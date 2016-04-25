@@ -9,7 +9,7 @@
 namespace weixin\qy\chat\push;
 
 
-use weixin\security\PrpCrypt;
+use cdcchen\wechat\security\PrpCrypt;
 
 
 class Request

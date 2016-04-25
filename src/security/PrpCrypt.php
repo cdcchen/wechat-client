@@ -5,7 +5,7 @@
  * Date: 15/7/22
  * Time: 下午5:11
  */
-namespace weixin\security;
+namespace cdcchen\wechat\security;
 
 /**
  * PrpCrypt class

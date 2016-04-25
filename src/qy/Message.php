@@ -6,11 +6,13 @@
  * Time: 下午10:11
  */
 
-namespace weixin\qy;
+namespace cdcchen\wechat\qy;
 
 
-use phpplus\net\CUrl;
-use weixin\base\ResponseException;
+use cdcchen\net\curl\Client;
+use cdcchen\net\curl\HttpRequest;
+use cdcchen\net\curl\HttpResponse;
+use cdcchen\wechat\base\ResponseException;
 
 class Message extends Request
 {
@@ -34,13 +36,12 @@ class Message extends Request
         $attributes = array_merge($this->_attributes, $attributes);
         $attributes['agentid'] = $agent_id;
 
-        $request = new CUrl();
         $url = $this->getUrl(self::API_SEND);
-        $request->post($url, json_encode($attributes, 320));
+        $request = Client::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
 
-        return static::handleRequest($request, function(CUrl $request){
-            return static::handleResponse($request, function($response){
-                return static::checkResponse($response);
+        return static::handleRequest($request, function(HttpResponse $response){
+            return static::handleResponse($response, function($data){
+                return static::checkResponse($data);
             });
         });
     }

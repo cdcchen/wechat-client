@@ -6,33 +6,34 @@
  * Time: 下午3:26
  */
 
-namespace weixin\qy;
+namespace cdcchen\wechat\qy;
 
 
-use phpplus\net\CUrl;
-use weixin\base\BaseRequest;
+use cdcchen\net\curl\Client;
+use cdcchen\net\curl\HttpResponse;
+use cdcchen\wechat\base\BaseRequest;
+use cdcchen\wechat\base\ResponseException;
 use weixin\base\ApiException;
-use weixin\base\ResponseException;
 
 class AccessToken extends BaseRequest
 {
     const API_ACCESS_TOKEN = '/cgi-bin/gettoken';
 
-    public static function fetch($corp_id, $corp_secret, $only_token = true)
+    public function fetch($corp_id, $corp_secret)
     {
         $params = [
             'corpid' => $corp_id,
             'corpsecret' => $corp_secret,
         ];
 
-        $request = new CUrl();
-        $request->get(Request::getRequestUrl(self::API_ACCESS_TOKEN), $params);
+        $url = Request::getRequestUrl(self::API_ACCESS_TOKEN, '', $params);
+        $request = Client::get($url);
 
-        return static::handleRequest($request, function(CUrl $request) use ($only_token){
-            $data = $request->getJsonData();
-            static::checkAccessTokenResponse($data);
-
-            return $only_token ? $data['access_token'] : $data;
+        return static::handleRequest($request, function(HttpResponse $response) {
+            return static::handleResponse($response, function($data) {
+                static::checkAccessTokenResponse($data);
+                return $data;
+            });
         });
     }
 

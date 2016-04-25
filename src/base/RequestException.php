@@ -7,7 +7,7 @@
  * Time: 22:01
  */
 
-namespace weixin\base;
+namespace cdcchen\wechat\base;
 
 
 class RequestException extends \Exception

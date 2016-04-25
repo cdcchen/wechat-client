@@ -6,11 +6,11 @@
  * Date: 16/3/9
  * Time: 22:12
  */
-namespace weixin\qy\chat;
+namespace cdcchen\wechat\qy\chat;
 
 use phpplus\net\CUrl;
-use weixin\qy\base\UpdateTrait;
-use weixin\qy\Request;
+use cdcchen\wechat\qy\base\UpdateTrait;
+use cdcchen\wechat\qy\Request;
 
 class Chat extends Request
 {

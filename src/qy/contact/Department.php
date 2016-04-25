@@ -6,11 +6,13 @@
  * Time: 上午10:23
  */
 
-namespace weixin\qy\contact;
+namespace cdcchen\wechat\qy\contact;
 
 
-use phpplus\net\CUrl;
-use weixin\qy\Request;
+use cdcchen\net\curl\Client;
+use cdcchen\net\curl\HttpRequest;
+use cdcchen\net\curl\HttpResponse;
+use cdcchen\wechat\qy\Request;
 
 class Department extends Request
 {
@@ -22,13 +24,12 @@ class Department extends Request
 
     public function select($id = null)
     {
-        $request = new CUrl();
         $url = $this->getUrl(self::API_LIST);
-        $request->get($url, ['id' => $id]);
+        $request = Client::get($url, ['id' => $id]);
 
-        return static::handleRequest($request, function(CUrl $request){
-            return static::handleResponse($request, function($response){
-                return $response['department'];
+        return static::handleRequest($request, function(HttpResponse $response){
+            return static::handleResponse($response, function($data){
+                return $data['department'];
             });
         });
     }
@@ -43,13 +44,12 @@ class Department extends Request
         if ($order > 0) $attributes['order'] = $order;
         if ($id > 0) $attributes['id'] = $id;
 
-        $request = new CUrl();
         $url = $this->getUrl(self::API_CREATE);
-        $request->post($url, json_encode($attributes, 320));
+        $request = Client::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
 
-        return static::handleRequest($request, function(CUrl $request){
-            return static::handleResponse($request, function($response){
-                return $response['id'];
+        return static::handleRequest($request, function(HttpResponse $response){
+            return static::handleResponse($response, function($data){
+                return $data['id'];
             });
         });
     }
@@ -64,12 +64,11 @@ class Department extends Request
 
         if ($order > 0) $attributes['order'] = $order;
 
-        $request = new CUrl();
         $url = $this->getUrl(self::API_UPDATE);
-        $request->post($url, json_encode($attributes, 320));
+        $request = Client::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
 
-        return static::handleRequest($request, function(CUrl $request){
-            return static::handleResponse($request, function($response){
+        return static::handleRequest($request, function(HttpResponse $response){
+            return static::handleResponse($response, function($data){
                 return true;
             });
         });
@@ -79,12 +78,11 @@ class Department extends Request
     {
         $attributes = ['id' => $id];
 
-        $request = new CUrl();
         $url = $this->getUrl(self::API_DELETE);
-        $request->get($url, $attributes);
+        $request = Client::get($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
 
-        return static::handleRequest($request, function(CUrl $request){
-            return static::handleResponse($request, function($response){
+        return static::handleRequest($request, function(HttpResponse $response){
+            return static::handleResponse($response, function($data){
                 return true;
             });
         });

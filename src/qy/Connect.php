@@ -6,11 +6,11 @@
  * Time: 下午3:26
  */
 
-namespace weixin\qy;
+namespace cdcchen\wechat\qy;
 
 
-use weixin\base\Object;
-use weixin\security\PrpCrypt;
+use cdcchen\wechat\base\Object;
+use cdcchen\wechat\security\PrpCrypt;
 
 class Connect extends Object
 {

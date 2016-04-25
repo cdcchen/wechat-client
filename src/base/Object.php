@@ -6,7 +6,7 @@
  * Time: 15:18
  */
 
-namespace weixin\base;
+namespace cdcchen\wechat\base;
 
 
 class Object

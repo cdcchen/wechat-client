@@ -6,10 +6,10 @@
  * Time: 上午9:55
  */
 
-namespace weixin\qy;
+namespace cdcchen\wechat\qy;
 
 
-use weixin\base\BaseRequest;
+use cdcchen\wechat\base\BaseRequest;
 
 
 class Request extends BaseRequest
