@@ -9,10 +9,10 @@
 namespace cdcchen\wechat\qy;
 
 
-use cdcchen\wechat\base\Object;
+use cdcchen\wechat\base\BaseClient;
 use cdcchen\wechat\security\PrpCrypt;
 
-class Connect extends Object
+class Connect
 {
     const ENCODING_AES_KEY_LENGTH = 43;
 
@@ -64,6 +64,6 @@ class Connect extends Object
 
     protected function getSignature($timestamp, $nonce, $echo_str)
     {
-        return Request::getSHA1($this->_token, $timestamp, $nonce, $echo_str);
+        return BaseClient::getSHA1($this->_token, $timestamp, $nonce, $echo_str);
     }
 }

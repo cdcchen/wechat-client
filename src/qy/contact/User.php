@@ -6,16 +6,18 @@
  * Time: 下午1:48
  */
 
-namespace weixin\qy\contact;
+namespace cdcchen\wechat\qy\contact;
 
 
-use phpplus\net\CUrl;
-use weixin\qy\base\UpdateTrait;
-use weixin\qy\Request;
+use cdcchen\net\curl\Client as HttpClient;
+use cdcchen\net\curl\HttpRequest;
+use cdcchen\net\curl\HttpResponse;
+use cdcchen\wechat\qy\base\UpdateAttributeTrait;
+use cdcchen\wechat\qy\Client;
 
-class User extends Request
+class User extends Client
 {
-    use UpdateTrait;
+    use UpdateAttributeTrait;
 
     const STATUS_FOLLOWED = 1;
     const STATUS_FORBIDDEN = 2;
@@ -42,12 +44,12 @@ class User extends Request
         if ($ext_attr)
             $attributes['extattr'] = $ext_attr;
 
-        $request = new CUrl();
+        
         $url = $this->getUrl(self::API_CREATE);
-        $request->post($url, json_encode($attributes, 320));
+        $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
 
-        return static::handleRequest($request, function(CUrl $request){
-            return static::handleResponse($request, function($response){
+        return static::handleRequest($request, function(HttpResponse $response){
+            return static::handleResponse($response, function($data){
                 return true;
             });
         });
@@ -60,12 +62,12 @@ class User extends Request
         if (count($attributes) <= 1)
             throw new \InvalidArgumentException('There is no attributes need to be updated.');
 
-        $request = new CUrl();
+        
         $url = $this->getUrl(self::API_UPDATE);
-        $request->post($url, json_encode($attributes, 320));
+        $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
 
-        return static::handleRequest($request, function(CUrl $request){
-            return static::handleResponse($request, function($response){
+        return static::handleRequest($request, function(HttpResponse $response){
+            return static::handleResponse($response, function($data){
                 return true;
             });
         });
@@ -73,12 +75,12 @@ class User extends Request
 
     public function delete($user_id)
     {
-        $request = new CUrl();
+        
         $url = $this->getUrl(self::API_DELETE);
-        $request->get($url, ['userid' => $user_id]);
+        $request = HttpClient::get($url, ['userid' => $user_id]);
 
-        return static::handleRequest($request, function(CUrl $request){
-            return static::handleResponse($request, function($response){
+        return static::handleRequest($request, function(HttpResponse $response){
+            return static::handleResponse($response, function($data){
                 return true;
             });
         });
@@ -88,12 +90,12 @@ class User extends Request
     {
         $attributes = ['useridlist' => $users];
 
-        $request = new CUrl();
+        
         $url = $this->getUrl(self::API_BATCH_DELETE);
-        $request->post($url, json_encode($attributes, 320));
+        $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
 
-        return static::handleRequest($request, function(CUrl $request){
-            return static::handleResponse($request, function($response){
+        return static::handleRequest($request, function(HttpResponse $response){
+            return static::handleResponse($response, function($data){
                 return true;
             });
         });
@@ -101,13 +103,13 @@ class User extends Request
 
     public function fetch($user_id)
     {
-        $request = new CUrl();
+        
         $url = $this->getUrl(self::API_GET_ITEM);
-        $request->get($url, ['userid' => $user_id]);
+        $request = HttpClient::get($url, ['userid' => $user_id]);
 
-        return static::handleRequest($request, function(CUrl $request){
-            return static::handleResponse($request, function($response){
-                return $response;
+        return static::handleRequest($request, function(HttpResponse $response){
+            return static::handleResponse($response, function($data){
+                return $data;
             });
         });
 
@@ -121,13 +123,13 @@ class User extends Request
             'fetch_child' => $fetch_child ? 1 : 0,
         ];
 
-        $request = new CUrl();
+        
         $url = $this->getUrl(self::API_SIMPLE_LIST);
-        $request->get($url, $attributes);
+        $request = HttpClient::get($url, $attributes);
 
-        return static::handleRequest($request, function(CUrl $request){
-            return static::handleResponse($request, function($response){
-                return $response['userlist'];
+        return static::handleRequest($request, function(HttpResponse $response){
+            return static::handleResponse($response, function($data){
+                return $data['userlist'];
             });
         });
     }
@@ -140,13 +142,13 @@ class User extends Request
             'fetch_child' => $fetch_child ? 1 : 0,
         ];
 
-        $request = new CUrl();
+        
         $url = $this->getUrl(self::API_DETAIL_LIST);
-        $request->get($url, $attributes);
+        $request = HttpClient::get($url, $attributes);
 
-        return static::handleRequest($request, function(CUrl $request){
-            return static::handleResponse($request, function($response){
-                return $response['userlist'];
+        return static::handleRequest($request, function(HttpResponse $response){
+            return static::handleResponse($response, function($data){
+                return $data['userlist'];
             });
         });
     }
@@ -155,13 +157,13 @@ class User extends Request
     {
         $attributes = ['userid' => $user_id];
 
-        $request = new CUrl();
+        
         $url = $this->getUrl(self::API_INVITE);
-        $request->post($url, json_encode($attributes, 320));
+        $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
 
-        return static::handleRequest($request, function(CUrl $request){
-            return static::handleResponse($request, function($response){
-                return $response['type'];
+        return static::handleRequest($request, function(HttpResponse $response){
+            return static::handleResponse($response, function($data){
+                return $data['type'];
             });
         });
     }
@@ -172,14 +174,14 @@ class User extends Request
         if ($agent_id)
             $attributes['agent_id'] = $agent_id;
 
-        $request = new CUrl();
+        
         $url = $this->getUrl(self::API_CONVERT_TO_OPENID);
-        $request->post($url, json_encode($attributes, 320));
+        $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
 
-        return static::handleRequest($request, function(CUrl $request){
-            return static::handleResponse($request, function($response){
-                unset($response['errcode'], $response['errmsg']);
-                return $response;
+        return static::handleRequest($request, function(HttpResponse $response){
+            return static::handleResponse($response, function($data){
+                unset($data['errcode'], $data['errmsg']);
+                return $data;
             });
         });
     }
@@ -188,13 +190,13 @@ class User extends Request
     {
         $attributes = ['openid' => $open_id];
 
-        $request = new CUrl();
+        
         $url = $this->getUrl(self::API_CONVERT_TO_USERID);
-        $request->post($url, json_encode($attributes, 320));
+        $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
 
-        return static::handleRequest($request, function(CUrl $request){
-            return static::handleResponse($request, function($response){
-                return $response['userid'];
+        return static::handleRequest($request, function(HttpResponse $response){
+            return static::handleResponse($response, function($data){
+                return $data['userid'];
             });
         });
     }
@@ -230,7 +232,7 @@ class User extends Request
 
     public function setWeixinId($value)
     {
-        return $this->setUpdateAttribute('weixinid', $value);
+        return $this->setUpdateAttribute('cdcchen\wechatid', $value);
     }
 
     public function setStatus($value)

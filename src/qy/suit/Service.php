@@ -6,53 +6,104 @@
  * Time: 21:26
  */
 
-namespace weixin\qy\suit;
+namespace cdcchen\wechat\qy\suit;
 
 
-use phpplus\net\CUrl;
-use weixin\suit\Request;
+use cdcchen\net\curl\Client as HttpClient;
+use cdcchen\net\curl\HttpRequest;
+use cdcchen\net\curl\HttpResponse;
 
-class Service extends Request
+class Service extends Client
 {
-    const TARGET_AGENT_SETTING = 'agent_setting';
-    const TARGET_SEND_MSG = 'send_msg';
-    const TARGET_CONTACT = 'contact';
-    const TARGET_3RD_ADMIN = '3rd_admin';
+    const API_GET_PRE_AUTH_CODE = '/cgi-bin/service/get_provider_token';
+    const API_SET_SESSION_INFO = '/cgi-bin/service/set_session_info';
+    const API_GET_PERMANENT_CODE = '/cgi-bin/service/get_permanent_code';
+    const API_GET_AUTH_INFO = '/cgi-bin/service/get_auth_info';
+    const API_GET_CORP_TOKEN = '/cgi-bin/service/get_corp_token';
 
-    const API_GET_LOGIN_INFO = '/cgi-bin/service/get_login_info';
-    const API_GET_LOGIN_URL = '/cgi-bin/service/get_login_url';
-
-    public function getLoginInfo($auth_code)
+    public function getPreAuthCode($suite_id)
     {
-        $attributes = ['auth_code' => $auth_code];
+        $attributes = ['suite_id' => $suite_id];
 
-        $request = new CUrl();
-        $url = $this->getUrl(self::API_GET_LOGIN_INFO);
-        $request->post($url, json_encode($attributes, 320));
+        $url = $this->getUrl(self::API_GET_PRE_AUTH_CODE);
+        $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
 
-        return static::handleRequest($request, function(CUrl $request) {
-            return static::handleResponse($request, function($response) {
-                return $response;
+        return static::handleRequest($request, function (HttpResponse $response) {
+            return static::handleResponse($response, function ($data) {
+                unset($data['errcode'], $data['errmsg']);
+                return $data;
             });
         });
     }
 
-    public function getLoginUrl($login_ticket, $target, $agent_id = null, $only_url = true)
+    public function setSessionInfo($pre_auth_code, array $session_info)
     {
         $attributes = [
-            'login_ticket' => $login_ticket,
-            'target' => $target,
-            'agentid' => $agent_id,
+            'pre_auth_code' => $pre_auth_code,
+            'session_info' => $session_info,
         ];
 
-        $request = new CUrl();
-        $url = $this->getUrl(self::API_GET_LOGIN_URL);
-        $request->post($url, json_encode($attributes, 320));
+        $url = $this->getUrl(self::API_SET_SESSION_INFO);
+        $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
 
-        return static::handleRequest($request, function(CUrl $request) use ($only_url) {
-            return static::handleResponse($request, function($response) use ($only_url) {
-                unset($response['errcode'], $response['errmsg']);
-                return $only_url ? $response['login_url'] : $response;
+        return static::handleRequest($request, function (HttpResponse $response) {
+            return static::handleResponse($response, function ($data) {
+                unset($data['errcode'], $data['errmsg']);
+                return true;
+            });
+        });
+    }
+
+    public function getPermanentCode($suite_id, $auth_code)
+    {
+        $attributes = [
+            'suite_id' => $suite_id,
+            'auth_code' => $auth_code,
+        ];
+
+        $url = $this->getUrl(self::API_SET_SESSION_INFO);
+        $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
+
+        return static::handleRequest($request, function (HttpResponse $response) {
+            return static::handleResponse($response, function ($data) {
+                return $data;
+            });
+        });
+    }
+
+    public function getAuthInfo($suite_id, $auth_corp_id, $permanent_code)
+    {
+        $attributes = [
+            'suite_id' => $suite_id,
+            'auth_corpid' => $auth_corp_id,
+            'permanent_code' => $permanent_code,
+        ];
+
+        $url = $this->getUrl(self::API_SET_SESSION_INFO);
+        $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
+
+        return static::handleRequest($request, function (HttpResponse $response) {
+            return static::handleResponse($response, function ($data) {
+                return $data;
+            });
+        });
+    }
+
+    public function getCorpAccessToken($suite_id, $auth_corp_id, $permanent_code)
+    {
+        $attributes = [
+            'suite_id' => $suite_id,
+            'auth_corpid' => $auth_corp_id,
+            'permanent_code' => $permanent_code,
+        ];
+
+        $url = $this->getUrl(self::API_SET_SESSION_INFO);
+        $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
+
+        return static::handleRequest($request, function (HttpResponse $response) {
+            return static::handleResponse($response, function ($data) {
+                unset($data['errcode'], $data['errmsg']);
+                return $data;
             });
         });
     }

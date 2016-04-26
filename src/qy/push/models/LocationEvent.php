@@ -6,7 +6,7 @@
  * Time: 下午2:00
  */
 
-namespace weixin\qy\push\models;
+namespace cdcchen\wechat\qy\push\models;
 
 
 class LocationEvent extends Event

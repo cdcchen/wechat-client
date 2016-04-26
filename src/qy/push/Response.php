@@ -6,11 +6,11 @@
  * Time: 下午5:58
  */
 
-namespace weixin\qy\push;
+namespace cdcchen\wechat\qy\push;
 
 
-use weixin\qy\Request;
-use weixin\security\PrpCrypt;
+use cdcchen\wechat\base\BaseClient;
+use cdcchen\wechat\security\PrpCrypt;
 
 class Response
 {
@@ -125,7 +125,7 @@ class Response
         $nonce = uniqid();
         $plainXml = $this->buildPlainXml($extra_xml);
         $encryptXml = $this->buildEncryptedXml($plainXml);
-        $signature = Request::getSHA1($this->_token, $timestamp, $nonce, $encryptXml);
+        $signature = BaseClient::getSHA1($this->_token, $timestamp, $nonce, $encryptXml);
 
         return sprintf($format, $encryptXml, $signature, $timestamp, $nonce);
     }

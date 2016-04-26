@@ -6,16 +6,17 @@
  * Time: 下午9:48
  */
 
-namespace weixin\qy;
+namespace cdcchen\wechat\qy;
 
 
-use phpplus\net\CUrl;
-use phpplus\net\UrlHelper;
-use weixin\qy\base\UpdateTrait;
+use cdcchen\net\curl\Client as HttpClient;
+use cdcchen\net\curl\HttpRequest;
+use cdcchen\net\curl\HttpResponse;
+use cdcchen\wechat\qy\base\UpdateAttributeTrait;
 
-class Agent extends Request
+class Agent extends Client
 {
-    use UpdateTrait;
+    use UpdateAttributeTrait;
 
     const LOCATION_FLAG_DISABLED = 0;
     const LOCATION_FLAG_ON_ENTER = 1;
@@ -28,26 +29,24 @@ class Agent extends Request
 
     public function getAll()
     {
-        $request = new CUrl();
         $url = $this->getUrl(self::API_LIST);
-        $request->get($url);
+        $request = HttpClient::get($url);
 
-        return static::handleRequest($request, function(CUrl $request){
-            return static::handleResponse($request, function($response){
-                return $response['agentlist'];
+        return static::handleRequest($request, function(HttpResponse $response) {
+            return static::handleResponse($response, function($data) {
+                return $data['agentlist'];
             });
         });
     }
 
-    public function select($agent_id)
+    public function query($agent_id)
     {
-        $request = new CUrl();
         $url = $this->getUrl(self::API_INFO);
-        $request->get($url, ['agentid' => $agent_id]);
+        $request = HttpClient::get($url, ['agentid' => $agent_id]);
 
-        return static::handleRequest($request, function(CUrl $request){
-            return static::handleResponse($request, function($response){
-                return $response;
+        return static::handleRequest($request, function(HttpResponse $response) {
+            return static::handleResponse($response, function($data) {
+                return $data;
             });
         });
     }
@@ -59,12 +58,11 @@ class Agent extends Request
         if (count($attributes) <= 1)
             throw new \InvalidArgumentException('There is no attributes need to be updated.');
 
-        $request = new CUrl();
         $url = $this->getUrl(self::API_UPDATE);
-        $request->post($url, json_encode($attributes, 320));
+        $request = HttpClient::post($url, json_encode($attributes, 320))->setFormat(HttpRequest::FORMAT_JSON);
 
-        return static::handleRequest($request, function(CUrl $request){
-            return static::handleResponse($request, function($response){
+        return static::handleRequest($request, function(HttpResponse $response) {
+            return static::handleResponse($response, function($data) {
                 return true;
             });
         });
@@ -107,7 +105,7 @@ class Agent extends Request
 
     public function setHomeUrl($value)
     {
-        if (!UrlHelper::isUrl($value))
+        if (filter_var($value, FILTER_VALIDATE_URL) === false)
             throw new \InvalidArgumentException('The value is not invalid');
 
         return $this->setUpdateAttribute('home_url', $value);

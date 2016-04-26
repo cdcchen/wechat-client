@@ -6,12 +6,14 @@
  * Time: 下午1:59
  */
 
-namespace weixin\qy;
+namespace cdcchen\wechat\qy;
 
 
-use phpplus\net\CUrl;
+use cdcchen\net\curl\Client as HttpClient;
+use cdcchen\net\curl\HttpRequest;
+use cdcchen\net\curl\HttpResponse;
 
-class Menu extends Request
+class Menu extends Client
 {
     const API_CREATE = '/cgi-bin/menu/create';
     const API_DELETE = '/cgi-bin/menu/delete';
@@ -23,12 +25,10 @@ class Menu extends Request
             $attributes = ['button' => $attributes];
 
         $url = $this->getUrl(self::API_CREATE, ['agentid' => $agent_id]);
+        $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
 
-        $request = new CUrl();
-        $request->post($url, json_encode($attributes, 320));
-
-        return static::handleRequest($request, function(CUrl $request){
-            return static::handleResponse($request, function($response){
+        return static::handleRequest($request, function (HttpResponse $response) {
+            return static::handleResponse($response, function ($data) {
                 return true;
             });
         });
@@ -37,12 +37,10 @@ class Menu extends Request
     public function delete($agent_id)
     {
         $url = $this->getUrl(self::API_DELETE);
+        $request = HttpClient::post($url, ['agentid' => $agent_id])->setFormat(HttpRequest::FORMAT_JSON);
 
-        $request = new CUrl();
-        $request->post($url, ['agentid' => $agent_id]);
-
-        return static::handleRequest($request, function(CUrl $request){
-            return static::handleResponse($request, function($response){
+        return static::handleRequest($request, function (HttpResponse $response) {
+            return static::handleResponse($response, function ($data) {
                 return true;
             });
         });
@@ -50,14 +48,13 @@ class Menu extends Request
 
     public function select($agent_id)
     {
-        $request = new CUrl();
         $url = $this->getUrl(self::API_LIST);
-        $request->get($url, ['agentid' => $agent_id]);
+        $request = HttpClient::get($url, ['agentid' => $agent_id]);
 
-        return static::handleRequest($request, function(CUrl $request){
-            return static::handleResponse($request, function($response){
-                unset($response['errcode'], $response['errmsg']);
-                return $response;
+        return static::handleRequest($request, function (HttpResponse $response) {
+            return static::handleResponse($response, function ($data) {
+                unset($data['errcode'], $data['errmsg']);
+                return $data;
             });
         });
     }

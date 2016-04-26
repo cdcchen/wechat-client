@@ -9,25 +9,25 @@
 namespace cdcchen\wechat\qy;
 
 
-use cdcchen\net\curl\Client;
+use cdcchen\net\curl\Client as HttpClient;
 use cdcchen\net\curl\HttpResponse;
-use cdcchen\wechat\base\BaseRequest;
+use cdcchen\wechat\base\BaseClient;
 use cdcchen\wechat\base\ResponseException;
-use weixin\base\ApiException;
+use cdcchen\wechat\base\ApiException;
 
-class AccessToken extends BaseRequest
+class AccessToken extends BaseClient
 {
     const API_ACCESS_TOKEN = '/cgi-bin/gettoken';
 
-    public function fetch($corp_id, $corp_secret)
+    public static function fetch($corp_id, $corp_secret)
     {
         $params = [
             'corpid' => $corp_id,
             'corpsecret' => $corp_secret,
         ];
 
-        $url = Request::getRequestUrl(self::API_ACCESS_TOKEN, '', $params);
-        $request = Client::get($url);
+        $url = Client::getRequestUrl(self::API_ACCESS_TOKEN, $params);
+        $request = HttpClient::get($url);
 
         return static::handleRequest($request, function(HttpResponse $response) {
             return static::handleResponse($response, function($data) {

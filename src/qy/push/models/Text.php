@@ -6,7 +6,7 @@
  * Time: 下午1:29
  */
 
-namespace weixin\qy\push\models;
+namespace cdcchen\wechat\qy\push\models;
 
 
 class Text extends Message

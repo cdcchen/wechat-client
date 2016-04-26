@@ -6,12 +6,12 @@
  * Time: 下午5:12
  */
 
-namespace weixin\qy\push;
+namespace cdcchen\wechat\qy\push;
 
 
-use weixin\qy\push\models\Event;
-use weixin\qy\push\models\Message;
-use weixin\security\PrpCrypt;
+use cdcchen\wechat\qy\push\models\Event;
+use cdcchen\wechat\qy\push\models\Message;
+use cdcchen\wechat\security\PrpCrypt;
 
 class Request
 {
@@ -61,25 +61,25 @@ class Request
 
 
     static protected $modelMap = [
-        Message::TYPE_TEXT => 'weixin\qy\push\models\Text',
-        Message::TYPE_IMAGE => 'weixin\qy\push\models\Image',
-        Message::TYPE_VOICE => 'weixin\qy\push\models\Voice',
-        Message::TYPE_VIDEO => 'weixin\qy\push\models\Video',
-        Message::TYPE_SHORT_VIDEO => 'weixin\qy\push\models\ShortVideo',
-        Message::TYPE_LOCATION => 'weixin\qy\push\models\Location',
+        Message::TYPE_TEXT => 'cdcchen\wechat\qy\push\models\Text',
+        Message::TYPE_IMAGE => 'cdcchen\wechat\qy\push\models\Image',
+        Message::TYPE_VOICE => 'cdcchen\wechat\qy\push\models\Voice',
+        Message::TYPE_VIDEO => 'cdcchen\wechat\qy\push\models\Video',
+        Message::TYPE_SHORT_VIDEO => 'cdcchen\wechat\qy\push\models\ShortVideo',
+        Message::TYPE_LOCATION => 'cdcchen\wechat\qy\push\models\Location',
 
-        Message::TYPE_EVENT . Event::EVENT_SUBSCRIBE => 'weixin\qy\push\models\Event',
-        Message::TYPE_EVENT . Event::EVENT_UNSUBSCRIBE => 'weixin\qy\push\models\Event',
-        Message::TYPE_EVENT . Event::EVENT_LOCATION => 'weixin\qy\push\models\LocationEvent',
-        Message::TYPE_EVENT . Event::EVENT_CLICK => 'weixin\qy\push\models\ClickEvent',
-        Message::TYPE_EVENT . Event::EVENT_VIEW => 'weixin\qy\push\models\ViewEvent',
-        Message::TYPE_EVENT . Event::EVENT_SCANCODE_PUSH => 'weixin\qy\push\models\ScanCodePushEvent',
-        Message::TYPE_EVENT . Event::EVENT_SCANCODE_WAITMSG => 'weixin\qy\push\models\ScanCodeWaitMsgEvent',
-        Message::TYPE_EVENT . Event::EVENT_PIC_SYSPHOTO => 'weixin\qy\push\models\PicPhotoEvent',
-        Message::TYPE_EVENT . Event::EVENT_PIC_PHOTO_OR_ALBUM => 'weixin\qy\push\models\PicPhotoAlbumEvent',
-        Message::TYPE_EVENT . Event::EVENT_PIC_WEIXIN_PHOTO => 'weixin\qy\push\models\PicWeixinPhotoEvent',
-        Message::TYPE_EVENT . Event::EVENT_LOCATION_SELECT => 'weixin\qy\push\models\LocationSelectEvent',
-        Message::TYPE_EVENT . Event::EVENT_ENTER_AGENT => 'weixin\qy\push\models\EnterAgentEvent',
-        Message::TYPE_EVENT . Event::EVENT_BATCH_JOB_RESULT => 'weixin\qy\push\models\BatchJobEvent',
+        Message::TYPE_EVENT . Event::EVENT_SUBSCRIBE => 'cdcchen\wechat\qy\push\models\Event',
+        Message::TYPE_EVENT . Event::EVENT_UNSUBSCRIBE => 'cdcchen\wechat\qy\push\models\Event',
+        Message::TYPE_EVENT . Event::EVENT_LOCATION => 'cdcchen\wechat\qy\push\models\LocationEvent',
+        Message::TYPE_EVENT . Event::EVENT_CLICK => 'cdcchen\wechat\qy\push\models\ClickEvent',
+        Message::TYPE_EVENT . Event::EVENT_VIEW => 'cdcchen\wechat\qy\push\models\ViewEvent',
+        Message::TYPE_EVENT . Event::EVENT_SCANCODE_PUSH => 'cdcchen\wechat\qy\push\models\ScanCodePushEvent',
+        Message::TYPE_EVENT . Event::EVENT_SCANCODE_WAITMSG => 'cdcchen\wechat\qy\push\models\ScanCodeWaitMsgEvent',
+        Message::TYPE_EVENT . Event::EVENT_PIC_SYSPHOTO => 'cdcchen\wechat\qy\push\models\PicPhotoEvent',
+        Message::TYPE_EVENT . Event::EVENT_PIC_PHOTO_OR_ALBUM => 'cdcchen\wechat\qy\push\models\PicPhotoAlbumEvent',
+        Message::TYPE_EVENT . Event::EVENT_PIC_WEIXIN_PHOTO => 'cdcchen\wechat\qy\push\models\PicWeixinPhotoEvent',
+        Message::TYPE_EVENT . Event::EVENT_LOCATION_SELECT => 'cdcchen\wechat\qy\push\models\LocationSelectEvent',
+        Message::TYPE_EVENT . Event::EVENT_ENTER_AGENT => 'cdcchen\wechat\qy\push\models\EnterAgentEvent',
+        Message::TYPE_EVENT . Event::EVENT_BATCH_JOB_RESULT => 'cdcchen\wechat\qy\push\models\BatchJobEvent',
     ];
 }

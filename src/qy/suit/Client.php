@@ -6,16 +6,14 @@
  * Time: 上午9:55
  */
 
-namespace weixin\suit;
+namespace cdcchen\wechat\qy\suit;
 
 
-use weixin\base\BaseRequest;
+use cdcchen\wechat\base\BaseClient;
 
-class Request extends BaseRequest
+class Client extends BaseClient
 {
     const API_HOST = 'https://qyapi.weixin.qq.com';
-
-    protected $_accessToken;
 
     public function __construct($access_token)
     {
@@ -25,23 +23,7 @@ class Request extends BaseRequest
         $this->setAccessToken($access_token);
     }
 
-    public function getAccessToken()
-    {
-        return $this->_accessToken;
-    }
-
-    public function setAccessToken($access_token)
-    {
-        $this->_accessToken = $access_token;
-        return $this;
-    }
-
-    public function getUrl($path, $query = [])
-    {
-        return static::getRequestUrl($path, $this->getAccessToken(), $query);
-    }
-
-    public static function getRequestUrl($path, $access_token = '', $query = [])
+    public static function getRequestUrl($path, $query = [], $access_token = '')
     {
         $url =  self::API_HOST . '/' . ltrim($path, '/');
         if ($access_token)

@@ -6,14 +6,16 @@
  * Time: 下午3:29
  */
 
-namespace weixin\qy;
+namespace cdcchen\wechat\qy;
 
 
+use cdcchen\net\curl\Client as HttpClient;
+use cdcchen\net\curl\HttpRequest;
+use cdcchen\net\curl\HttpResponse;
+use cdcchen\wechat\base\ResponseException;
 use phpplus\filesystem\FileHelper;
-use phpplus\net\CUrl;
-use weixin\base\ResponseException;
 
-class Media extends Request
+class Media extends Client
 {
     const API_UPLOAD = '/cgi-bin/media/upload';
     const API_UPLOAD_IMG = '/cgi-bin/media/uploadimg';
@@ -32,30 +34,64 @@ class Media extends Request
 
     public function upload($filename, $type)
     {
+        $mimeType = FileHelper::getMimeType($filename, null, true);
+        $file = new \CURLFile($filename, $mimeType);
+        $data = [
+            'filename' => $filename,
+            'filelength' => filesize($filename),
+            'content-type' => $mimeType,
+        ];
+
         $url = $this->getUrl(self::API_UPLOAD, ['type' => $type]);
-        $media = static::makeMediaParams($filename);
+        $request = HttpClient::post($url, $data)
+                         ->addFile('upload_file', $file, $mimeType)
+                         ->setFormat(HttpRequest::FORMAT_JSON);
 
-        $request = new CUrl();
-        $request->post($url, $media, true);
-
-        return static::handleRequest($request, function(CUrl $request){
-            return static::handleResponse($request, function($response){
-                return $response['media_id'];
+        return static::handleRequest($request, function (HttpResponse $response) {
+            return static::handleResponse($response, function ($data) {
+                return $data['media_id'];
             });
         });
     }
 
+    public function uploadFile($filename)
+    {
+        return $this->upload($filename, self::TYPE_FILE);
+    }
+
+    public function uploadVideo($filename)
+    {
+        return $this->upload($filename, self::TYPE_VIDEO);
+    }
+
+    public function uploadVoice($filename)
+    {
+        return $this->upload($filename, self::TYPE_VOICE);
+    }
+
     public function uploadImage($filename)
     {
+        return $this->upload($filename, self::TYPE_IMAGE);
+    }
+
+    public function uploadPhoto($filename)
+    {
+        $mimeType = FileHelper::getMimeType($filename, null, true);
+        $file = new \CURLFile($filename, $mimeType);
+        $data = [
+            'filename' => $filename,
+            'filelength' => filesize($filename),
+            'content-type' => $mimeType,
+        ];
+
         $url = $this->getUrl(self::API_UPLOAD_IMG);
-        $media = static::makeMediaParams($filename);
+        $request = HttpClient::post($url, $data)
+                         ->addFile('upload_file', $file, $mimeType)
+                         ->setFormat(HttpRequest::FORMAT_JSON);
 
-        $request = new CUrl();
-        $request->post($url, $media, true);
-
-        return static::handleRequest($request, function(CUrl $request){
-            return static::handleResponse($request, function($response){
-                return $response['url'];
+        return static::handleRequest($request, function (HttpResponse $response) {
+            return static::handleResponse($response, function ($data) {
+                return $data['url'];
             });
         });
     }
@@ -63,31 +99,15 @@ class Media extends Request
     public function download($media_id)
     {
         $url = $this->getUrl(self::API_DOWNLOAD);
+        $request = HttpClient::get($url, ['media_id' => $media_id]);
 
-        $request = new CUrl();
-        $request->returnHeaders(true)->get($url, ['media_id' => $media_id]);
-
-        return static::handleRequest($request, function(CUrl $request){
-            $contentType = $request->getResponseHeaders('content-type');
-            if (stripos($contentType, 'json') === false) {
-                return $request->getBody();
-            }
-            else {
-                $response = $request->getJsonData();
-                throw new ResponseException($response['errmsg'], $response['errcode']);
+        return static::handleRequest($request, function(HttpResponse $response) {
+            if ($response->getFormat() !== HttpRequest::FORMAT_JSON) {
+                return $response->getContent();
+            } else {
+                $data = $response->getData();
+                throw new ResponseException($data['errmsg'], $data['errcode']);
             }
         });
-    }
-
-    protected static function makeMediaParams($filename)
-    {
-        $mimeType = FileHelper::getMimeType($filename, null, true);
-        $file = new \CURLFile($filename, $mimeType);
-        return [
-            'upload_file' => $file,
-            'filename' => $filename,
-            'filelength' => filesize($filename),
-            'content-type' => $mimeType,
-        ];
     }
 }

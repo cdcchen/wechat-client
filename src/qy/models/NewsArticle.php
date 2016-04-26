@@ -6,7 +6,7 @@
  * Time: 15:26
  */
 
-namespace weixin\qy\models;
+namespace cdcchen\wechat\qy\models;
 
 
 class NewsArticle extends Base

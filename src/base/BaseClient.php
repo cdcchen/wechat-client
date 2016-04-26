@@ -13,8 +13,50 @@ use cdcchen\net\curl\HttpRequest;
 use cdcchen\net\curl\HttpResponse;
 
 
-abstract class BaseRequest extends Object
+class BaseClient extends Object
 {
+    protected $_accessToken;
+
+    public function getAccessToken()
+    {
+        return $this->_accessToken;
+    }
+
+    public function setAccessToken($access_token)
+    {
+        $this->_accessToken = $access_token;
+        return $this;
+    }
+
+
+    public static function getSHA1($token, $timestamp, $nonce, $encrypt_msg)
+    {
+        $params = [$encrypt_msg, $token, $timestamp, $nonce];
+        sort($params, SORT_STRING);
+        $str = implode('', $params);
+
+        return sha1($str);
+    }
+
+    protected function getUrl($path, $query = [])
+    {
+        return static::getRequestUrl($path, $query, $this->getAccessToken());
+    }
+
+    /**
+     * @param $path
+     * @param array $query
+     * @param string $access_token
+     * @return string
+     * @throws \Exception
+     */
+    protected static function getRequestUrl($path, $query = [], $access_token = '')
+    {
+        throw new \Exception('This method should be override.');
+    }
+
+    
+
     protected static function handleRequest(HttpRequest $request, callable $success = null, callable $failed = null)
     {
         try {

@@ -20,6 +20,7 @@
   "minimum-stability": "stable",
   "require": {
     "php": ">=5.4.0",
+    "cdcchen/php-plus": "1.0.x-dev",
     "cdcchen/curl-client": "1.0.x-dev"
   },
   "autoload": {

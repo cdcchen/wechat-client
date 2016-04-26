@@ -6,10 +6,10 @@
  * Time: 15:10
  */
 
-namespace weixin\qy\base;
+namespace cdcchen\wechat\qy\base;
 
 
-trait UpdateTrait
+trait UpdateAttributeTrait
 {
     protected $_updateAttributes = [];
 

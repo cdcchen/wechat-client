@@ -6,12 +6,14 @@
  * Time: 22:15
  */
 
-namespace weixin\qy;
+namespace cdcchen\wechat\qy;
 
 
-use phpplus\net\CUrl;
+use cdcchen\net\curl\Client as HttpClient;
+use cdcchen\net\curl\HttpRequest;
+use cdcchen\net\curl\HttpResponse;
 
-class Shake extends Request
+class Shake extends Client
 {
     const API_GET_SHAKE_INFO = '/cgi-bin/shakearound/getshakeinfo';
 
@@ -19,13 +21,12 @@ class Shake extends Request
     {
         $attributes = ['ticket' => $ticket];
 
-        $request = new CUrl();
         $url = $this->getUrl(self::API_GET_SHAKE_INFO);
-        $request->post($url, json_encode($attributes, 320));
+        $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
 
-        return static::handleRequest($request, function(CUrl $request){
-            return static::handleResponse($request, function($response){
-                return $response['data'];
+        return static::handleRequest($request, function (HttpResponse $response) {
+            return static::handleResponse($response, function ($data) {
+                return $data['data'];
             });
         });
     }

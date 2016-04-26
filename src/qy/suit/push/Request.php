@@ -6,7 +6,7 @@
  * Time: 22:56
  */
 
-namespace weixin\suit\push;
+namespace weixin\suit\qy\suit\push;
 
 
 class Request

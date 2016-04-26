@@ -6,7 +6,7 @@
  * Time: 15:27
  */
 
-namespace weixin\qy\models;
+namespace cdcchen\wechat\qy\models;
 
 
 abstract class Base

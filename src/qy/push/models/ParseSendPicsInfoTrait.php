@@ -6,7 +6,7 @@
  * Time: 下午5:38
  */
 
-namespace weixin\qy\push\models;
+namespace cdcchen\wechat\qy\push\models;
 
 
 trait ParseSendPicsInfoTrait

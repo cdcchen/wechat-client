@@ -6,14 +6,16 @@
  * Time: 下午2:57
  */
 
-namespace weixin\qy\contact;
+namespace cdcchen\wechat\qy\contact;
 
 
-use phpplus\net\CUrl;
-use weixin\base\ResponseException;
-use weixin\qy\Request;
+use cdcchen\net\curl\Client as HttpClient;
+use cdcchen\net\curl\HttpRequest;
+use cdcchen\net\curl\HttpResponse;
+use cdcchen\wechat\base\ResponseException;
+use cdcchen\wechat\qy\Client;
 
-class Tag extends Request
+class Tag extends Client
 {
     const API_CREATE = '/cgi-bin/tag/create';
     const API_UPDATE = '/cgi-bin/tag/update';
@@ -23,16 +25,15 @@ class Tag extends Request
     const API_ADD_USERS = '/cgi-bin/tag/addtagusers';
     const API_DELETE_USERS = '/cgi-bin/tag/deltagusers';
 
-    
+
     public function getAll()
     {
-        $request = new CUrl();
         $url = $this->getUrl(self::API_LIST);
-        $request->get($url);
+        $request = HttpClient::get($url);
 
-        return static::handleRequest($request, function(CUrl $request){
-            return static::handleResponse($request, function($response){
-                return $response['taglist'];
+        return static::handleRequest($request, function (HttpResponse $response) {
+            return static::handleResponse($response, function ($data) {
+                return $data['taglist'];
             });
         });
     }
@@ -40,15 +41,16 @@ class Tag extends Request
     public function create($name, $id = 0)
     {
         $attributes = ['tagname' => $name];
-        if ($id > 0) $attributes['tagid'] = $id;
+        if ($id > 0) {
+            $attributes['tagid'] = $id;
+        }
 
-        $request = new CUrl();
         $url = $this->getUrl(self::API_CREATE);
-        $request->post($url, json_encode($attributes, 320));
+        $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
 
-        return static::handleRequest($request, function(CUrl $request){
-            return static::handleResponse($request, function($response){
-                return $response['tagid'];
+        return static::handleRequest($request, function (HttpResponse $response) {
+            return static::handleResponse($response, function ($data) {
+                return $data['tagid'];
             });
         });
     }
@@ -60,25 +62,23 @@ class Tag extends Request
             'tagname' => $name,
         ];
 
-        $request = new CUrl();
         $url = $this->getUrl(self::API_UPDATE);
-        $request->post($url, json_encode($attributes, 320));
+        $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
 
-        return static::handleRequest($request, function(CUrl $request){
-            return static::handleResponse($request, function($response){
-                return $response['data'];
+        return static::handleRequest($request, function (HttpResponse $response) {
+            return static::handleResponse($response, function ($data) {
+                return true;
             });
         });
     }
 
     public function delete($id)
     {
-        $request = new CUrl();
-        $url = $this->getUrl(self::API_DELETE);
-        $request->get($url, ['tagid' => $id]);
+        $url = $this->getUrl(self::API_DELETE, ['tagid' => $id]);
+        $request = HttpClient::get($url);
 
-        return static::handleRequest($request, function(CUrl $request){
-            return static::handleResponse($request, function($response){
+        return static::handleRequest($request, function (HttpResponse $response) {
+            return static::handleResponse($response, function ($data) {
                 return true;
             });
         });
@@ -86,21 +86,21 @@ class Tag extends Request
 
     public function getUsers($id)
     {
-        $request = new CUrl();
-        $url = $this->getUrl(self::API_GET_USERS);
-        $request->get($url, ['tagid' => $id]);
+        $url = $this->getUrl(self::API_GET_USERS, ['tagid' => $id]);
+        $request = HttpClient::get($url);
 
-        return static::handleRequest($request, function(CUrl $request){
-            return static::handleResponse($request, function($response){
-                return $response['userlist'];
+        return static::handleRequest($request, function (HttpResponse $response) {
+            return static::handleResponse($response, function ($data) {
+                return $data['userlist'];
             });
         });
     }
 
     public function addUsers($id, array $user_list = [], array $party_list = [])
     {
-        if (empty($user_list) && empty($party_list))
+        if (empty($user_list) && empty($party_list)) {
             throw new \InvalidArgumentException('$user_list and $party_list can\'t at the same time is empty.');
+        }
 
         $attributes = [
             'tagid' => $id,
@@ -108,24 +108,26 @@ class Tag extends Request
             'partylist' => $party_list,
         ];
 
-        $request = new CUrl();
         $url = $this->getUrl(self::API_ADD_USERS);
-        $request->post($url, json_encode($attributes, 320));
+        $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
 
-        return static::handleRequest($request, function(CUrl $request){
-            return static::handleResponse($request, function($response){
-                if ($response['invalidlist'] || $response['invalidparty'])
-                    throw new ResponseException($response['errmsg'], $response['invalidlist'] . $response['invalidparty']);
-                else
+        return static::handleRequest($request, function (HttpResponse $response) {
+            return static::handleResponse($response, function ($data) {
+                if ($data['invalidlist'] || $data['invalidparty']) {
+                    throw new ResponseException($data['errmsg'],
+                        $data['invalidlist'] . $data['invalidparty']);
+                } else {
                     return true;
+                }
             });
         });
     }
 
     public function deleteUsers($id, array $user_list = [], array $party_list = [])
     {
-        if (empty($user_list) && empty($party_list))
+        if (empty($user_list) && empty($party_list)) {
             throw new \InvalidArgumentException('$user_list and $party_list can\'t at the same time is empty.');
+        }
 
         $attributes = [
             'tagid' => $id,
@@ -133,24 +135,23 @@ class Tag extends Request
             'partylist' => $party_list,
         ];
 
-        $request = new CUrl();
         $url = $this->getUrl(self::API_DELETE_USERS);
-        $request->post($url, json_encode($attributes, 320));
+        $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
 
-        return static::handleRequest($request, function(CUrl $request){
-            return static::handleResponse($request, function($response){
+        return static::handleRequest($request, function (HttpResponse $response) {
+            return static::handleResponse($response, function ($data) {
                 $invalid = [
-                    'invalidlist' => $response['invalidlist'],
-                    'invalidparty' => $response['invalidparty'],
+                    'invalidlist' => $data['invalidlist'],
+                    'invalidparty' => $data['invalidparty'],
                 ];
                 $invalid = array_filter($invalid);
 
                 if ($invalid) {
                     $invalidText = join('；', $invalid);
-                    throw new ResponseException($response['errmsg'] . $invalidText);
-                }
-                else
+                    throw new ResponseException($data['errmsg'] . $invalidText);
+                } else {
                     return true;
+                }
             });
         });
     }

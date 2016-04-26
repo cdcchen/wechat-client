@@ -6,13 +6,15 @@
  * Time: 下午9:41
  */
 
-namespace weixin\qy;
+namespace cdcchen\wechat\qy;
 
 
+use cdcchen\net\curl\Client as HttpClient;
+use cdcchen\net\curl\HttpRequest;
+use cdcchen\net\curl\HttpResponse;
 use phpplus\filesystem\FileHelper;
-use phpplus\net\CUrl;
 
-class Material extends Request
+class Material extends Client
 {
     const BATCH_GET_MAX_COUNT = 50;
 
@@ -36,53 +38,61 @@ class Material extends Request
     const SIZE_VIDEO_MAX = 10240000;
     const SIZE_FILE_MAX = 20480000;
 
-    public function uploadFile($filename, $type)
+    public function upload($filename, $type)
     {
-        $request = new CUrl();
-        $url = $this->getUrl(self::API_UPLOAD, ['type' => $type]);
-        $media = static::makeMediaParams($filename);
-        $request->post($url, $media, true);
+        $mimeType = FileHelper::getMimeType($filename, null, true);
+        $file = new \CURLFile($filename, $mimeType);
+        $data = [
+            'filename' => $filename,
+            'filelength' => filesize($filename),
+            'content-type' => $mimeType,
+        ];
 
-        return static::handleRequest($request, function(CUrl $request){
-            return static::handleResponse($request, function($response){
-                return $response['media_id'];
+        $url = $this->getUrl(self::API_UPLOAD, ['type' => $type]);
+        $request = HttpClient::post($url, $data, true)
+            ->addFile('upload_file', $file, $mimeType)
+            ->setFormat(HttpRequest::FORMAT_JSON);
+
+        return static::handleRequest($request, function(HttpResponse $response) {
+            return static::handleResponse($response, function($data) {
+                return $data['media_id'];
             });
         });
     }
 
-    public function fetch($media_id, $agent_id)
+    public function uploadFile($filename)
     {
-        $request = new CUrl();
-        $url = $this->getUrl(self::API_GET_ITEM);
-        $request->returnHeaders(true)
-            ->get($url, ['media_id' => $media_id, 'agentid' => $agent_id]);
-
-        return static::handleRequest($request, function(CUrl $request){
-            $contentType = $request->getResponseHeaders('content-type');
-            if (stripos($contentType, 'json') === false)
-                return $request->getBody();
-            else {
-                return static::handleResponse($request, function($response){
-                    return $response['mpnews'];
-                });
-            }
-        });
+        return $this->upload($filename, self::TYPE_FILE);
     }
 
-    public function createNews($agent_id, $news)
+    public function uploadImage($filename)
+    {
+        return $this->upload($filename, self::TYPE_IMAGE);
+    }
+
+    public function uploadVoice($filename)
+    {
+        return $this->upload($filename, self::TYPE_VOICE);
+    }
+
+    public function uploadVideo($filename)
+    {
+        return $this->upload($filename, self::TYPE_VIDEO);
+    }
+
+    public function uploadNews($agent_id, $news)
     {
         $attributes = [
             'agentid' => $agent_id,
             'mpnews' => $news,
         ];
 
-        $request = new CUrl();
         $url = $this->getUrl(self::API_ADD_NEWS, $this->getAccessToken());
-        $request->post($url, json_encode($attributes, 320));
+        $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
 
-        return static::handleRequest($request, function(CUrl $request){
-            return static::handleResponse($request, function($response){
-                return $response['media_id'];
+        return static::handleRequest($request, function(HttpResponse $response) {
+            return static::handleResponse($response, function($data) {
+                return $data['media_id'];
             });
         });
     }
@@ -95,27 +105,41 @@ class Material extends Request
             'mpnews' => ['articles' => $articles],
         ];
 
-        $request = new CUrl();
         $url = $this->getUrl(self::API_UPDATE_NEWS, $this->getAccessToken());
-        $request->post($url, json_encode($attributes, 320));
+        $request = HttpClient::post($url, $attributes);
 
-        return static::handleRequest($request, function(CUrl $request){
-            return static::handleResponse($request, function($response){
+        return static::handleRequest($request, function(HttpResponse $response) {
+            return static::handleResponse($response, function($data) {
                 return true;
             });
         });
     }
 
+    public function fetch($media_id, $agent_id)
+    {
+        $url = $this->getUrl(self::API_GET_ITEM);
+        $request = HttpClient::get($url, ['media_id' => $media_id, 'agentid' => $agent_id]);
+
+        return static::handleRequest($request, function(HttpResponse $response) {
+            if ($response->getFormat() !== HttpRequest::FORMAT_JSON)
+                return $response->getContent();
+            else {
+                return static::handleResponse($response, function($data){
+                    return $data['mpnews'];
+                });
+            }
+        });
+    }
+
     public function getCount($agent_id)
     {
-        $request = new CUrl();
         $url = $this->getUrl(self::API_GET_COUNT);
-        $request->get($url, ['agentid' => $agent_id]);
+        $request = HttpClient::get($url, ['agentid' => $agent_id]);
 
-        return static::handleRequest($request, function(CUrl $request){
-            return static::handleResponse($request, function($response){
-                unset($response['errcode'], $response['errmsg']);
-                return $response;
+        return static::handleRequest($request, function(HttpResponse $response) {
+            return static::handleResponse($response, function($data) {
+                unset($data['errcode'], $data['errmsg']);
+                return $data;
             });
         });
     }
@@ -130,8 +154,6 @@ class Material extends Request
      */
     public function query($agent_id, $type, $count, $offset = 0)
     {
-        $url = $this->getUrl(self::API_LIST);
-
         $attributes = [
             'agentid' => $agent_id,
             'type' => $type,
@@ -139,13 +161,13 @@ class Material extends Request
             'offset' => $offset,
         ];
 
-        $request = new CUrl();
-        $request->post($url, json_encode($attributes, 320));
+        $url = $this->getUrl(self::API_LIST);
+        $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
 
-        return static::handleRequest($request, function(CUrl $request){
-            return static::handleResponse($request, function($response){
-                unset($response['errcode'], $response['errmsg']);
-                return $response;
+        return static::handleRequest($request, function(HttpResponse $response) {
+            return static::handleResponse($response, function($data) {
+                unset($data['errcode'], $data['errmsg']);
+                return $data;
             });
         });
     }
@@ -160,26 +182,13 @@ class Material extends Request
             'media_id' => $media_id,
         ];
 
-        $request = new CUrl();
-        $request->get($url, $attributes);
+        $request = HttpClient::get($url, $attributes);
 
-        return static::handleRequest($request, function(CUrl $request){
-            return static::handleResponse($request, function($response){
-                unset($response['errcode'], $response['errmsg']);
+        return static::handleRequest($request, function(HttpResponse $response) {
+            return static::handleResponse($response, function($data) {
+                unset($data['errcode'], $data['errmsg']);
                 return true;
             });
         });
-    }
-
-    protected static function makeMediaParams($filename)
-    {
-        $mimeType = FileHelper::getMimeType($filename, null, true);
-        $file = new \CURLFile($filename, $mimeType);
-        return [
-            'upload_file' => $file,
-            'filename' => $filename,
-            'filelength' => filesize($filename),
-            'content-type' => $mimeType,
-        ];
     }
 }

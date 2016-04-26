@@ -9,12 +9,12 @@
 namespace cdcchen\wechat\qy\contact;
 
 
-use cdcchen\net\curl\Client;
+use cdcchen\net\curl\Client as HttpClient;
 use cdcchen\net\curl\HttpRequest;
 use cdcchen\net\curl\HttpResponse;
-use cdcchen\wechat\qy\Request;
+use cdcchen\wechat\qy\Client;
 
-class Department extends Request
+class Department extends Client
 {
     const API_CREATE = '/cgi-bin/department/create';
     const API_UPDATE = '/cgi-bin/department/update';
@@ -25,7 +25,7 @@ class Department extends Request
     public function select($id = null)
     {
         $url = $this->getUrl(self::API_LIST);
-        $request = Client::get($url, ['id' => $id]);
+        $request = HttpClient::get($url, ['id' => $id]);
 
         return static::handleRequest($request, function(HttpResponse $response){
             return static::handleResponse($response, function($data){
@@ -45,7 +45,7 @@ class Department extends Request
         if ($id > 0) $attributes['id'] = $id;
 
         $url = $this->getUrl(self::API_CREATE);
-        $request = Client::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
+        $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
 
         return static::handleRequest($request, function(HttpResponse $response){
             return static::handleResponse($response, function($data){
@@ -65,7 +65,7 @@ class Department extends Request
         if ($order > 0) $attributes['order'] = $order;
 
         $url = $this->getUrl(self::API_UPDATE);
-        $request = Client::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
+        $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
 
         return static::handleRequest($request, function(HttpResponse $response){
             return static::handleResponse($response, function($data){
@@ -79,7 +79,7 @@ class Department extends Request
         $attributes = ['id' => $id];
 
         $url = $this->getUrl(self::API_DELETE);
-        $request = Client::get($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
+        $request = HttpClient::get($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
 
         return static::handleRequest($request, function(HttpResponse $response){
             return static::handleResponse($response, function($data){

@@ -6,34 +6,34 @@
  * Time: 21:32
  */
 
-namespace weixin\login;
+namespace cdcchen\wechat\qy\login;
 
 
-use phpplus\net\CUrl;
-use weixin\base\BaseRequest;
-use weixin\base\ApiException;
-use weixin\base\ResponseException;
+use cdcchen\net\curl\Client as HttpClient;
+use cdcchen\net\curl\HttpResponse;
+use cdcchen\wechat\base\BaseClient;
+use cdcchen\wechat\base\ApiException;
+use cdcchen\wechat\base\ResponseException;
 
-class AccessToken extends BaseRequest
+class AccessToken extends BaseClient
 {
     const API_ACCESS_TOKEN = '/cgi-bin/service/get_provider_token';
 
-    public static function fetch($suite_id, $provider_secret, $only_token = true)
+    public static function fetch($suite_id, $provider_secret)
     {
         $params = [
             'suite_id' => $suite_id,
             'provider_secret' => $provider_secret,
         ];
 
-        $request = new CUrl();
-        $url = Request::getRequestUrl(self::API_ACCESS_TOKEN);
-        $request->post($url, $params);
+        $url = Client::getRequestUrl(self::API_ACCESS_TOKEN);
+        $request = HttpClient::post($url, $params);
 
-        return static::handleRequest($request, function(CUrl $request) use ($only_token){
-            $data = $request->getJsonData();
-            static::checkAccessTokenResponse($data);
-
-            return $only_token ? $data['provider_access_token'] : $data;
+        return static::handleRequest($request, function(HttpResponse $response) {
+            return static::handleResponse($response, function($data) {
+                static::checkAccessTokenResponse($data);
+                return $data;
+            });
         });
     }
 

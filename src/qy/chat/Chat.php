@@ -8,13 +8,15 @@
  */
 namespace cdcchen\wechat\qy\chat;
 
-use phpplus\net\CUrl;
-use cdcchen\wechat\qy\base\UpdateTrait;
-use cdcchen\wechat\qy\Request;
+use cdcchen\net\curl\Client as HttpClient;
+use cdcchen\net\curl\HttpRequest;
+use cdcchen\net\curl\HttpResponse;
+use cdcchen\wechat\qy\base\UpdateAttributeTrait;
+use cdcchen\wechat\qy\Client;
 
-class Chat extends Request
+class Chat extends Client
 {
-    use UpdateTrait;
+    use UpdateAttributeTrait;
 
     const CHAT_TYPE_SINGLE = 'single';
     const CHAT_TYPE_GROUP = 'group';
@@ -40,8 +42,6 @@ class Chat extends Request
     {
         static::checkCreateArguments($owner, $user_list);
 
-        $url = $this->getUrl(self::API_CREATE);
-
         $attributes = [
             'chatid' => $chat_id,
             'name' => $name,
@@ -49,11 +49,11 @@ class Chat extends Request
             'userlist' => $user_list,
         ];
 
-        $request = new CUrl();
-        $request->post($url, json_encode($attributes, 320));
+        $url = $this->getUrl(self::API_CREATE);
+        $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
 
-        return static::handleRequest($request, function (CUrl $request) {
-            return static::handleResponse($request, function ($response) {
+        return static::handleRequest($request, function(HttpResponse $response){
+            return static::handleResponse($response, function($data){
                 return true;
             });
         });
@@ -63,13 +63,11 @@ class Chat extends Request
     public function fetch($chat_id)
     {
         $url = $this->getUrl(self::API_FETCH, ['chatid' => $chat_id]);
+        $request = HttpClient::get($url);
 
-        $request = new CUrl();
-        $request->get($url);
-
-        return static::handleRequest($request, function (CUrl $request) {
-            return static::handleResponse($request, function ($response) {
-                return $response['chat_info'];
+        return static::handleRequest($request, function(HttpResponse $response){
+            return static::handleResponse($response, function($data){
+                return $data['chat_info'];
             });
         });
     }
@@ -88,12 +86,11 @@ class Chat extends Request
         if (count($attributes) <= 2)
             throw new \InvalidArgumentException('There is no attributes need to be updated.');
 
-        $request = new CUrl();
         $url = $this->getUrl(self::API_UPDATE);
-        $request->post($url, json_encode($attributes, 320));
+        $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
 
-        return static::handleRequest($request, function(CUrl $request){
-            return static::handleResponse($request, function($response){
+        return static::handleRequest($request, function(HttpResponse $response){
+            return static::handleResponse($response, function($data){
                 return true;
             });
         });
@@ -148,19 +145,16 @@ class Chat extends Request
 
     public function quit($chat_id, $op_user)
     {
-        $url = $this->getUrl(self::API_QUIT);
-
-        $request = new CUrl();
-
         $attributes = [
             'chatid' => $chat_id,
             'op_user' => $op_user,
         ];
 
-        $request->post($url, json_encode($attributes, 320));
+        $url = $this->getUrl(self::API_QUIT);
+        $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
 
-        return static::handleRequest($request, function (CUrl $request) {
-            return static::handleResponse($request, function ($response) {
+        return static::handleRequest($request, function(HttpResponse $response){
+            return static::handleResponse($response, function($data){
                 return true;
             });
         });
@@ -169,19 +163,16 @@ class Chat extends Request
 
     public function clearNotify($op_user, $chat = [])
     {
-        $url = $this->getUrl(self::API_CLEAR_NOTIFY);
-
-        $request = new CUrl();
-
         $attributes = [
             'op_user' => $op_user,
             'chat' => $chat,
         ];
 
-        $request->post($url, json_encode($attributes, 320));
+        $url = $this->getUrl(self::API_CLEAR_NOTIFY);
+        $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
 
-        return static::handleRequest($request, function (CUrl $request) {
-            return static::handleResponse($request, function ($response) {
+        return static::handleRequest($request, function(HttpResponse $response){
+            return static::handleResponse($response, function($data){
                 return true;
             });
         });
@@ -190,17 +181,14 @@ class Chat extends Request
 
     public function setMute($user_mute_list = [])
     {
-        $url = $this->getUrl(self::API_SET_MUTE);
-
-        $request = new CUrl();
-
         $attributes = ['user_mute_list' => $user_mute_list];
 
-        $request->post($url, json_encode($attributes, 320));
+        $url = $this->getUrl(self::API_SET_MUTE);
+        $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
 
-        return static::handleRequest($request, function (CUrl $request) {
-            return static::handleResponse($request, function ($response) {
-                return isset($response['invaliduser']) ? $response['invaliduser'] : true;
+        return static::handleRequest($request, function(HttpResponse $response){
+            return static::handleResponse($response, function($data){
+                return isset($data['invaliduser']) ? $data['invaliduser'] : true;
             });
         });
     }
@@ -239,18 +227,15 @@ class Chat extends Request
 
     public function send($receiver_type, $receiver_id, $sender, $msg_type, $attributes = [])
     {
-        $url = $this->getUrl(self::API_SEND);
-
-        $request = new CUrl();
-
         $attributes['receiver'] = ['type' => $receiver_type, 'id' => $receiver_id];
         $attributes['sender'] = $sender;
         $attributes['msgtype'] = $msg_type;
 
-        $request->post($url, json_encode($attributes, 320));
+        $url = $this->getUrl(self::API_SEND);
+        $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
 
-        return static::handleRequest($request, function (CUrl $request) {
-            return static::handleResponse($request, function ($response) {
+        return static::handleRequest($request, function(HttpResponse $response){
+            return static::handleResponse($response, function($data){
                 return true;
             });
         });

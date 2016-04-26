@@ -9,12 +9,12 @@
 namespace cdcchen\wechat\qy;
 
 
-use cdcchen\net\curl\Client;
+use cdcchen\net\curl\Client as HttpClient;
 use cdcchen\net\curl\HttpRequest;
 use cdcchen\net\curl\HttpResponse;
 use cdcchen\wechat\base\ResponseException;
 
-class Message extends Request
+class Message extends Client
 {
     const API_SEND = '/cgi-bin/message/send';
 
@@ -37,7 +37,7 @@ class Message extends Request
         $attributes['agentid'] = $agent_id;
 
         $url = $this->getUrl(self::API_SEND);
-        $request = Client::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
+        $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
 
         return static::handleRequest($request, function(HttpResponse $response){
             return static::handleResponse($response, function($data){

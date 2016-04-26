@@ -6,13 +6,14 @@
  * Time: 下午2:26
  */
 
-namespace weixin\qy;
+namespace cdcchen\wechat\qy;
 
 
-use phpplus\net\CUrl;
-use weixin\base\ResponseException;
+use cdcchen\net\curl\Client as HttpClient;
+use cdcchen\net\curl\HttpResponse;
+use cdcchen\wechat\base\ResponseException;
 
-class OAuth extends Request
+class OAuth extends Client
 {
     CONST URL_AUTHORIZE = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=snsapi_base&state=%s#wechat_redirect';
     const API_INFO = '/cgi-bin/user/getuserinfo';
@@ -24,17 +25,16 @@ class OAuth extends Request
 
     public function getUserInfo($code)
     {
-        $request = new CUrl();
-        $url = $this->getUrl(self::API_INFO);
-        $request->get($url, ['code' => $code]);
+        $url = $this->getUrl(self::API_INFO, ['code' => $code]);
+        $request = HttpClient::get($url);
 
-        return static::handleRequest($request, function(CUrl $request){
-            $response = $request->getJsonData();
-            if (isset($response['errcode'])) {
+        return static::handleRequest($request, function(HttpResponse $response){
+            $data = $response->getData();
+            if (isset($data['errcode'])) {
                 throw new ResponseException($response['errmsg'], $response['errcode']);
             }
             else
-                return $response;
+                return $data;
         });
     }
 }

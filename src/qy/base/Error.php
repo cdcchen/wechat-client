@@ -6,7 +6,7 @@
  * Time: 10:45
  */
 
-namespace weixin\qy\base;
+namespace cdcchen\wechat\qy\base;
 
 
 class Error

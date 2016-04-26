@@ -6,24 +6,24 @@
  * Time: 下午4:32
  */
 
-namespace weixin\qy;
+namespace cdcchen\wechat\qy;
 
 
-use phpplus\net\CUrl;
+use cdcchen\net\curl\Client as HttpClient;
+use cdcchen\net\curl\HttpResponse;
 
-class Server extends Request
+class Server extends Client
 {
     const API_IP_LIST = '/cgi-bin/getcallbackip';
 
     public function getCallbackIP()
     {
-        $request = new CUrl();
         $url = $this->getUrl(self::API_IP_LIST);
-        $request->get($url);
+        $request = HttpClient::get($url);
 
-        return static::handleRequest($request, function(CUrl $request){
-            return static::handleResponse($request, function($response){
-                return $response['ip_list'];
+        return static::handleRequest($request, function (HttpResponse $response) {
+            return static::handleResponse($response, function ($data) {
+                return $data['ip_list'];
             });
         });
     }
