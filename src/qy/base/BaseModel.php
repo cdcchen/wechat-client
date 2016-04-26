@@ -6,10 +6,10 @@
  * Time: 15:27
  */
 
-namespace cdcchen\wechat\qy\models;
+namespace cdcchen\wechat\qy\base;
 
 
-abstract class Base
+abstract class BaseModel
 {
     abstract public function attributesMap();
 

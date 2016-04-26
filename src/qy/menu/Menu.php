@@ -6,12 +6,13 @@
  * Time: 下午1:59
  */
 
-namespace cdcchen\wechat\qy;
+namespace cdcchen\wechat\qy\menu;
 
 
 use cdcchen\net\curl\Client as HttpClient;
 use cdcchen\net\curl\HttpRequest;
 use cdcchen\net\curl\HttpResponse;
+use cdcchen\wechat\qy\Client;
 
 class Menu extends Client
 {
