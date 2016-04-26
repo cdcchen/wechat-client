@@ -21,7 +21,7 @@ class Shake extends Client
     {
         $attributes = ['ticket' => $ticket];
 
-        $url = $this->getUrl(self::API_GET_SHAKE_INFO);
+        $url = $this->buildUrl(self::API_GET_SHAKE_INFO);
         $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
 
         return static::handleRequest($request, function (HttpResponse $response) {

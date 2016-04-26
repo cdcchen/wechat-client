@@ -21,7 +21,11 @@ class MPNewsArticle extends Base
 
     public function attributesMap()
     {
-        return ['title', 'author', 'content', 'digest',
+        return [
+            'title',
+            'author',
+            'content',
+            'digest',
             'thumbMediaId' => 'thumb_media_id',
             'contentSourceUrl' => 'content_source_url',
             'showCoverPic' => 'show_cover_pic',

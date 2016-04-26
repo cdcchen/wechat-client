@@ -80,7 +80,7 @@ class Batch extends Client
 
     public function getResult($job_id)
     {
-        $url = $this->getUrl(self::API_GET_RESULT);
+        $url = $this->buildUrl(self::API_GET_RESULT);
         $request = HttpClient::get($url, ['jobid' => $job_id]);
 
         return static::handleRequest($request, function (HttpResponse $response) {
@@ -97,7 +97,7 @@ class Batch extends Client
             $attributes['callback'] = static::buildCallback($url, $token, $encoding_aes_key);
         }
 
-        $url = $this->getUrl($api_name);
+        $url = $this->buildUrl($api_name);
         $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
 
         return static::handleRequest($request, function (HttpResponse $response) {

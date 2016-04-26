@@ -19,37 +19,37 @@ class User extends Client
 {
     use UpdateAttributeTrait;
 
-    const STATUS_FOLLOWED = 1;
-    const STATUS_FORBIDDEN = 2;
+    const STATUS_FOLLOWED     = 1;
+    const STATUS_FORBIDDEN    = 2;
     const STATUS_NOT_FOLLOWED = 4;
 
     const INVITE_TYPE_WEIXIN = 1;
-    const INVITE_TYPE_EMAIL = 2;
+    const INVITE_TYPE_EMAIL  = 2;
 
-    const API_CREATE                = '/cgi-bin/user/create';
-    const API_UPDATE                = '/cgi-bin/user/update';
-    const API_DELETE                = '/cgi-bin/user/delete';
-    const API_GET_ITEM              = '/cgi-bin/user/get';
-    const API_SIMPLE_LIST           = '/cgi-bin/user/simplelist';
-    const API_DETAIL_LIST           = '/cgi-bin/user/list';
-    const API_BATCH_DELETE          = '/cgi-bin/user/batchdelete';
-    const API_CONVERT_TO_OPENID     = '/cgi-bin/user/convert_to_openid';
-    const API_CONVERT_TO_USERID     = '/cgi-bin/user/convert_to_userid';
-    const API_INVITE                = '/cgi-bin/invite/send';
-
+    const API_CREATE            = '/cgi-bin/user/create';
+    const API_UPDATE            = '/cgi-bin/user/update';
+    const API_DELETE            = '/cgi-bin/user/delete';
+    const API_GET_ITEM          = '/cgi-bin/user/get';
+    const API_SIMPLE_LIST       = '/cgi-bin/user/simplelist';
+    const API_DETAIL_LIST       = '/cgi-bin/user/list';
+    const API_BATCH_DELETE      = '/cgi-bin/user/batchdelete';
+    const API_CONVERT_TO_OPENID = '/cgi-bin/user/convert_to_openid';
+    const API_CONVERT_TO_USERID = '/cgi-bin/user/convert_to_userid';
+    const API_INVITE            = '/cgi-bin/invite/send';
 
 
     public function create(array $attributes, array $ext_attr = [])
     {
-        if ($ext_attr)
+        if ($ext_attr) {
             $attributes['extattr'] = $ext_attr;
+        }
 
-        
-        $url = $this->getUrl(self::API_CREATE);
+
+        $url = $this->buildUrl(self::API_CREATE);
         $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
 
-        return static::handleRequest($request, function(HttpResponse $response){
-            return static::handleResponse($response, function($data){
+        return static::handleRequest($request, function (HttpResponse $response) {
+            return static::handleResponse($response, function ($data) {
                 return true;
             });
         });
@@ -59,15 +59,16 @@ class User extends Client
     {
         $attributes = array_merge($this->_updateAttributes, $attributes);
         $attributes['userid'] = $user_id;
-        if (count($attributes) <= 1)
+        if (count($attributes) <= 1) {
             throw new \InvalidArgumentException('There is no attributes need to be updated.');
+        }
 
-        
-        $url = $this->getUrl(self::API_UPDATE);
+
+        $url = $this->buildUrl(self::API_UPDATE);
         $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
 
-        return static::handleRequest($request, function(HttpResponse $response){
-            return static::handleResponse($response, function($data){
+        return static::handleRequest($request, function (HttpResponse $response) {
+            return static::handleResponse($response, function ($data) {
                 return true;
             });
         });
@@ -75,12 +76,12 @@ class User extends Client
 
     public function delete($user_id)
     {
-        
-        $url = $this->getUrl(self::API_DELETE);
+
+        $url = $this->buildUrl(self::API_DELETE);
         $request = HttpClient::get($url, ['userid' => $user_id]);
 
-        return static::handleRequest($request, function(HttpResponse $response){
-            return static::handleResponse($response, function($data){
+        return static::handleRequest($request, function (HttpResponse $response) {
+            return static::handleResponse($response, function ($data) {
                 return true;
             });
         });
@@ -90,12 +91,12 @@ class User extends Client
     {
         $attributes = ['useridlist' => $users];
 
-        
-        $url = $this->getUrl(self::API_BATCH_DELETE);
+
+        $url = $this->buildUrl(self::API_BATCH_DELETE);
         $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
 
-        return static::handleRequest($request, function(HttpResponse $response){
-            return static::handleResponse($response, function($data){
+        return static::handleRequest($request, function (HttpResponse $response) {
+            return static::handleResponse($response, function ($data) {
                 return true;
             });
         });
@@ -103,12 +104,12 @@ class User extends Client
 
     public function fetch($user_id)
     {
-        
-        $url = $this->getUrl(self::API_GET_ITEM);
+
+        $url = $this->buildUrl(self::API_GET_ITEM);
         $request = HttpClient::get($url, ['userid' => $user_id]);
 
-        return static::handleRequest($request, function(HttpResponse $response){
-            return static::handleResponse($response, function($data){
+        return static::handleRequest($request, function (HttpResponse $response) {
+            return static::handleResponse($response, function ($data) {
                 return $data;
             });
         });
@@ -123,12 +124,12 @@ class User extends Client
             'fetch_child' => $fetch_child ? 1 : 0,
         ];
 
-        
-        $url = $this->getUrl(self::API_SIMPLE_LIST);
+
+        $url = $this->buildUrl(self::API_SIMPLE_LIST);
         $request = HttpClient::get($url, $attributes);
 
-        return static::handleRequest($request, function(HttpResponse $response){
-            return static::handleResponse($response, function($data){
+        return static::handleRequest($request, function (HttpResponse $response) {
+            return static::handleResponse($response, function ($data) {
                 return $data['userlist'];
             });
         });
@@ -142,12 +143,12 @@ class User extends Client
             'fetch_child' => $fetch_child ? 1 : 0,
         ];
 
-        
-        $url = $this->getUrl(self::API_DETAIL_LIST);
+
+        $url = $this->buildUrl(self::API_DETAIL_LIST);
         $request = HttpClient::get($url, $attributes);
 
-        return static::handleRequest($request, function(HttpResponse $response){
-            return static::handleResponse($response, function($data){
+        return static::handleRequest($request, function (HttpResponse $response) {
+            return static::handleResponse($response, function ($data) {
                 return $data['userlist'];
             });
         });
@@ -157,12 +158,12 @@ class User extends Client
     {
         $attributes = ['userid' => $user_id];
 
-        
-        $url = $this->getUrl(self::API_INVITE);
+
+        $url = $this->buildUrl(self::API_INVITE);
         $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
 
-        return static::handleRequest($request, function(HttpResponse $response){
-            return static::handleResponse($response, function($data){
+        return static::handleRequest($request, function (HttpResponse $response) {
+            return static::handleResponse($response, function ($data) {
                 return $data['type'];
             });
         });
@@ -171,15 +172,16 @@ class User extends Client
     public function getOpenIdByUserIdTo($user_id, $agent_id = '')
     {
         $attributes = ['userid' => $user_id];
-        if ($agent_id)
+        if ($agent_id) {
             $attributes['agent_id'] = $agent_id;
+        }
 
-        
-        $url = $this->getUrl(self::API_CONVERT_TO_OPENID);
+
+        $url = $this->buildUrl(self::API_CONVERT_TO_OPENID);
         $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
 
-        return static::handleRequest($request, function(HttpResponse $response){
-            return static::handleResponse($response, function($data){
+        return static::handleRequest($request, function (HttpResponse $response) {
+            return static::handleResponse($response, function ($data) {
                 unset($data['errcode'], $data['errmsg']);
                 return $data;
             });
@@ -190,17 +192,16 @@ class User extends Client
     {
         $attributes = ['openid' => $open_id];
 
-        
-        $url = $this->getUrl(self::API_CONVERT_TO_USERID);
+
+        $url = $this->buildUrl(self::API_CONVERT_TO_USERID);
         $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
 
-        return static::handleRequest($request, function(HttpResponse $response){
-            return static::handleResponse($response, function($data){
+        return static::handleRequest($request, function (HttpResponse $response) {
+            return static::handleResponse($response, function ($data) {
                 return $data['userid'];
             });
         });
     }
-
 
 
     ################################## Update ####################################

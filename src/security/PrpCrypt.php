@@ -15,7 +15,7 @@ namespace cdcchen\wechat\security;
 class PrpCrypt
 {
     const RANDOM_STRING_LEN = 16;
-    const INIT_VECTOR_SIZE = 16;
+    const INIT_VECTOR_SIZE  = 16;
 
     private $_key;
 

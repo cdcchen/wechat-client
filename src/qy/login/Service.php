@@ -27,7 +27,7 @@ class Service extends Client
     {
         $attributes = ['auth_code' => $auth_code];
 
-        $url = $this->getUrl(self::API_GET_LOGIN_INFO);
+        $url = $this->buildUrl(self::API_GET_LOGIN_INFO);
         $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
 
         return static::handleRequest($request, function (HttpResponse $response) {
@@ -45,7 +45,7 @@ class Service extends Client
             'agentid' => $agent_id,
         ];
 
-        $url = $this->getUrl(self::API_GET_LOGIN_URL);
+        $url = $this->buildUrl(self::API_GET_LOGIN_URL);
         $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
 
         return static::handleRequest($request, function (HttpResponse $response) {

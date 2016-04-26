@@ -48,7 +48,7 @@ class Material extends Client
             'content-type' => $mimeType,
         ];
 
-        $url = $this->getUrl(self::API_UPLOAD, ['type' => $type]);
+        $url = $this->buildUrl(self::API_UPLOAD, ['type' => $type]);
         $request = HttpClient::post($url, $data, true)
             ->addFile('upload_file', $file, $mimeType)
             ->setFormat(HttpRequest::FORMAT_JSON);
@@ -87,7 +87,7 @@ class Material extends Client
             'mpnews' => $news,
         ];
 
-        $url = $this->getUrl(self::API_ADD_NEWS, $this->getAccessToken());
+        $url = $this->buildUrl(self::API_ADD_NEWS, $this->getAccessToken());
         $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
 
         return static::handleRequest($request, function(HttpResponse $response) {
@@ -105,7 +105,7 @@ class Material extends Client
             'mpnews' => ['articles' => $articles],
         ];
 
-        $url = $this->getUrl(self::API_UPDATE_NEWS, $this->getAccessToken());
+        $url = $this->buildUrl(self::API_UPDATE_NEWS, $this->getAccessToken());
         $request = HttpClient::post($url, $attributes);
 
         return static::handleRequest($request, function(HttpResponse $response) {
@@ -117,7 +117,7 @@ class Material extends Client
 
     public function fetch($media_id, $agent_id)
     {
-        $url = $this->getUrl(self::API_GET_ITEM);
+        $url = $this->buildUrl(self::API_GET_ITEM);
         $request = HttpClient::get($url, ['media_id' => $media_id, 'agentid' => $agent_id]);
 
         return static::handleRequest($request, function(HttpResponse $response) {
@@ -133,7 +133,7 @@ class Material extends Client
 
     public function getCount($agent_id)
     {
-        $url = $this->getUrl(self::API_GET_COUNT);
+        $url = $this->buildUrl(self::API_GET_COUNT);
         $request = HttpClient::get($url, ['agentid' => $agent_id]);
 
         return static::handleRequest($request, function(HttpResponse $response) {
@@ -161,7 +161,7 @@ class Material extends Client
             'offset' => $offset,
         ];
 
-        $url = $this->getUrl(self::API_LIST);
+        $url = $this->buildUrl(self::API_LIST);
         $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
 
         return static::handleRequest($request, function(HttpResponse $response) {
@@ -175,7 +175,7 @@ class Material extends Client
 
     public function delete($agent_id, $media_id)
     {
-        $url = $this->getUrl(self::API_DELETE);
+        $url = $this->buildUrl(self::API_DELETE);
 
         $attributes = [
             'agentid' => $agent_id,

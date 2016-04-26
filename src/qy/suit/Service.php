@@ -25,7 +25,7 @@ class Service extends Client
     {
         $attributes = ['suite_id' => $suite_id];
 
-        $url = $this->getUrl(self::API_GET_PRE_AUTH_CODE);
+        $url = $this->buildUrl(self::API_GET_PRE_AUTH_CODE);
         $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
 
         return static::handleRequest($request, function (HttpResponse $response) {
@@ -43,7 +43,7 @@ class Service extends Client
             'session_info' => $session_info,
         ];
 
-        $url = $this->getUrl(self::API_SET_SESSION_INFO);
+        $url = $this->buildUrl(self::API_SET_SESSION_INFO);
         $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
 
         return static::handleRequest($request, function (HttpResponse $response) {
@@ -61,7 +61,7 @@ class Service extends Client
             'auth_code' => $auth_code,
         ];
 
-        $url = $this->getUrl(self::API_SET_SESSION_INFO);
+        $url = $this->buildUrl(self::API_SET_SESSION_INFO);
         $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
 
         return static::handleRequest($request, function (HttpResponse $response) {
@@ -79,7 +79,7 @@ class Service extends Client
             'permanent_code' => $permanent_code,
         ];
 
-        $url = $this->getUrl(self::API_SET_SESSION_INFO);
+        $url = $this->buildUrl(self::API_SET_SESSION_INFO);
         $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
 
         return static::handleRequest($request, function (HttpResponse $response) {
@@ -97,7 +97,7 @@ class Service extends Client
             'permanent_code' => $permanent_code,
         ];
 
-        $url = $this->getUrl(self::API_SET_SESSION_INFO);
+        $url = $this->buildUrl(self::API_SET_SESSION_INFO);
         $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
 
         return static::handleRequest($request, function (HttpResponse $response) {

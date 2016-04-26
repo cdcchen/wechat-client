@@ -25,7 +25,7 @@ class OAuth extends Client
 
     public function getUserInfo($code)
     {
-        $url = $this->getUrl(self::API_INFO, ['code' => $code]);
+        $url = $this->buildUrl(self::API_INFO, ['code' => $code]);
         $request = HttpClient::get($url);
 
         return static::handleRequest($request, function(HttpResponse $response){

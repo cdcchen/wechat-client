@@ -18,7 +18,7 @@ class Server extends Client
 
     public function getCallbackIP()
     {
-        $url = $this->getUrl(self::API_IP_LIST);
+        $url = $this->buildUrl(self::API_IP_LIST);
         $request = HttpClient::get($url);
 
         return static::handleRequest($request, function (HttpResponse $response) {

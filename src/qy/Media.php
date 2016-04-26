@@ -42,7 +42,7 @@ class Media extends Client
             'content-type' => $mimeType,
         ];
 
-        $url = $this->getUrl(self::API_UPLOAD, ['type' => $type]);
+        $url = $this->buildUrl(self::API_UPLOAD, ['type' => $type]);
         $request = HttpClient::post($url, $data)
                          ->addFile('upload_file', $file, $mimeType)
                          ->setFormat(HttpRequest::FORMAT_JSON);
@@ -84,7 +84,7 @@ class Media extends Client
             'content-type' => $mimeType,
         ];
 
-        $url = $this->getUrl(self::API_UPLOAD_IMG);
+        $url = $this->buildUrl(self::API_UPLOAD_IMG);
         $request = HttpClient::post($url, $data)
                          ->addFile('upload_file', $file, $mimeType)
                          ->setFormat(HttpRequest::FORMAT_JSON);
@@ -98,7 +98,7 @@ class Media extends Client
 
     public function download($media_id)
     {
-        $url = $this->getUrl(self::API_DOWNLOAD);
+        $url = $this->buildUrl(self::API_DOWNLOAD);
         $request = HttpClient::get($url, ['media_id' => $media_id]);
 
         return static::handleRequest($request, function(HttpResponse $response) {

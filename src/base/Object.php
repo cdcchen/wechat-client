@@ -14,20 +14,19 @@ class Object
     protected static function checkRequiredAttributes($attributes, array $required_keys, array $one_required_keys = [])
     {
         foreach ($required_keys as $key) {
-            if (!isset($attributes[$key]))
-                throw new \InvalidArgumentException("Argument $key is required.");
-        }
-
-        $valid = false;
-        foreach ($one_required_keys as $key) {
-            if (isset($attributes[$key])) {
-                $valid = true;
-                break;
+            if (!isset($attributes[$key])) {
+                throw new \InvalidArgumentException("Argument {$key} is required.");
             }
         }
-        if (!$valid)
-            throw new \InvalidArgumentException('Arguments ' . join('/', $one_required_keys) . ' cannot at the same time is empty.');
 
-        return true;
+        foreach ($one_required_keys as $key) {
+            if (isset($attributes[$key])) {
+                return true;
+            }
+        }
+
+        $keys = join('/', $one_required_keys);
+        throw new \InvalidArgumentException("Arguments {$keys} cannot at the same time is empty.");
+
     }
 }

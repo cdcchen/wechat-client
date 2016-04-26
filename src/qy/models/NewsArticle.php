@@ -18,7 +18,10 @@ class NewsArticle extends Base
 
     public function attributesMap()
     {
-        return ['title', '$description', 'url',
+        return [
+            'title',
+            'description',
+            'url',
             'picUrl' => 'picurl',
         ];
     }

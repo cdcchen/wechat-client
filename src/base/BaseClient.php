@@ -17,6 +17,15 @@ class BaseClient extends Object
 {
     protected $_accessToken;
 
+    public function __construct($access_token)
+    {
+        if (empty($access_token)) {
+            throw new \InvalidArgumentException('Access token is required.');
+        }
+
+        $this->setAccessToken($access_token);
+    }
+
     public function getAccessToken()
     {
         return $this->_accessToken;
@@ -38,7 +47,7 @@ class BaseClient extends Object
         return sha1($str);
     }
 
-    protected function getUrl($path, $query = [])
+    protected function buildUrl($path, $query = [])
     {
         return static::getRequestUrl($path, $query, $this->getAccessToken());
     }
@@ -55,7 +64,6 @@ class BaseClient extends Object
         throw new \Exception('This method should be override.');
     }
 
-    
 
     protected static function handleRequest(HttpRequest $request, callable $success = null, callable $failed = null)
     {

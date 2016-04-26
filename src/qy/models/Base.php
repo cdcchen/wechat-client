@@ -13,18 +13,28 @@ abstract class Base
 {
     abstract public function attributesMap();
 
-    public function buildAttributes()
+    protected function buildAttributes()
     {
         $attributes = [];
         foreach ($this->attributesMap() as $key => $attr) {
-            if (is_int($key))
-                $attributes[$attr] = $this->$attr;
-            elseif (is_string($key))
-                $attributes[$attr] = $this->$key;
-            else
+            if (is_int($key)) {
+                $value = $this->$attr;
+            } elseif (is_string($key)) {
+                $value = $this->$key;
+            } else {
                 throw new \Exception('Key is not valid in attributes map.');
+            }
+
+            if ($value !== false) {
+                $attributes[$attr] = $value;
+            }
         }
 
         return $attributes;
+    }
+
+    public function toArray()
+    {
+        return $this->buildAttributes();
     }
 }

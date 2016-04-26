@@ -15,14 +15,6 @@ class Client extends BaseClient
 {
     const API_HOST = 'https://qyapi.weixin.qq.com';
 
-    public function __construct($access_token)
-    {
-        if (empty($access_token))
-            throw new \InvalidArgumentException('Access token is required.');
-
-        $this->setAccessToken($access_token);
-    }
-
     public static function getRequestUrl($path, $query = [], $access_token = '')
     {
         $url =  self::API_HOST . '/' . ltrim($path, '/');

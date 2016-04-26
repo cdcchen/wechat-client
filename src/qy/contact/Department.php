@@ -19,16 +19,16 @@ class Department extends Client
     const API_CREATE = '/cgi-bin/department/create';
     const API_UPDATE = '/cgi-bin/department/update';
     const API_DELETE = '/cgi-bin/department/delete';
-    const API_LIST = '/cgi-bin/department/list';
+    const API_LIST   = '/cgi-bin/department/list';
 
 
     public function select($id = null)
     {
-        $url = $this->getUrl(self::API_LIST);
+        $url = $this->buildUrl(self::API_LIST);
         $request = HttpClient::get($url, ['id' => $id]);
 
-        return static::handleRequest($request, function(HttpResponse $response){
-            return static::handleResponse($response, function($data){
+        return static::handleRequest($request, function (HttpResponse $response) {
+            return static::handleResponse($response, function ($data) {
                 return $data['department'];
             });
         });
@@ -41,20 +41,24 @@ class Department extends Client
             'parentid' => $parent_id,
         ];
 
-        if ($order > 0) $attributes['order'] = $order;
-        if ($id > 0) $attributes['id'] = $id;
+        if ($order > 0) {
+            $attributes['order'] = $order;
+        }
+        if ($id > 0) {
+            $attributes['id'] = $id;
+        }
 
-        $url = $this->getUrl(self::API_CREATE);
+        $url = $this->buildUrl(self::API_CREATE);
         $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
 
-        return static::handleRequest($request, function(HttpResponse $response){
-            return static::handleResponse($response, function($data){
+        return static::handleRequest($request, function (HttpResponse $response) {
+            return static::handleResponse($response, function ($data) {
                 return $data['id'];
             });
         });
     }
 
-    public function update($id, $name, $parent_id = 1, $order = 0)
+    public function update($id, $name, $parent_id = 1, $order = null)
     {
         $attributes = [
             'id' => $id,
@@ -62,13 +66,15 @@ class Department extends Client
             'parentid' => $parent_id,
         ];
 
-        if ($order > 0) $attributes['order'] = $order;
+        if (is_int($order)) {
+            $attributes['order'] = $order;
+        }
 
-        $url = $this->getUrl(self::API_UPDATE);
+        $url = $this->buildUrl(self::API_UPDATE);
         $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
 
-        return static::handleRequest($request, function(HttpResponse $response){
-            return static::handleResponse($response, function($data){
+        return static::handleRequest($request, function (HttpResponse $response) {
+            return static::handleResponse($response, function ($data) {
                 return true;
             });
         });
@@ -78,11 +84,11 @@ class Department extends Client
     {
         $attributes = ['id' => $id];
 
-        $url = $this->getUrl(self::API_DELETE);
+        $url = $this->buildUrl(self::API_DELETE);
         $request = HttpClient::get($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
 
-        return static::handleRequest($request, function(HttpResponse $response){
-            return static::handleResponse($response, function($data){
+        return static::handleRequest($request, function (HttpResponse $response) {
+            return static::handleResponse($response, function ($data) {
                 return true;
             });
         });

@@ -20,20 +20,20 @@ class Agent extends Client
 
     const LOCATION_FLAG_DISABLED = 0;
     const LOCATION_FLAG_ON_ENTER = 1;
-    const LOCATION_FLAG_ENABLED = 2;
+    const LOCATION_FLAG_ENABLED  = 2;
 
-    const API_INFO = '/cgi-bin/agent/get';
+    const API_INFO   = '/cgi-bin/agent/get';
     const API_UPDATE = '/cgi-bin/agent/set';
-    const API_LIST = '/cgi-bin/agent/list';
+    const API_LIST   = '/cgi-bin/agent/list';
 
 
     public function getAll()
     {
-        $url = $this->getUrl(self::API_LIST);
+        $url = $this->buildUrl(self::API_LIST);
         $request = HttpClient::get($url);
 
-        return static::handleRequest($request, function(HttpResponse $response) {
-            return static::handleResponse($response, function($data) {
+        return static::handleRequest($request, function (HttpResponse $response) {
+            return static::handleResponse($response, function ($data) {
                 return $data['agentlist'];
             });
         });
@@ -41,11 +41,11 @@ class Agent extends Client
 
     public function query($agent_id)
     {
-        $url = $this->getUrl(self::API_INFO);
+        $url = $this->buildUrl(self::API_INFO);
         $request = HttpClient::get($url, ['agentid' => $agent_id]);
 
-        return static::handleRequest($request, function(HttpResponse $response) {
-            return static::handleResponse($response, function($data) {
+        return static::handleRequest($request, function (HttpResponse $response) {
+            return static::handleResponse($response, function ($data) {
                 return $data;
             });
         });
@@ -55,14 +55,15 @@ class Agent extends Client
     {
         $attributes = array_merge($this->_updateAttributes, $attributes);
         $attributes['agentid'] = $agent_id;
-        if (count($attributes) <= 1)
+        if (count($attributes) <= 1) {
             throw new \InvalidArgumentException('There is no attributes need to be updated.');
+        }
 
-        $url = $this->getUrl(self::API_UPDATE);
+        $url = $this->buildUrl(self::API_UPDATE);
         $request = HttpClient::post($url, json_encode($attributes, 320))->setFormat(HttpRequest::FORMAT_JSON);
 
-        return static::handleRequest($request, function(HttpResponse $response) {
-            return static::handleResponse($response, function($data) {
+        return static::handleRequest($request, function (HttpResponse $response) {
+            return static::handleResponse($response, function ($data) {
                 return true;
             });
         });
@@ -105,8 +106,9 @@ class Agent extends Client
 
     public function setHomeUrl($value)
     {
-        if (filter_var($value, FILTER_VALIDATE_URL) === false)
+        if (filter_var($value, FILTER_VALIDATE_URL) === false) {
             throw new \InvalidArgumentException('The value is not invalid');
+        }
 
         return $this->setUpdateAttribute('home_url', $value);
     }
