@@ -6,16 +6,17 @@
  * Time: 下午3:29
  */
 
-namespace cdcchen\wechat\qy;
+namespace cdcchen\wechat\qy\material;
 
 
 use cdcchen\net\curl\Client as HttpClient;
 use cdcchen\net\curl\HttpRequest;
 use cdcchen\net\curl\HttpResponse;
 use cdcchen\wechat\base\ResponseException;
+use cdcchen\wechat\qy\Client;
 use phpplus\filesystem\FileHelper;
 
-class Media extends Client
+class MediaClient extends Client
 {
     const API_UPLOAD = '/cgi-bin/media/upload';
     const API_UPLOAD_IMG = '/cgi-bin/media/uploadimg';

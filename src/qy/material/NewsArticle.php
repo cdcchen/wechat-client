@@ -9,7 +9,9 @@
 namespace cdcchen\wechat\qy\models;
 
 
-class NewsArticle extends Base
+use cdcchen\wechat\qy\base\BaseModel;
+
+class NewsArticle extends BaseModel
 {
     public $title;
     public $description;

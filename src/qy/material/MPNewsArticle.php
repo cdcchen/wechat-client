@@ -9,7 +9,9 @@
 namespace cdcchen\wechat\qy\models;
 
 
-class MPNewsArticle extends Base
+use cdcchen\wechat\qy\base\BaseModel;
+
+class MPNewsArticle extends BaseModel
 {
     public $title;
     public $thumbMediaId;

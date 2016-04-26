@@ -6,15 +6,16 @@
  * Time: 下午10:11
  */
 
-namespace cdcchen\wechat\qy;
+namespace cdcchen\wechat\qy\message;
 
 
 use cdcchen\net\curl\Client as HttpClient;
 use cdcchen\net\curl\HttpRequest;
 use cdcchen\net\curl\HttpResponse;
 use cdcchen\wechat\base\ResponseException;
+use cdcchen\wechat\qy\Client;
 
-class Message extends Client
+class MessageClient extends Client
 {
     const API_SEND = '/cgi-bin/message/send';
 

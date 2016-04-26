@@ -6,15 +6,16 @@
  * Time: 下午9:41
  */
 
-namespace cdcchen\wechat\qy;
+namespace cdcchen\wechat\qy\material;
 
 
 use cdcchen\net\curl\Client as HttpClient;
 use cdcchen\net\curl\HttpRequest;
 use cdcchen\net\curl\HttpResponse;
+use cdcchen\wechat\qy\Client;
 use phpplus\filesystem\FileHelper;
 
-class Material extends Client
+class MaterialClient extends Client
 {
     const BATCH_GET_MAX_COUNT = 50;
 

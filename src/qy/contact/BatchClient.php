@@ -14,7 +14,7 @@ use cdcchen\net\curl\HttpRequest;
 use cdcchen\net\curl\HttpResponse;
 use cdcchen\wechat\qy\Client;
 
-class Batch extends Client
+class BatchClient extends Client
 {
     const TYPE_INVITE_USER = 'invite_user';
     const TYPE_SYNC_USER = 'sync_user';
