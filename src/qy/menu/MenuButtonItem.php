@@ -17,6 +17,8 @@ use cdcchen\wechat\qy\base\BaseModel;
  */
 class MenuButtonItem extends BaseModel
 {
+    private $_buttons = [];
+
     /**
      * 点击推事件
      */
@@ -50,33 +52,67 @@ class MenuButtonItem extends BaseModel
      */
     const TYPE_LOCATION_SELECT = 'location_select';
 
-    public $type;
-    public $name;
-    public $key = false;
-    public $url = false;
-    public $subButton = false;
 
-    public function attributesMap()
+    /**
+     * @param $value
+     * @return $this
+     */
+    public function setName($value)
     {
-        return [
-            'type',
-            'name',
-            'key',
-            'url',
-            'subButton' => 'sub_button'
-        ];
+        return $this->setAttribute('name', $value);
     }
 
-    public function addSubButton(self $item)
+    /**
+     * @param $value
+     * @return $this
+     */
+    public function setType($value)
     {
-        $this->subButton[] = $item;
-        return $this;
+        return $this->setAttribute('type', $value);
     }
 
-    public function setSubButtons(array $items)
+    /**
+     * @param $value
+     * @return $this
+     */
+    public function setKey($value)
     {
-        $this->subButton = $items;
-        return $this;
+        return empty($value) ? $this : $this->setAttribute('key', $value);
     }
 
+    /**
+     * @param $value
+     * @return $this
+     */
+    public function setUrl($value)
+    {
+        return empty($value) ? $this : $this->setAttribute('url', $value);
+    }
+
+    /**
+     * @param array $button
+     * @return $this
+     */
+    public function setSubButton(array $button)
+    {
+        return $this->setAttribute('sub_button', $button);
+    }
+
+    /**
+     * @param MenuButtonItem $button
+     * @return $this
+     */
+    public function addSubButton(MenuButtonItem $button)
+    {
+        $this->_buttons[] = $button;
+        return $this->setAttribute('sub_button', $this->_buttons);
+    }
+
+    /**
+     * @return array
+     */
+    protected function fields()
+    {
+        return ['type', 'name', 'key', 'url', 'sub_sutton'];
+    }
 }

@@ -13,9 +13,17 @@ use cdcchen\wechat\qy\base\BaseModel;
 
 class Media extends BaseModel
 {
-    public function attributesMap()
+    const TYPE_IMAGE = 'image';
+    const TYPE_VOICE = 'voice';
+    const TYPE_VIDEO = 'video';
+    const TYPE_FILE  = 'file';
+    const TYPE_NEWS  = 'mpnews';
+
+
+    protected function fields()
     {
-        // TODO: Implement attributesMap() method.
+        // TODO: Implement fields() method.
     }
+
 
 }

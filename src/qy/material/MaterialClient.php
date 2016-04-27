@@ -27,12 +27,6 @@ class MaterialClient extends Client
     const API_LIST = '/cgi-bin/material/batchget';
     const API_DELETE = '/cgi-bin/material/del';
 
-    const TYPE_IMAGE = 'image';
-    const TYPE_VOICE = 'voice';
-    const TYPE_VIDEO = 'video';
-    const TYPE_FILE = 'file';
-    const TYPE_NEWS = 'mpnews';
-
     const SIZE_MIN = 5;
     const SIZE_IMAGE_MAX = 2048000;
     const SIZE_VOICE_MAX = 2048000;
@@ -63,22 +57,22 @@ class MaterialClient extends Client
 
     public function uploadFile($filename)
     {
-        return $this->upload($filename, self::TYPE_FILE);
+        return $this->upload($filename, Media::TYPE_FILE);
     }
 
     public function uploadImage($filename)
     {
-        return $this->upload($filename, self::TYPE_IMAGE);
+        return $this->upload($filename, Media::TYPE_IMAGE);
     }
 
     public function uploadVoice($filename)
     {
-        return $this->upload($filename, self::TYPE_VOICE);
+        return $this->upload($filename, Media::TYPE_VOICE);
     }
 
     public function uploadVideo($filename)
     {
-        return $this->upload($filename, self::TYPE_VIDEO);
+        return $this->upload($filename, Media::TYPE_VIDEO);
     }
 
     public function uploadNews($agent_id, $news)

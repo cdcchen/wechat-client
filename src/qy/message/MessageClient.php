@@ -19,23 +19,10 @@ class MessageClient extends Client
 {
     const API_SEND = '/cgi-bin/message/send';
 
-    const MAX_USER_COUNT  = 1000;
-    const MAX_PARTY_COUNT = 100;
 
-    const TYPE_TEXT   = 'text';
-    const TYPE_IMAGE  = 'image';
-    const TYPE_VOICE  = 'voice';
-    const TYPE_VIDEO  = 'video';
-    const TYPE_FILE   = 'file';
-    const TYPE_NEWS   = 'news';
-    const TYPE_MPNEWS = 'mpnews';
-
-    protected $_attributes = [];
-
-    public function send($agent_id, array $attributes)
+    public function send($message)
     {
-        $attributes = array_merge($this->_attributes, $attributes);
-        $attributes['agentid'] = $agent_id;
+        $attributes = ($message instanceof Message) ? $message->toArray() : $message;
 
         $url = $this->buildUrl(self::API_SEND);
         $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
@@ -50,139 +37,108 @@ class MessageClient extends Client
 
     ############## send *(text|image|voice|video|file|news|mpnews) shortcut methods ############
 
-    public function sendText($agent_id, $content, array $attributes = [])
+    public function sendText(TextMessage $message, $text = null, $agent_id = null)
     {
-        $attributes['msgtype'] = self::TYPE_TEXT;
-        $attributes['text']['content'] = $content;
-
-        return $this->send($agent_id, $attributes);
-    }
-
-    public function sendImage($agent_id, $media_id, array $attributes = [])
-    {
-        $attributes['msgtype'] = self::TYPE_IMAGE;
-        $attributes['image']['media_id'] = $media_id;
-
-        return $this->send($agent_id, $attributes);
-    }
-
-    public function sendVoice($agent_id, $media_id, array $attributes = [])
-    {
-        $attributes['msgtype'] = self::TYPE_VOICE;
-        $attributes['voice']['media_id'] = $media_id;
-
-        return $this->send($agent_id, $attributes);
-    }
-
-    public function sendVideo($agent_id, $video, array $attributes = [])
-    {
-        $attributes['msgtype'] = self::TYPE_VIDEO;
-        if (is_array($video)) {
-            $attributes['video'] = $video;
-        } else {
-            $attributes['video']['media_id'] = $video;
+        $message->setMsgType(Message::TYPE_TEXT);
+        if ($text) {
+            $message->setText($text);
+        }
+        if ($agent_id) {
+            $message->setAgentId($agent_id);
         }
 
-        return $this->send($agent_id, $attributes);
+        return $this->send($message->toArray());
     }
 
-    public function sendFile($agent_id, $media_id, array $attributes = [])
+    public function sendImage(MediaMessage $message, $media = null, $agent_id = null)
     {
-        $attributes['msgtype'] = self::TYPE_FILE;
-        $attributes['file']['media_id'] = $media_id;
-
-        return $this->send($agent_id, $attributes);
+        $message->setMsgType(Message::TYPE_IMAGE);
+        return $this->sendMedia($message, $media, $agent_id);
     }
 
-    public function sendNews($agent_id, $articles, array $attributes = [])
+    public function sendVoice(MediaMessage $message, $media = null, $agent_id = null)
     {
-        $attributes['msgtype'] = self::TYPE_NEWS;
-        $attributes['news']['articles'] = $articles;
-
-        return $this->send($agent_id, $attributes);
+        $message->setMsgType(Message::TYPE_VOICE);
+        return $this->sendMedia($message, $media, $agent_id);
     }
 
-    public function sendMPNews($agent_id, $articles, array $attributes = [])
+    public function sendVideo(MediaMessage $message, $media = null, $agent_id = null)
     {
-        $attributes['msgtype'] = self::TYPE_MPNEWS;
+        $message->setMsgType(Message::TYPE_VIDEO);
+        return $this->sendMedia($message, $media, $agent_id);
+    }
+
+    public function sendFile(MediaMessage $message, $media = null, $agent_id = null)
+    {
+        $message->setMsgType(Message::TYPE_FILE);
+        return $this->sendMedia($message, $media, $agent_id);
+    }
+
+    private function sendMedia(MediaMessage $message, $media = null, $agent_id = null)
+    {
+        if ($media) {
+            $message->setMediaId($media);
+        }
+        if ($agent_id) {
+            $message->setAgentId($agent_id);
+        }
+
+        return $this->send($message->toArray());
+    }
+
+    public function sendNews(NewsMessage $message, $agent_id = null, $articles = null)
+    {
+        $message->setMsgType(Message::TYPE_NEWS);
+        if ($articles) {
+            $attributes['news']['articles'] = $articles;
+        }
+        if ($agent_id) {
+            $message->setAgentId($agent_id);
+        }
+
+        return $this->send($message->toArray());
+    }
+
+    public function sendMPNews(MPNewsMessage $message, $agent_id = null, $articles = null)
+    {
+        $message->setMsgType(Message::TYPE_MPNEWS);
+        if ($agent_id) {
+            $message->setAgentId($agent_id);
+        }
         if (is_array($articles)) {
             $attributes['mpnews']['articles'] = $articles;
         } else {
             $attributes['mpnews']['media_id'] = $articles;
         }
 
-        return $this->send($agent_id, $attributes);
+        return $this->send($message->toArray());
     }
 
 
     ########################### send to (user|party|tag) shortcut methods ##############################
 
-    public function sendToAll($agent_id, array $attributes)
+    public function sendToAllUser(Message $message)
     {
-        $attributes['touser'] = '@all';
-        return $this->send($agent_id, $attributes);
+        $message->setToAllUser();
+        return $this->send($message->toArray());
     }
 
-    public function sendToUser($agent_id, $to_user, array $attributes)
+    public function sendToUser(Message $message, $to_user)
     {
-        $to_user = (array)$to_user;
-        if (count($to_user) > self::MAX_USER_COUNT) {
-            throw new \InvalidArgumentException('The number of $to_user should not exceed ' . self::MAX_USER_COUNT);
-        }
-
-        $attributes['touser'] = join('|', $to_user);
-        return $this->send($agent_id, $attributes);
+        $message->setToUser($to_user);
+        return $this->send($message->toArray());
     }
 
-    public function sendToParty($agent_id, $to_party, array $attributes)
+    public function sendToParty(Message $message, $to_party)
     {
-        $to_party = (array)$to_party;
-        if (count($to_party) > self::MAX_USER_COUNT) {
-            throw new \InvalidArgumentException('The number of $to_user should not exceed ' . self::MAX_PARTY_COUNT);
-        }
-
-        $attributes['toparty'] = join('|', $to_party);
-        return $this->send($agent_id, $attributes);
+        $message->setToParty($to_party);
+        return $this->send($message->toArray());
     }
 
-    public function sendToTag($agent_id, $to_tag, array $attributes)
+    public function sendToTag(Message $message, $to_tag)
     {
-        $attributes['totag'] = join('|', (array)$to_tag);
-        return $this->send($agent_id, $attributes);
-    }
-
-
-    ############################## set attributes ##############################
-
-    public function setToUser($value)
-    {
-        return $this->setAttribute('touser', $value);
-    }
-
-    public function setToAllUser()
-    {
-        return $this->setAttribute('touser', '@all');
-    }
-
-    public function setToParty($value)
-    {
-        return $this->setAttribute('toparty', $value);
-    }
-
-    public function setToTag($value)
-    {
-        return $this->setAttribute('totag', $value);
-    }
-
-    public function setSafe($flag)
-    {
-        return $this->setAttribute('safe', $flag ? 1 : 0);
-    }
-
-    protected function setAttribute($attribute, $value)
-    {
-        $this->_attributes[$attribute] = $value;
-        return $this;
+        $message->setToTag($to_tag);
+        return $this->send($message->toArray());
     }
 
 

@@ -68,6 +68,11 @@ class ChatClient extends Client
     }
 
 
+    /**
+     * @param $chat_id
+     * @return bool|ChatGroup
+     * @throws \cdcchen\wechat\base\RequestException|\cdcchen\wechat\base\ResponseException
+     */
     public function fetch($chat_id)
     {
         $url = $this->buildUrl(self::API_FETCH, ['chatid' => $chat_id]);
@@ -75,7 +80,7 @@ class ChatClient extends Client
 
         return static::handleRequest($request, function (HttpResponse $response) {
             return static::handleResponse($response, function ($data) {
-                return $data['chat_info'];
+                return new $data['chat_info'];
             });
         });
     }
@@ -103,12 +108,12 @@ class ChatClient extends Client
         });
     }
 
-    public function setName($name)
+    public function updateName($name)
     {
         return $this->setUpdateAttribute('name', $name);
     }
 
-    public function setOwner($owner)
+    public function updateOwner($owner)
     {
         return $this->setUpdateAttribute('owner', $owner);
     }
@@ -117,7 +122,7 @@ class ChatClient extends Client
      * @param array $add_user_list
      * @return $this
      */
-    public function setAddUsers(array $add_user_list)
+    public function updateAddUsers(array $add_user_list)
     {
         return $this->setUpdateAttribute('add_user_list', $add_user_list);
     }
@@ -126,7 +131,7 @@ class ChatClient extends Client
      * @param array $del_user_list
      * @return $this
      */
-    public function setDeleteUsers(array $del_user_list)
+    public function updateDeleteUsers(array $del_user_list)
     {
         return $this->setUpdateAttribute('del_user_list', $del_user_list);
     }
@@ -137,7 +142,7 @@ class ChatClient extends Client
             throw new \InvalidArgumentException('$add_user_list can\'t be empty');
         }
 
-        return $this->setAddUsers($add_user_list)->update($chat_id, $op_user);
+        return $this->updateAddUsers($add_user_list)->update($chat_id, $op_user);
     }
 
     public function removeUsers($chat_id, $op_user, array $del_user_list)
@@ -146,7 +151,7 @@ class ChatClient extends Client
             throw new \InvalidArgumentException('$del_user_list can\'t be empty');
         }
 
-        return $this->setDeleteUsers($del_user_list)->update($chat_id, $op_user);
+        return $this->updateDeleteUsers($del_user_list)->update($chat_id, $op_user);
     }
 
 

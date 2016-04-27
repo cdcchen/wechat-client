@@ -16,46 +16,27 @@ use cdcchen\wechat\qy\Client;
 
 class BatchClient extends Client
 {
-    const TYPE_INVITE_USER = 'invite_user';
-    const TYPE_SYNC_USER = 'sync_user';
-    const TYPE_REPLACE_USER = 'replace_user';
+    const STATUS_STARTED   = 1;
+    const STATUS_DOING     = 2;
+    const STATUS_COMPLETED = 3;
+
+    const TYPE_SYNC_USER     = 'sync_user';
+    const TYPE_REPLACE_USER  = 'replace_user';
     const TYPE_REPLACE_PARTY = 'replace_party';
 
-    const USER_ACTION_NEW = 0x01;
-    const USER_ACTION_UPDATE = 0x10;
+    const ACTION_NEW_USER    = 0x01;
+    const ACTION_UPDATE_USER = 0x10;
 
-    const PARTY_ACTION_NEW = 0x0001;
-    const PARTY_ACTION_UPDATE_NAME = 0x0010;
-    const PARTY_ACTION_MOVIE = 0x0100;
-    const PARTY_ACTION_UPDATE_ORDER = 0x1000;
+    const ACTION_NEW_PARTY          = 0x0001;
+    const ACTION_UPDATE_PARTY_NAME  = 0x0010;
+    const ACTION_MOVE_PARTY         = 0x0100;
+    const ACTION_UPDATE_PARTY_ORDER = 0x1000;
 
-    const API_INVITE_USER = '/cgi-bin/batch/inviteuser';
-    const API_SYNC_USER = '/cgi-bin/batch/syncuser';
-    const API_REPLACE_USER = '/cgi-bin/batch/replaceuser';
+    const API_SYNC_USER     = '/cgi-bin/batch/syncuser';
+    const API_REPLACE_USER  = '/cgi-bin/batch/replaceuser';
     const API_REPLACE_PARTY = '/cgi-bin/batch/replacparty';
-    const API_GET_RESULT = '/cgi-bin/batch/getresult';
+    const API_GET_RESULT    = '/cgi-bin/batch/getresult';
 
-    public function inviteUsers(
-        $to_user = [],
-        $to_party = [],
-        $to_tag = [],
-        $url = '',
-        $token = '',
-        $encoding_aes_key = ''
-    ) {
-        $attributes = [];
-        if ($to_user) {
-            $attributes['touser'] = join('|', $to_user);
-        }
-        if ($to_party) {
-            $attributes['toparty'] = join('|', $to_party);
-        }
-        if ($to_tag) {
-            $attributes['totag'] = join('|', $to_tag);
-        }
-
-        return $this->request(self::API_INVITE_USER, $attributes, $url, $token, $encoding_aes_key);
-    }
 
     public function syncUsers($media_id, $url = '', $token = '', $encoding_aes_key = '')
     {

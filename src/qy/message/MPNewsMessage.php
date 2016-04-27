@@ -11,5 +11,14 @@ namespace cdcchen\wechat\qy\message;
 
 class MPNewsMessage extends Message
 {
+    protected function init()
+    {
+        parent::init();
+        $this->setMsgType(self::TYPE_MPNEWS);
+    }
 
+    public function setArticles($articles)
+    {
+        return $this->setContent($articles);
+    }
 }

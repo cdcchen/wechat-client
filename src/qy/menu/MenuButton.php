@@ -9,44 +9,57 @@
 namespace cdcchen\wechat\qy\menu;
 
 
-class MenuButton
+use cdcchen\wechat\qy\base\BaseModel;
+
+/**
+ * Class MenuButton
+ * @package cdcchen\wechat\qy\menu
+ */
+class MenuButton extends BaseModel
 {
-    /**
-     * @var MenuButtonItem[]
-     */
     private $_buttons = [];
 
-    public function addButton($item)
+    public static function load($data)
     {
-        $this->_buttons[] = $item;
-        return $this;
+        $button = new static();
+        $buttons = $data['button'];
+        $button->setButton(static::parseButtons($buttons));
+
+        return $button;
     }
 
-    /**
-     * @return array
-     */
-    public function build()
+    protected static function parseButtons($buttons)
     {
-        $buttons = $this->format($this->_buttons);
-        return ['button' => $buttons];
-    }
-
-    private function format(array $items)
-    {
-        $buttons = [];
-        foreach ($items as $item) {
-            if (!($item instanceof MenuButtonItem)) {
-                throw new \InvalidArgumentException('Buttons type is must be MenuButtonItem array');
+        foreach ($buttons as $key => $button) {
+            if ($button['sub_button']) {
+                $button['sub_button'] = static::parseButtons($button['sub_button']);
             }
-
-            $button = $item->toArray();
-            if (is_array($item->subButton)) {
-                $button['sub_button'] = $this->format($item->subButton);
+            else {
+                unset($button['sub_button']);
             }
-            $buttons[] = $button;
+            $buttons[$key] = new MenuButtonItem($button);
         }
 
         return $buttons;
+    }
+
+    /**
+     * @param array $button
+     * @return $this
+     */
+    public function setButton(array $button)
+    {
+        return $this->setAttribute('button', $button);
+    }
+
+    /**
+     * @param MenuButtonItem $button
+     * @return $this
+     */
+    public function addButton(MenuButtonItem $button)
+    {
+        $this->_buttons[] = $button;
+        return $this->setAttribute('button', $this->_buttons);
     }
 
     /**
@@ -63,11 +76,16 @@ class MenuButton
         }
 
         $button = new MenuButtonItem();
-        $button->name = $name;
-        $button->type = $type;
-        $button->key = $key ?: false;
-        $button->url = $url ?: false;
+        $button->setName($name)->setType($type)->setKey($key)->setUrl($url);
 
         return $button;
+    }
+
+    /**
+     * @return array
+     */
+    protected function fields()
+    {
+        return ['button'];
     }
 }

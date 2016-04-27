@@ -11,5 +11,14 @@ namespace cdcchen\wechat\qy\message;
 
 class NewsMessage extends Message
 {
+    protected function init()
+    {
+        parent::init();
+        $this->setMsgType(self::TYPE_NEWS);
+    }
 
+    public function setArticles($articles)
+    {
+        return $this->setContent($articles);
+    }
 }

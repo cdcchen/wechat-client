@@ -20,11 +20,9 @@ class MenuClient extends Client
     const API_DELETE = '/cgi-bin/menu/delete';
     const API_LIST   = '/cgi-bin/menu/get';
 
-    public function create($agent_id, $attributes)
+    public function create($agent_id, MenuButton $button)
     {
-        if (!isset($attributes['button'])) {
-            $attributes = ['button' => $attributes];
-        }
+        $attributes = $button->toArray();
 
         $url = $this->buildUrl(self::API_CREATE, ['agentid' => $agent_id]);
         $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
@@ -55,8 +53,7 @@ class MenuClient extends Client
 
         return static::handleRequest($request, function (HttpResponse $response) {
             return static::handleResponse($response, function ($data) {
-                unset($data['errcode'], $data['errmsg']);
-                return $data;
+                return $data['menu'];
             });
         });
     }

@@ -65,6 +65,13 @@ class BaseClient extends Object
     }
 
 
+    /**
+     * @param HttpRequest $request
+     * @param callable|null $success
+     * @param callable|null $failed
+     * @return bool|\cdcchen\net\curl\Response
+     * @throws RequestException
+     */
     protected static function handleRequest(HttpRequest $request, callable $success = null, callable $failed = null)
     {
         try {
@@ -83,6 +90,13 @@ class BaseClient extends Object
         }
     }
 
+    /**
+     * @param HttpResponse $response
+     * @param callable|null $success
+     * @param callable|null $failed
+     * @return mixed
+     * @throws ResponseException
+     */
     protected static function handleResponse(HttpResponse $response, callable $success = null, callable $failed = null)
     {
         $data = $response->getData();
