@@ -14,7 +14,6 @@ use cdcchen\net\curl\HttpRequest;
 use cdcchen\net\curl\HttpResponse;
 use cdcchen\wechat\base\ResponseException;
 use cdcchen\wechat\qy\Client;
-use phpplus\filesystem\FileHelper;
 
 class MediaClient extends Client
 {
@@ -65,17 +64,11 @@ class MediaClient extends Client
 
     public function uploadPhoto($filename)
     {
-        $mimeType = FileHelper::getMimeType($filename, null, true);
-        $file = new \CURLFile($filename, $mimeType);
-        $data = [
-            'filename' => $filename,
-            'filelength' => filesize($filename),
-            'content-type' => $mimeType,
-        ];
+        $media = (new Media())->setFilename($filename);
 
         $url = $this->buildUrl(self::API_UPLOAD_IMG);
-        $request = HttpClient::post($url, $data)
-                             ->addFile('upload_file', $file, $mimeType)
+        $request = HttpClient::post($url, $media->getFormData())
+                             ->addFile('upload_file', $media->getUploadFile())
                              ->setFormat(HttpRequest::FORMAT_JSON);
 
         return static::handleRequest($request, function (HttpResponse $response) {

@@ -13,7 +13,6 @@ use cdcchen\net\curl\Client as HttpClient;
 use cdcchen\net\curl\HttpRequest;
 use cdcchen\net\curl\HttpResponse;
 use cdcchen\wechat\qy\Client;
-use phpplus\filesystem\FileHelper;
 
 class MaterialClient extends Client
 {
@@ -35,17 +34,11 @@ class MaterialClient extends Client
 
     public function upload($filename, $type)
     {
-        $mimeType = FileHelper::getMimeType($filename, null, true);
-        $file = new \CURLFile($filename, $mimeType);
-        $data = [
-            'filename' => $filename,
-            'filelength' => filesize($filename),
-            'content-type' => $mimeType,
-        ];
+        $media = (new Media())->setFilename($filename);
 
         $url = $this->buildUrl(self::API_UPLOAD, ['type' => $type]);
-        $request = HttpClient::post($url, $data, true)
-            ->addFile('upload_file', $file, $mimeType)
+        $request = HttpClient::post($url, $media->getFormData(), true)
+            ->addFile('upload_file', $media->getUploadFile())
             ->setFormat(HttpRequest::FORMAT_JSON);
 
         return static::handleRequest($request, function(HttpResponse $response) {

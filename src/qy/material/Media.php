@@ -9,8 +9,8 @@
 namespace cdcchen\wechat\qy\material;
 
 
+use cdcchen\helpers\file\FileHelper;
 use cdcchen\wechat\qy\base\BaseModel;
-use phpplus\filesystem\FileHelper;
 
 class Media extends BaseModel
 {
