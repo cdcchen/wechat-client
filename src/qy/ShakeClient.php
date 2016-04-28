@@ -13,7 +13,7 @@ use cdcchen\net\curl\Client as HttpClient;
 use cdcchen\net\curl\HttpRequest;
 use cdcchen\net\curl\HttpResponse;
 
-class Shake extends Client
+class ShakeClient extends Client
 {
     const API_GET_SHAKE_INFO = '/cgi-bin/shakearound/getshakeinfo';
 

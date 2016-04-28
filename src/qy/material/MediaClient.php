@@ -30,17 +30,10 @@ class MediaClient extends Client
 
     public function upload($filename, $type)
     {
-        $mimeType = FileHelper::getMimeType($filename, null, true);
-        $file = new \CURLFile($filename, $mimeType);
-        $data = [
-            'filename' => $filename,
-            'filelength' => filesize($filename),
-            'content-type' => $mimeType,
-        ];
-
+        $media = (new Media())->setFilename($filename);
         $url = $this->buildUrl(self::API_UPLOAD, ['type' => $type]);
-        $request = HttpClient::post($url, $data)
-                             ->addFile('upload_file', $file, $mimeType)
+        $request = HttpClient::post($url, $media->getFormData())
+                             ->addFile('upload_file', $media->getUploadFile())
                              ->setFormat(HttpRequest::FORMAT_JSON);
 
         return static::handleRequest($request, function (HttpResponse $response) {

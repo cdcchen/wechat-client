@@ -14,7 +14,7 @@ use cdcchen\net\curl\HttpRequest;
 use cdcchen\net\curl\HttpResponse;
 use cdcchen\wechat\qy\base\UpdateAttributeTrait;
 
-class Agent extends Client
+class AgentClient extends Client
 {
     use UpdateAttributeTrait;
 

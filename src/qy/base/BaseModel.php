@@ -18,8 +18,14 @@ abstract class BaseModel
 
     public function __construct($attributes = [])
     {
-        if (!empty($attributes)) {
-            $this->setAttributes($attributes);
+        foreach ($attributes as $name => $value) {
+            $methodName = 'set' . ucfirst($name);var_dump($methodName);
+            if (method_exists($this, $methodName)) {
+                call_user_func([$this, $methodName], $value);
+            }
+            else {
+                $this->setAttribute($name, $value);
+            }
         }
 
         $this->init();

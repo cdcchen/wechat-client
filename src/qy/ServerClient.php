@@ -12,7 +12,7 @@ namespace cdcchen\wechat\qy;
 use cdcchen\net\curl\Client as HttpClient;
 use cdcchen\net\curl\HttpResponse;
 
-class Server extends Client
+class ServerClient extends Client
 {
     const API_IP_LIST = '/cgi-bin/getcallbackip';
 
