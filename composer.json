@@ -1,11 +1,10 @@
 {
   "name": "cdcchen/wechat-client",
   "description": "weixin development sdk",
-  "version": "1.0.0",
   "keywords": ["weixin", "wechat", "sdk"],
   "homepage": "https://github.com/cdcchen/wechat-client",
   "time": "2016-03-09 16:45:01",
-  "license": "private",
+  "license": "BSD-4-Clause",
   "support": {
     "issues": "https://github.com/cdcchen/wechat-client/issues",
     "wiki": "https://github.com/cdcchen/wechat-client/wiki",
@@ -29,10 +28,6 @@
     }
   },
   "extra": {
-    "asset-installer-paths": {
-      "npm-asset-library": "vendor/npm",
-      "bower-asset-library": "vendor/bower"
-    },
     "branch-alias": {
       "dev-master": "1.0.x-dev"
     }
