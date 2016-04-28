@@ -9,7 +9,7 @@
 namespace cdcchen\wechat\qy\material;
 
 
-use cdcchen\helpers\file\FileHelper;
+use cdcchen\filesystem\FileHelper;
 use cdcchen\wechat\qy\base\BaseModel;
 
 class Media extends BaseModel
