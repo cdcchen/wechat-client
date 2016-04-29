@@ -131,9 +131,13 @@ class BaseClient extends Object
     protected static function handleResponse(HttpResponse $response, callable $success = null, callable $failed = null)
     {
         $httpCode = (int)$response->getHeader('http-code');
+        if ($httpCode !== 200) {
+            throw new ResponseException('Http request error.', $httpCode);
+        }
+
         $data = $response->getData();
 
-        if ($httpCode !== 200 || (isset($data['errcode']) && $data['errcode'] != 0)) {
+        if (isset($data['errcode']) && $data['errcode'] != 0) {
             if ($failed) {
                 return call_user_func($failed, $response);
             } else {
