@@ -9,8 +9,17 @@
 namespace cdcchen\wechat\qy\message;
 
 
+/**
+ * Class MediaMessage
+ * @package cdcchen\wechat\qy\message
+ */
 class MediaMessage extends Message
 {
+    /**
+     * @param string $media_id
+     * @return $this
+     * @throws \Exception
+     */
     public function setMediaId($media_id)
     {
         return $this->setContent($media_id);

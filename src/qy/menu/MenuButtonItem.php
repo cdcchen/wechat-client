@@ -17,6 +17,9 @@ use cdcchen\wechat\qy\base\BaseModel;
  */
 class MenuButtonItem extends BaseModel
 {
+    /**
+     * @var array
+     */
     private $_buttons = [];
 
     /**
@@ -54,7 +57,7 @@ class MenuButtonItem extends BaseModel
 
 
     /**
-     * @param $value
+     * @param string $value
      * @return $this
      */
     public function setName($value)
@@ -63,7 +66,7 @@ class MenuButtonItem extends BaseModel
     }
 
     /**
-     * @param $value
+     * @param int $value
      * @return $this
      */
     public function setType($value)
@@ -72,7 +75,7 @@ class MenuButtonItem extends BaseModel
     }
 
     /**
-     * @param $value
+     * @param string $value
      * @return $this
      */
     public function setKey($value)
@@ -81,7 +84,7 @@ class MenuButtonItem extends BaseModel
     }
 
     /**
-     * @param $value
+     * @param string $value
      * @return $this
      */
     public function setUrl($value)

@@ -14,14 +14,36 @@ use cdcchen\net\curl\HttpRequest;
 use cdcchen\net\curl\HttpResponse;
 use cdcchen\wechat\qy\Client;
 
+/**
+ * Class DepartmentClient
+ * @package cdcchen\wechat\qy\contact
+ */
 class DepartmentClient extends Client
 {
+    /**
+     * Api create path
+     */
     const API_CREATE = '/cgi-bin/department/create';
+    /**
+     * Api update path
+     */
     const API_UPDATE = '/cgi-bin/department/update';
+    /**
+     * Api delete path
+     */
     const API_DELETE = '/cgi-bin/department/delete';
-    const API_LIST   = '/cgi-bin/department/list';
+    /**
+     * Api list path
+     */
+    const API_LIST = '/cgi-bin/department/list';
 
 
+    /**
+     * @param null|int $id
+     * @return mixed
+     * @throws \cdcchen\wechat\base\RequestException
+     * @throws \cdcchen\wechat\base\ResponseException
+     */
     public function select($id = null)
     {
         $url = $this->buildUrl(self::API_LIST);
@@ -34,6 +56,15 @@ class DepartmentClient extends Client
         });
     }
 
+    /**
+     * @param string $name
+     * @param int $parent_id
+     * @param int $order
+     * @param int $id
+     * @return int
+     * @throws \cdcchen\wechat\base\RequestException
+     * @throws \cdcchen\wechat\base\ResponseException
+     */
     public function create($name, $parent_id = 1, $order = 0, $id = 0)
     {
         $attributes = [
@@ -58,6 +89,15 @@ class DepartmentClient extends Client
         });
     }
 
+    /**
+     * @param int $id
+     * @param string $name
+     * @param int $parent_id
+     * @param null|int $order
+     * @return mixed
+     * @throws \cdcchen\wechat\base\RequestException
+     * @throws \cdcchen\wechat\base\ResponseException
+     */
     public function update($id, $name, $parent_id = 1, $order = null)
     {
         $attributes = [
@@ -79,6 +119,12 @@ class DepartmentClient extends Client
         });
     }
 
+    /**
+     * @param int $id
+     * @return bool
+     * @throws \cdcchen\wechat\base\RequestException
+     * @throws \cdcchen\wechat\base\ResponseException
+     */
     public function delete($id)
     {
         $attributes = ['id' => $id];

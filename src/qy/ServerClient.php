@@ -12,10 +12,22 @@ namespace cdcchen\wechat\qy;
 use cdcchen\net\curl\Client as HttpClient;
 use cdcchen\net\curl\HttpResponse;
 
+/**
+ * Class ServerClient
+ * @package cdcchen\wechat\qy
+ */
 class ServerClient extends Client
 {
+    /**
+     *
+     */
     const API_IP_LIST = '/cgi-bin/getcallbackip';
 
+    /**
+     * @return array
+     * @throws \cdcchen\wechat\base\RequestException
+     * @throws \cdcchen\wechat\base\ResponseException
+     */
     public function getCallbackIP()
     {
         $url = $this->buildUrl(self::API_IP_LIST);

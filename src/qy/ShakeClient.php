@@ -13,10 +13,23 @@ use cdcchen\net\curl\Client as HttpClient;
 use cdcchen\net\curl\HttpRequest;
 use cdcchen\net\curl\HttpResponse;
 
+/**
+ * Class ShakeClient
+ * @package cdcchen\wechat\qy
+ */
 class ShakeClient extends Client
 {
+    /**
+     *
+     */
     const API_GET_SHAKE_INFO = '/cgi-bin/shakearound/getshakeinfo';
 
+    /**
+     * @param string $ticket
+     * @return mixed
+     * @throws \cdcchen\wechat\base\RequestException
+     * @throws \cdcchen\wechat\base\ResponseException
+     */
     public function getInfo($ticket)
     {
         $attributes = ['ticket' => $ticket];

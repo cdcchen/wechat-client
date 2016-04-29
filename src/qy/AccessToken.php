@@ -15,10 +15,24 @@ use cdcchen\wechat\base\ApiException;
 use cdcchen\wechat\base\BaseClient;
 use cdcchen\wechat\base\ResponseException;
 
+/**
+ * Class AccessToken
+ * @package cdcchen\wechat\qy
+ */
 class AccessToken extends BaseClient
 {
+    /**
+     *
+     */
     const API_ACCESS_TOKEN = '/cgi-bin/gettoken';
 
+    /**
+     * @param string $corp_id
+     * @param string $corp_secret
+     * @return array
+     * @throws ResponseException
+     * @throws \cdcchen\wechat\base\RequestException
+     */
     public static function fetch($corp_id, $corp_secret)
     {
         $params = [
@@ -37,6 +51,12 @@ class AccessToken extends BaseClient
         });
     }
 
+    /**
+     * @param array|mixed $data
+     * @return bool
+     * @throws ApiException
+     * @throws ResponseException
+     */
     protected static function checkAccessTokenResponse($data)
     {
         if (isset($data['access_token'])) {

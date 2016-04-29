@@ -12,16 +12,38 @@ namespace cdcchen\wechat\qy;
 use cdcchen\net\curl\Client as HttpClient;
 use cdcchen\wechat\base\ResponseException;
 
+/**
+ * Class OAuth
+ * @package cdcchen\wechat\qy
+ */
 class OAuth extends Client
 {
+    /**
+     * authorize url
+     */
     CONST URL_AUTHORIZE = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=snsapi_base&state=%s#wechat_redirect';
-    const API_INFO      = '/cgi-bin/user/getuserinfo';
+    /**
+     * api path
+     */
+    const API_INFO = '/cgi-bin/user/getuserinfo';
 
-    public static function buildAuthorizeUrl($app_id, $redirect_uri, $state = '')
+    /**
+     * @param string $corp_id
+     * @param string $redirect_uri
+     * @param string $state
+     * @return string
+     */
+    public static function buildAuthorizeUrl($corp_id, $redirect_uri, $state = '')
     {
-        return sprintf(self::URL_AUTHORIZE, $app_id, urlencode($redirect_uri), $state);
+        return sprintf(self::URL_AUTHORIZE, $corp_id, urlencode($redirect_uri), $state);
     }
 
+    /**
+     * @param string $code
+     * @return array
+     * @throws ResponseException
+     * @throws \cdcchen\wechat\base\RequestException
+     */
     public function getUserInfo($code)
     {
         $url = $this->buildUrl(self::API_INFO, ['code' => $code]);

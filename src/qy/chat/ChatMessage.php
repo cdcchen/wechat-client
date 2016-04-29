@@ -18,24 +18,24 @@ use cdcchen\wechat\qy\base\BaseModel;
 class ChatMessage extends BaseModel
 {
     /**
-     *
+     * Text msg type
      */
     const MSG_TYPE_TEXT = 'text';
     /**
-     *
+     * Image msg type
      */
     const MSG_TYPE_IMAGE = 'image';
     /**
-     *
+     * File msg type
      */
     const MSG_TYPE_FILE = 'file';
     /**
-     *
+     * Voice msg type
      */
     const MSG_TYPE_VOICE = 'voice';
 
     /**
-     * @param $type
+     * @param int $type
      * @return $this
      */
     public function setReceiverType($type)
@@ -44,7 +44,7 @@ class ChatMessage extends BaseModel
     }
 
     /**
-     * @param $id
+     * @param string $id
      * @return $this
      */
     public function setReceiverId($id)
@@ -53,7 +53,7 @@ class ChatMessage extends BaseModel
     }
 
     /**
-     * @param $value
+     * @param string $value
      * @return $this
      */
     public function setSender($value)
@@ -62,7 +62,7 @@ class ChatMessage extends BaseModel
     }
 
     /**
-     * @param $type
+     * @param int $type
      * @return $this
      */
     public function setMsgType($type)
@@ -76,7 +76,7 @@ class ChatMessage extends BaseModel
     }
 
     /**
-     * @param $value
+     * @param string $value
      * @return $this
      * @throws \Exception
      */

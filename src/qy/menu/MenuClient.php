@@ -14,12 +14,32 @@ use cdcchen\net\curl\HttpRequest;
 use cdcchen\net\curl\HttpResponse;
 use cdcchen\wechat\qy\Client;
 
+/**
+ * Class MenuClient
+ * @package cdcchen\wechat\qy\menu
+ */
 class MenuClient extends Client
 {
+    /**
+     * Api create path
+     */
     const API_CREATE = '/cgi-bin/menu/create';
+    /**
+     * Api delete path
+     */
     const API_DELETE = '/cgi-bin/menu/delete';
-    const API_LIST   = '/cgi-bin/menu/get';
+    /**
+     * Api list path
+     */
+    const API_LIST = '/cgi-bin/menu/get';
 
+    /**
+     * @param int $agent_id
+     * @param MenuButton $button
+     * @return bool
+     * @throws \cdcchen\wechat\base\RequestException
+     * @throws \cdcchen\wechat\base\ResponseException
+     */
     public function create($agent_id, MenuButton $button)
     {
         $attributes = $button->toArray();
@@ -33,6 +53,12 @@ class MenuClient extends Client
         });
     }
 
+    /**
+     * @param int $agent_id
+     * @return bool
+     * @throws \cdcchen\wechat\base\RequestException
+     * @throws \cdcchen\wechat\base\ResponseException
+     */
     public function delete($agent_id)
     {
         $url = $this->buildUrl(self::API_DELETE);
@@ -44,6 +70,12 @@ class MenuClient extends Client
         });
     }
 
+    /**
+     * @param int $agent_id
+     * @return array
+     * @throws \cdcchen\wechat\base\RequestException
+     * @throws \cdcchen\wechat\base\ResponseException
+     */
     public function select($agent_id)
     {
         $url = $this->buildUrl(self::API_LIST);

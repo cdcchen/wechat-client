@@ -15,17 +15,47 @@ use cdcchen\net\curl\HttpResponse;
 use cdcchen\wechat\base\ResponseException;
 use cdcchen\wechat\qy\Client;
 
+/**
+ * Class TagClient
+ * @package cdcchen\wechat\qy\contact
+ */
 class TagClient extends Client
 {
-    const API_CREATE       = '/cgi-bin/tag/create';
-    const API_UPDATE       = '/cgi-bin/tag/update';
-    const API_DELETE       = '/cgi-bin/tag/delete';
-    const API_LIST         = '/cgi-bin/tag/list';
-    const API_GET_USERS    = '/cgi-bin/tag/get';
-    const API_ADD_USERS    = '/cgi-bin/tag/addtagusers';
+    /**
+     * Api create path
+     */
+    const API_CREATE = '/cgi-bin/tag/create';
+    /**
+     * Api update path
+     */
+    const API_UPDATE = '/cgi-bin/tag/update';
+    /**
+     * Api delete path
+     */
+    const API_DELETE = '/cgi-bin/tag/delete';
+    /**
+     * Api list path
+     */
+    const API_LIST = '/cgi-bin/tag/list';
+    /**
+     * Api get_users path
+     */
+    const API_GET_USERS = '/cgi-bin/tag/get';
+    /**
+     * Api add_users path
+     */
+    const API_ADD_USERS = '/cgi-bin/tag/addtagusers';
+    /**
+     * Api delete_users path
+     */
     const API_DELETE_USERS = '/cgi-bin/tag/deltagusers';
 
 
+    /**
+     * @return array
+     * @throws ResponseException
+     * @throws \cdcchen\wechat\base\RequestException
+     */
     public function getAll()
     {
         $url = $this->buildUrl(self::API_LIST);
@@ -38,6 +68,13 @@ class TagClient extends Client
         });
     }
 
+    /**
+     * @param string $name
+     * @param int $id
+     * @return int
+     * @throws ResponseException
+     * @throws \cdcchen\wechat\base\RequestException
+     */
     public function create($name, $id = 0)
     {
         $attributes = ['tagname' => $name];
@@ -55,6 +92,13 @@ class TagClient extends Client
         });
     }
 
+    /**
+     * @param int $id
+     * @param string $name
+     * @return bool
+     * @throws ResponseException
+     * @throws \cdcchen\wechat\base\RequestException
+     */
     public function update($id, $name)
     {
         $attributes = [
@@ -71,6 +115,12 @@ class TagClient extends Client
         });
     }
 
+    /**
+     * @param int $id
+     * @return bool
+     * @throws ResponseException
+     * @throws \cdcchen\wechat\base\RequestException
+     */
     public function delete($id)
     {
         $url = $this->buildUrl(self::API_DELETE, ['tagid' => $id]);
@@ -82,6 +132,12 @@ class TagClient extends Client
         });
     }
 
+    /**
+     * @param int $id
+     * @return array
+     * @throws ResponseException
+     * @throws \cdcchen\wechat\base\RequestException
+     */
     public function getUsers($id)
     {
         $url = $this->buildUrl(self::API_GET_USERS, ['tagid' => $id]);
@@ -94,6 +150,14 @@ class TagClient extends Client
         });
     }
 
+    /**
+     * @param int $id
+     * @param array $user_list
+     * @param array $party_list
+     * @return bool
+     * @throws ResponseException
+     * @throws \cdcchen\wechat\base\RequestException
+     */
     public function addUsers($id, array $user_list = [], array $party_list = [])
     {
         if (empty($user_list) && empty($party_list)) {
@@ -113,14 +177,23 @@ class TagClient extends Client
         return static::handleResponse($response, function (HttpResponse $response) {
             $data = $response->getData();
             if ($data['invalidlist'] || $data['invalidparty']) {
-                throw new ResponseException($data['errmsg'],
-                    $data['invalidlist'] . $data['invalidparty']);
+                $message = sprintf('%s, invalid users: %s, invalid parties: %s.', $data['errmsg'], $data['invalidlist'],
+                    join('|', $data['invalidparty']));
+                throw new ResponseException($message);
             } else {
                 return true;
             }
         });
     }
 
+    /**
+     * @param int $id
+     * @param array $user_list
+     * @param array $party_list
+     * @return bool
+     * @throws ResponseException
+     * @throws \cdcchen\wechat\base\RequestException
+     */
     public function deleteUsers($id, array $user_list = [], array $party_list = [])
     {
         if (empty($user_list) && empty($party_list)) {

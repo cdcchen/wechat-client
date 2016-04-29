@@ -17,8 +17,15 @@ use cdcchen\wechat\qy\base\BaseModel;
  */
 class MenuButton extends BaseModel
 {
+    /**
+     * @var array
+     */
     private $_buttons = [];
 
+    /**
+     * @param array $data
+     * @return static
+     */
     public static function load($data)
     {
         $button = new static();
@@ -28,6 +35,10 @@ class MenuButton extends BaseModel
         return $button;
     }
 
+    /**
+     * @param array $buttons
+     * @return array
+     */
     protected static function parseButtons($buttons)
     {
         foreach ($buttons as $key => $button) {

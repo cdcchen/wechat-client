@@ -13,10 +13,21 @@ use cdcchen\net\curl\HttpRequest;
 use cdcchen\net\curl\HttpResponse;
 
 
+/**
+ * Class BaseClient
+ * @package cdcchen\wechat\base
+ */
 class BaseClient extends Object
 {
+    /**
+     * @var string
+     */
     protected $_accessToken;
 
+    /**
+     * BaseClient constructor.
+     * @param string $access_token
+     */
     public function __construct($access_token)
     {
         if (empty($access_token)) {
@@ -26,11 +37,18 @@ class BaseClient extends Object
         $this->setAccessToken($access_token);
     }
 
+    /**
+     * @return string
+     */
     public function getAccessToken()
     {
         return $this->_accessToken;
     }
 
+    /**
+     * @param string $access_token
+     * @return $this
+     */
     public function setAccessToken($access_token)
     {
         $this->_accessToken = $access_token;
@@ -38,6 +56,13 @@ class BaseClient extends Object
     }
 
 
+    /**
+     * @param string $token
+     * @param string $timestamp
+     * @param string $nonce
+     * @param string $encrypt_msg
+     * @return string
+     */
     public static function getSHA1($token, $timestamp, $nonce, $encrypt_msg)
     {
         $params = [$encrypt_msg, $token, $timestamp, $nonce];
@@ -47,13 +72,19 @@ class BaseClient extends Object
         return sha1($str);
     }
 
+    /**
+     * @param string $path
+     * @param array $query
+     * @return string
+     * @throws \Exception
+     */
     protected function buildUrl($path, $query = [])
     {
         return static::getRequestUrl($path, $query, $this->getAccessToken());
     }
 
     /**
-     * @param $path
+     * @param string $path
      * @param array $query
      * @param string $access_token
      * @return string

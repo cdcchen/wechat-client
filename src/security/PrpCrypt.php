@@ -12,13 +12,30 @@ namespace cdcchen\wechat\security;
  *
  * 提供接收和推送给公众平台消息的加解密接口.
  */
+/**
+ * Class PrpCrypt
+ * @package cdcchen\wechat\security
+ */
 class PrpCrypt
 {
+    /**
+     * random string len
+     */
     const RANDOM_STRING_LEN = 16;
-    const INIT_VECTOR_SIZE  = 16;
+    /**
+     * init vector size
+     */
+    const INIT_VECTOR_SIZE = 16;
 
+    /**
+     * @var string
+     */
     private $_key;
 
+    /**
+     * PrpCrypt constructor.
+     * @param string $k
+     */
     public function __construct($k)
     {
         $this->_key = base64_decode($k . '=');
@@ -26,6 +43,7 @@ class PrpCrypt
 
     /**
      * 对明文进行加密
+     *
      * @param string $text 需要加密的明文
      * @param string $corp_id
      * @return string 加密后的密文
@@ -51,6 +69,7 @@ class PrpCrypt
 
     /**
      * 对密文进行解密
+     *
      * @param string $encrypted 需要解密的密文
      * @param string $corp_id
      * @return string 解密得到的明文
@@ -94,6 +113,7 @@ class PrpCrypt
 
     /**
      * 随机生成16位字符串
+     *
      * @return string 生成的字符串
      */
     public function getRandomStr()

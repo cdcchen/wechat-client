@@ -9,14 +9,26 @@
 namespace cdcchen\wechat\qy\message;
 
 
+/**
+ * Class TextMessage
+ * @package cdcchen\wechat\qy\message
+ */
 class TextMessage extends Message
 {
+    /**
+     * @inheritdoc
+     */
     protected function init()
     {
         parent::init();
         $this->setMsgType(self::TYPE_TEXT);
     }
 
+    /**
+     * @param string $text
+     * @return $this
+     * @throws \Exception
+     */
     public function setText($text)
     {
         return $this->setContent($text);
