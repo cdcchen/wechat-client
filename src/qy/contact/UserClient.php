@@ -36,11 +36,10 @@ class UserClient extends Client
 
         $url = $this->buildUrl(self::API_CREATE);
         $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
+        $response = static::sendRequest($request);
 
-        return static::handleRequest($request, function (HttpResponse $response) {
-            return static::handleResponse($response, function ($data) {
-                return true;
-            });
+        return static::handleResponse($response, function (HttpResponse $response) {
+            return true;
         });
     }
 
@@ -57,11 +56,10 @@ class UserClient extends Client
 
         $url = $this->buildUrl(self::API_UPDATE);
         $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
+        $response = static::sendRequest($request);
 
-        return static::handleRequest($request, function (HttpResponse $response) {
-            return static::handleResponse($response, function ($data) {
-                return true;
-            });
+        return static::handleResponse($response, function (HttpResponse $response) {
+            return true;
         });
     }
 
@@ -70,11 +68,10 @@ class UserClient extends Client
 
         $url = $this->buildUrl(self::API_DELETE);
         $request = HttpClient::get($url, ['userid' => $user_id]);
+        $response = static::sendRequest($request);
 
-        return static::handleRequest($request, function (HttpResponse $response) {
-            return static::handleResponse($response, function ($data) {
-                return true;
-            });
+        return static::handleResponse($response, function (HttpResponse $response) {
+            return true;
         });
     }
 
@@ -85,11 +82,10 @@ class UserClient extends Client
 
         $url = $this->buildUrl(self::API_BATCH_DELETE);
         $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
+        $response = static::sendRequest($request);
 
-        return static::handleRequest($request, function (HttpResponse $response) {
-            return static::handleResponse($response, function ($data) {
-                return true;
-            });
+        return static::handleResponse($response, function (HttpResponse $response) {
+            return true;
         });
     }
 
@@ -98,11 +94,11 @@ class UserClient extends Client
 
         $url = $this->buildUrl(self::API_GET_ITEM);
         $request = HttpClient::get($url, ['userid' => $user_id]);
+        $response = static::sendRequest($request);
 
-        return static::handleRequest($request, function (HttpResponse $response) {
-            return static::handleResponse($response, function ($data) {
-                return $data;
-            });
+        return static::handleResponse($response, function (HttpResponse $response) {
+            $data = $response->getData();
+            return $data;
         });
 
     }
@@ -118,11 +114,11 @@ class UserClient extends Client
 
         $url = $this->buildUrl(self::API_SIMPLE_LIST);
         $request = HttpClient::get($url, $attributes);
+        $response = static::sendRequest($request);
 
-        return static::handleRequest($request, function (HttpResponse $response) {
-            return static::handleResponse($response, function ($data) {
-                return $data['userlist'];
-            });
+        return static::handleResponse($response, function (HttpResponse $response) {
+            $data = $response->getData();
+            return $data['userlist'];
         });
     }
 
@@ -137,11 +133,11 @@ class UserClient extends Client
 
         $url = $this->buildUrl(self::API_DETAIL_LIST);
         $request = HttpClient::get($url, $attributes);
+        $response = static::sendRequest($request);
 
-        return static::handleRequest($request, function (HttpResponse $response) {
-            return static::handleResponse($response, function ($data) {
-                return $data['userlist'];
-            });
+        return static::handleResponse($response, function (HttpResponse $response) {
+            $data = $response->getData();
+            return $data['userlist'];
         });
     }
 
@@ -155,12 +151,12 @@ class UserClient extends Client
 
         $url = $this->buildUrl(self::API_CONVERT_TO_OPENID);
         $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
+        $response = static::sendRequest($request);
 
-        return static::handleRequest($request, function (HttpResponse $response) {
-            return static::handleResponse($response, function ($data) {
-                unset($data['errcode'], $data['errmsg']);
-                return $data;
-            });
+        return static::handleResponse($response, function (HttpResponse $response) {
+            $data = $response->getData();
+            unset($data['errcode'], $data['errmsg']);
+            return $data;
         });
     }
 
@@ -171,11 +167,11 @@ class UserClient extends Client
 
         $url = $this->buildUrl(self::API_CONVERT_TO_USERID);
         $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
+        $response = static::sendRequest($request);
 
-        return static::handleRequest($request, function (HttpResponse $response) {
-            return static::handleResponse($response, function ($data) {
-                return $data['userid'];
-            });
+        return static::handleResponse($response, function (HttpResponse $response) {
+            $data = $response->getData();
+            return $data['userid'];
         });
     }
 

@@ -26,11 +26,11 @@ class MessageClient extends Client
 
         $url = $this->buildUrl(self::API_SEND);
         $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
+        $response = static::sendRequest($request);
 
-        return static::handleRequest($request, function (HttpResponse $response) {
-            return static::handleResponse($response, function ($data) {
-                return static::checkResponse($data);
-            });
+        return static::handleResponse($response, function (HttpResponse $response) {
+            $data = $response->getData();
+            return static::checkResponse($data);
         });
     }
 

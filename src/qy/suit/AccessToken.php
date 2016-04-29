@@ -29,12 +29,12 @@ class AccessToken extends BaseClient
 
         $url = Client::getRequestUrl(self::API_ACCESS_TOKEN);
         $request = HttpClient::post($url, $params);
+        $response = static::sendRequest($request);
 
-        return static::handleRequest($request, function(HttpResponse $response) {
-            return static::handleResponse($response, function($data) {
+        return static::handleResponse($response, function (HttpResponse $response) {
+            $data = $response->getData();
                 static::checkAccessTokenResponse($data);
                 return $data;
-            });
         });
     }
 

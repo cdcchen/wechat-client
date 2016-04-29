@@ -18,19 +18,19 @@ class MaterialClient extends Client
 {
     const BATCH_GET_MAX_COUNT = 50;
 
-    const API_UPLOAD = '/cgi-bin/material/add_material';
-    const API_GET_ITEM = '/cgi-bin/material/get';
-    const API_ADD_NEWS = '/cgi-bin/material/add_mpnews';
+    const API_UPLOAD      = '/cgi-bin/material/add_material';
+    const API_GET_ITEM    = '/cgi-bin/material/get';
+    const API_ADD_NEWS    = '/cgi-bin/material/add_mpnews';
     const API_UPDATE_NEWS = '/cgi-bin/material/update_MPNEWS';
-    const API_GET_COUNT = '/cgi-bin/material/get_count';
-    const API_LIST = '/cgi-bin/material/batchget';
-    const API_DELETE = '/cgi-bin/material/del';
+    const API_GET_COUNT   = '/cgi-bin/material/get_count';
+    const API_LIST        = '/cgi-bin/material/batchget';
+    const API_DELETE      = '/cgi-bin/material/del';
 
-    const SIZE_MIN = 5;
+    const SIZE_MIN       = 5;
     const SIZE_IMAGE_MAX = 2048000;
     const SIZE_VOICE_MAX = 2048000;
     const SIZE_VIDEO_MAX = 10240000;
-    const SIZE_FILE_MAX = 20480000;
+    const SIZE_FILE_MAX  = 20480000;
 
     public function upload($filename, $type)
     {
@@ -38,13 +38,13 @@ class MaterialClient extends Client
 
         $url = $this->buildUrl(self::API_UPLOAD, ['type' => $type]);
         $request = HttpClient::post($url, $media->getFormData(), true)
-            ->addFile('upload_file', $media->getUploadFile())
-            ->setFormat(HttpRequest::FORMAT_JSON);
+                             ->addFile('upload_file', $media->getUploadFile())
+                             ->setFormat(HttpRequest::FORMAT_JSON);
+        $response = static::sendRequest($request);
 
-        return static::handleRequest($request, function(HttpResponse $response) {
-            return static::handleResponse($response, function($data) {
-                return $data['media_id'];
-            });
+        return static::handleResponse($response, function (HttpResponse $response) {
+            $data = $response->getData();
+            return $data['media_id'];
         });
     }
 
@@ -77,11 +77,11 @@ class MaterialClient extends Client
 
         $url = $this->buildUrl(self::API_ADD_NEWS, $this->getAccessToken());
         $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
+        $response = static::sendRequest($request);
 
-        return static::handleRequest($request, function(HttpResponse $response) {
-            return static::handleResponse($response, function($data) {
-                return $data['media_id'];
-            });
+        return static::handleResponse($response, function (HttpResponse $response) {
+            $data = $response->getData();
+            return $data['media_id'];
         });
     }
 
@@ -95,11 +95,10 @@ class MaterialClient extends Client
 
         $url = $this->buildUrl(self::API_UPDATE_NEWS, $this->getAccessToken());
         $request = HttpClient::post($url, $attributes);
+        $response = static::sendRequest($request);
 
-        return static::handleRequest($request, function(HttpResponse $response) {
-            return static::handleResponse($response, function($data) {
-                return true;
-            });
+        return static::handleResponse($response, function (HttpResponse $response) {
+            return true;
         });
     }
 
@@ -107,28 +106,28 @@ class MaterialClient extends Client
     {
         $url = $this->buildUrl(self::API_GET_ITEM);
         $request = HttpClient::get($url, ['media_id' => $media_id, 'agentid' => $agent_id]);
+        $response = static::sendRequest($request);
 
-        return static::handleRequest($request, function(HttpResponse $response) {
-            if ($response->getFormat() !== HttpRequest::FORMAT_JSON)
-                return $response->getContent();
-            else {
-                return static::handleResponse($response, function($data){
-                    return $data['mpnews'];
-                });
-            }
-        });
+        if ($response->getFormat() !== HttpRequest::FORMAT_JSON) {
+            return $response->getContent();
+        } else {
+            return static::handleResponse($response, function (HttpResponse $response) {
+                $data = $response->getData();
+                return $data['mpnews'];
+            });
+        }
     }
 
     public function getCount($agent_id)
     {
         $url = $this->buildUrl(self::API_GET_COUNT);
         $request = HttpClient::get($url, ['agentid' => $agent_id]);
+        $response = static::sendRequest($request);
 
-        return static::handleRequest($request, function(HttpResponse $response) {
-            return static::handleResponse($response, function($data) {
-                unset($data['errcode'], $data['errmsg']);
-                return $data;
-            });
+        return static::handleResponse($response, function (HttpResponse $response) {
+            $data = $response->getData();
+            unset($data['errcode'], $data['errmsg']);
+            return $data;
         });
     }
 
@@ -151,12 +150,12 @@ class MaterialClient extends Client
 
         $url = $this->buildUrl(self::API_LIST);
         $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
+        $response = static::sendRequest($request);
 
-        return static::handleRequest($request, function(HttpResponse $response) {
-            return static::handleResponse($response, function($data) {
-                unset($data['errcode'], $data['errmsg']);
-                return $data;
-            });
+        return static::handleResponse($response, function (HttpResponse $response) {
+            $data = $response->getData();
+            unset($data['errcode'], $data['errmsg']);
+            return $data;
         });
     }
 
@@ -171,12 +170,12 @@ class MaterialClient extends Client
         ];
 
         $request = HttpClient::get($url, $attributes);
+        $response = static::sendRequest($request);
 
-        return static::handleRequest($request, function(HttpResponse $response) {
-            return static::handleResponse($response, function($data) {
-                unset($data['errcode'], $data['errmsg']);
-                return true;
-            });
+        return static::handleResponse($response, function (HttpResponse $response) {
+            $data = $response->getData();
+            unset($data['errcode'], $data['errmsg']);
+            return true;
         });
     }
 }

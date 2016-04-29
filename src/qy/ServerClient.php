@@ -20,11 +20,11 @@ class ServerClient extends Client
     {
         $url = $this->buildUrl(self::API_IP_LIST);
         $request = HttpClient::get($url);
+        $response = static::sendRequest($request);
 
-        return static::handleRequest($request, function (HttpResponse $response) {
-            return static::handleResponse($response, function ($data) {
-                return $data['ip_list'];
-            });
+        return static::handleResponse($response, function (HttpResponse $response) {
+            $data = $response->getData();
+            return $data['ip_list'];
         });
     }
 }

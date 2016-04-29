@@ -15,11 +15,11 @@ use cdcchen\net\curl\HttpResponse;
 
 class Service extends Client
 {
-    const API_GET_PRE_AUTH_CODE = '/cgi-bin/service/get_provider_token';
-    const API_SET_SESSION_INFO = '/cgi-bin/service/set_session_info';
+    const API_GET_PRE_AUTH_CODE  = '/cgi-bin/service/get_provider_token';
+    const API_SET_SESSION_INFO   = '/cgi-bin/service/set_session_info';
     const API_GET_PERMANENT_CODE = '/cgi-bin/service/get_permanent_code';
-    const API_GET_AUTH_INFO = '/cgi-bin/service/get_auth_info';
-    const API_GET_CORP_TOKEN = '/cgi-bin/service/get_corp_token';
+    const API_GET_AUTH_INFO      = '/cgi-bin/service/get_auth_info';
+    const API_GET_CORP_TOKEN     = '/cgi-bin/service/get_corp_token';
 
     public function getPreAuthCode($suite_id)
     {
@@ -27,12 +27,12 @@ class Service extends Client
 
         $url = $this->buildUrl(self::API_GET_PRE_AUTH_CODE);
         $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
+        $response = static::sendRequest($request);
 
-        return static::handleRequest($request, function (HttpResponse $response) {
-            return static::handleResponse($response, function ($data) {
-                unset($data['errcode'], $data['errmsg']);
-                return $data;
-            });
+        return static::handleResponse($response, function (HttpResponse $response) {
+            $data = $response->getData();
+            unset($data['errcode'], $data['errmsg']);
+            return $data;
         });
     }
 
@@ -45,12 +45,12 @@ class Service extends Client
 
         $url = $this->buildUrl(self::API_SET_SESSION_INFO);
         $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
+        $response = static::sendRequest($request);
 
-        return static::handleRequest($request, function (HttpResponse $response) {
-            return static::handleResponse($response, function ($data) {
-                unset($data['errcode'], $data['errmsg']);
-                return true;
-            });
+        return static::handleResponse($response, function (HttpResponse $response) {
+            $data = $response->getData();
+            unset($data['errcode'], $data['errmsg']);
+            return true;
         });
     }
 
@@ -63,11 +63,11 @@ class Service extends Client
 
         $url = $this->buildUrl(self::API_SET_SESSION_INFO);
         $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
+        $response = static::sendRequest($request);
 
-        return static::handleRequest($request, function (HttpResponse $response) {
-            return static::handleResponse($response, function ($data) {
-                return $data;
-            });
+        return static::handleResponse($response, function (HttpResponse $response) {
+            $data = $response->getData();
+            return $data;
         });
     }
 
@@ -81,11 +81,10 @@ class Service extends Client
 
         $url = $this->buildUrl(self::API_SET_SESSION_INFO);
         $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
+        $response = static::sendRequest($request);
 
-        return static::handleRequest($request, function (HttpResponse $response) {
-            return static::handleResponse($response, function ($data) {
-                return $data;
-            });
+        return static::handleResponse($response, function (HttpResponse $response) {
+            return $response->getData();
         });
     }
 
@@ -99,12 +98,12 @@ class Service extends Client
 
         $url = $this->buildUrl(self::API_SET_SESSION_INFO);
         $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
+        $response = static::sendRequest($request);
 
-        return static::handleRequest($request, function (HttpResponse $response) {
-            return static::handleResponse($response, function ($data) {
-                unset($data['errcode'], $data['errmsg']);
-                return $data;
-            });
+        return static::handleResponse($response, function (HttpResponse $response) {
+            $data = $response->getData();
+            unset($data['errcode'], $data['errmsg']);
+            return $data;
         });
     }
 }

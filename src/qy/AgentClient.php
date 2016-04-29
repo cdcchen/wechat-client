@@ -31,11 +31,11 @@ class AgentClient extends Client
     {
         $url = $this->buildUrl(self::API_LIST);
         $request = HttpClient::get($url);
+        $response = static::sendRequest($request);
 
-        return static::handleRequest($request, function (HttpResponse $response) {
-            return static::handleResponse($response, function ($data) {
-                return $data['agentlist'];
-            });
+        return static::handleResponse($response, function (HttpResponse $response) {
+            $data = $response->getData();
+            return $data['agentlist'];
         });
     }
 
@@ -43,11 +43,10 @@ class AgentClient extends Client
     {
         $url = $this->buildUrl(self::API_INFO);
         $request = HttpClient::get($url, ['agentid' => $agent_id]);
+        $response = static::sendRequest($request);
 
-        return static::handleRequest($request, function (HttpResponse $response) {
-            return static::handleResponse($response, function ($data) {
-                return $data;
-            });
+        return static::handleResponse($response, function (HttpResponse $response) {
+            return $response->getData();
         });
     }
 
@@ -61,11 +60,10 @@ class AgentClient extends Client
 
         $url = $this->buildUrl(self::API_UPDATE);
         $request = HttpClient::post($url, json_encode($attributes, 320))->setFormat(HttpRequest::FORMAT_JSON);
+        $response = static::sendRequest($request);
 
-        return static::handleRequest($request, function (HttpResponse $response) {
-            return static::handleResponse($response, function ($data) {
-                return true;
-            });
+        return static::handleResponse($response, function (HttpResponse $response) {
+            return true;
         });
     }
 

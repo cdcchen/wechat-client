@@ -23,11 +23,11 @@ class ShakeClient extends Client
 
         $url = $this->buildUrl(self::API_GET_SHAKE_INFO);
         $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
+        $response = static::sendRequest($request);
 
-        return static::handleRequest($request, function (HttpResponse $response) {
-            return static::handleResponse($response, function ($data) {
-                return $data['data'];
-            });
+        return static::handleResponse($response, function (HttpResponse $response) {
+            $data = $response->getData();
+            return $data['data'];
         });
     }
 }

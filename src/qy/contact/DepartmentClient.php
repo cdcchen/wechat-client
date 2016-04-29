@@ -26,11 +26,11 @@ class DepartmentClient extends Client
     {
         $url = $this->buildUrl(self::API_LIST);
         $request = HttpClient::get($url, ['id' => $id]);
+        $response = static::sendRequest($request);
 
-        return static::handleRequest($request, function (HttpResponse $response) {
-            return static::handleResponse($response, function ($data) {
-                return $data['department'];
-            });
+        return static::handleResponse($response, function (HttpResponse $response) {
+            $data = $response->getData();
+            return $data['department'];
         });
     }
 
@@ -50,11 +50,11 @@ class DepartmentClient extends Client
 
         $url = $this->buildUrl(self::API_CREATE);
         $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
+        $response = static::sendRequest($request);
 
-        return static::handleRequest($request, function (HttpResponse $response) {
-            return static::handleResponse($response, function ($data) {
-                return $data['id'];
-            });
+        return static::handleResponse($response, function (HttpResponse $response) {
+            $data = $response->getData();
+            return $data['id'];
         });
     }
 
@@ -72,11 +72,10 @@ class DepartmentClient extends Client
 
         $url = $this->buildUrl(self::API_UPDATE);
         $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
+        $response = static::sendRequest($request);
 
-        return static::handleRequest($request, function (HttpResponse $response) {
-            return static::handleResponse($response, function ($data) {
-                return true;
-            });
+        return static::handleResponse($response, function (HttpResponse $response) {
+            return true;
         });
     }
 
@@ -86,11 +85,10 @@ class DepartmentClient extends Client
 
         $url = $this->buildUrl(self::API_DELETE);
         $request = HttpClient::get($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
+        $response = static::sendRequest($request);
 
-        return static::handleRequest($request, function (HttpResponse $response) {
-            return static::handleResponse($response, function ($data) {
-                return true;
-            });
+        return static::handleResponse($response, function (HttpResponse $response) {
+            return true;
         });
     }
 }

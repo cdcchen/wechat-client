@@ -34,11 +34,11 @@ class MediaClient extends Client
         $request = HttpClient::post($url, $media->getFormData())
                              ->addFile('upload_file', $media->getUploadFile())
                              ->setFormat(HttpRequest::FORMAT_JSON);
+        $response = static::sendRequest($request);
 
-        return static::handleRequest($request, function (HttpResponse $response) {
-            return static::handleResponse($response, function ($data) {
-                return $data['media_id'];
-            });
+        return static::handleResponse($response, function (HttpResponse $response) {
+            $data = $response->getData();
+            return $data['media_id'];
         });
     }
 
@@ -70,11 +70,11 @@ class MediaClient extends Client
         $request = HttpClient::post($url, $media->getFormData())
                              ->addFile('upload_file', $media->getUploadFile())
                              ->setFormat(HttpRequest::FORMAT_JSON);
+        $response = static::sendRequest($request);
 
-        return static::handleRequest($request, function (HttpResponse $response) {
-            return static::handleResponse($response, function ($data) {
-                return $data['url'];
-            });
+        return static::handleResponse($response, function (HttpResponse $response) {
+            $data = $response->getData();
+            return $data['url'];
         });
     }
 
@@ -82,14 +82,13 @@ class MediaClient extends Client
     {
         $url = $this->buildUrl(self::API_DOWNLOAD);
         $request = HttpClient::get($url, ['media_id' => $media_id]);
+        $response = static::sendRequest($request);
 
-        return static::handleRequest($request, function (HttpResponse $response) {
-            if ($response->getFormat() !== HttpRequest::FORMAT_JSON) {
-                return $response->getContent();
-            } else {
-                $data = $response->getData();
-                throw new ResponseException($data['errmsg'], $data['errcode']);
-            }
-        });
+        if ($response->getFormat() !== HttpRequest::FORMAT_JSON) {
+            return $response->getContent();
+        } else {
+            $data = $response->getData();
+            throw new ResponseException($data['errmsg'], $data['errcode']);
+        }
     }
 }

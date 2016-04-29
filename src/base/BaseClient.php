@@ -69,10 +69,10 @@ class BaseClient extends Object
      * @param HttpRequest $request
      * @param callable|null $success
      * @param callable|null $failed
-     * @return bool|\cdcchen\net\curl\Response
+     * @return bool|\cdcchen\net\curl\HttpResponse
      * @throws RequestException
      */
-    protected static function handleRequest(HttpRequest $request, callable $success = null, callable $failed = null)
+    protected static function sendRequest(HttpRequest $request, callable $success = null, callable $failed = null)
     {
         try {
             $response = $request->send();
@@ -101,10 +101,10 @@ class BaseClient extends Object
     {
         $data = $response->getData();
         if ($data['errcode'] == 0 || !isset($data['errcode'])) {
-            return call_user_func($success, $data);
+            return call_user_func($success, $response);
         } else {
             if ($failed) {
-                return call_user_func($failed, $data);
+                return call_user_func($failed, $response);
             } else {
                 throw new ResponseException($data['errmsg'], $data['errcode']);
             }

@@ -11,8 +11,8 @@ namespace cdcchen\wechat\qy\login;
 
 use cdcchen\net\curl\Client as HttpClient;
 use cdcchen\net\curl\HttpResponse;
-use cdcchen\wechat\base\BaseClient;
 use cdcchen\wechat\base\ApiException;
+use cdcchen\wechat\base\BaseClient;
 use cdcchen\wechat\base\ResponseException;
 
 class AccessToken extends BaseClient
@@ -28,12 +28,12 @@ class AccessToken extends BaseClient
 
         $url = Client::getRequestUrl(self::API_ACCESS_TOKEN);
         $request = HttpClient::post($url, $params);
+        $response = static::sendRequest($request);
 
-        return static::handleRequest($request, function(HttpResponse $response) {
-            return static::handleResponse($response, function($data) {
-                static::checkAccessTokenResponse($data);
-                return $data;
-            });
+        return static::handleResponse($response, function (HttpResponse $response) {
+            $data = $response->getData();
+            static::checkAccessTokenResponse($data);
+            return $data;
         });
     }
 
@@ -41,10 +41,10 @@ class AccessToken extends BaseClient
     {
         if (isset($response['provider_access_token'])) {
             return true;
-        }
-        elseif (isset($response['errcode']))
+        } elseif (isset($response['errcode'])) {
             throw new ApiException($response['errmsg'], $response['errcode']);
-        else
+        } else {
             throw new ResponseException('Get access token error.');
+        }
     }
 }

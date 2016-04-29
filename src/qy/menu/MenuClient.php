@@ -26,11 +26,10 @@ class MenuClient extends Client
 
         $url = $this->buildUrl(self::API_CREATE, ['agentid' => $agent_id]);
         $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
+        $response = static::sendRequest($request);
 
-        return static::handleRequest($request, function (HttpResponse $response) {
-            return static::handleResponse($response, function ($data) {
-                return true;
-            });
+        return static::handleResponse($response, function (HttpResponse $response) {
+            return true;
         });
     }
 
@@ -38,11 +37,10 @@ class MenuClient extends Client
     {
         $url = $this->buildUrl(self::API_DELETE);
         $request = HttpClient::post($url, ['agentid' => $agent_id])->setFormat(HttpRequest::FORMAT_JSON);
+        $response = static::sendRequest($request);
 
-        return static::handleRequest($request, function (HttpResponse $response) {
-            return static::handleResponse($response, function ($data) {
-                return true;
-            });
+        return static::handleResponse($response, function (HttpResponse $response) {
+            return true;
         });
     }
 
@@ -50,11 +48,11 @@ class MenuClient extends Client
     {
         $url = $this->buildUrl(self::API_LIST);
         $request = HttpClient::get($url, ['agentid' => $agent_id]);
+        $response = static::sendRequest($request);
 
-        return static::handleRequest($request, function (HttpResponse $response) {
-            return static::handleResponse($response, function ($data) {
-                return $data['menu'];
-            });
+        return static::handleResponse($response, function (HttpResponse $response) {
+            $data = $response->getData();
+            return $data['menu'];
         });
     }
 }

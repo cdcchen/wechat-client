@@ -30,11 +30,11 @@ class TagClient extends Client
     {
         $url = $this->buildUrl(self::API_LIST);
         $request = HttpClient::get($url);
+        $response = static::sendRequest($request);
 
-        return static::handleRequest($request, function (HttpResponse $response) {
-            return static::handleResponse($response, function ($data) {
-                return $data['taglist'];
-            });
+        return static::handleResponse($response, function (HttpResponse $response) {
+            $data = $response->getData();
+            return $data['taglist'];
         });
     }
 
@@ -47,11 +47,11 @@ class TagClient extends Client
 
         $url = $this->buildUrl(self::API_CREATE);
         $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
+        $response = static::sendRequest($request);
 
-        return static::handleRequest($request, function (HttpResponse $response) {
-            return static::handleResponse($response, function ($data) {
-                return $data['tagid'];
-            });
+        return static::handleResponse($response, function (HttpResponse $response) {
+            $data = $response->getData();
+            return $data['tagid'];
         });
     }
 
@@ -64,11 +64,10 @@ class TagClient extends Client
 
         $url = $this->buildUrl(self::API_UPDATE);
         $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
+        $response = static::sendRequest($request);
 
-        return static::handleRequest($request, function (HttpResponse $response) {
-            return static::handleResponse($response, function ($data) {
-                return true;
-            });
+        return static::handleResponse($response, function (HttpResponse $response) {
+            return true;
         });
     }
 
@@ -76,11 +75,10 @@ class TagClient extends Client
     {
         $url = $this->buildUrl(self::API_DELETE, ['tagid' => $id]);
         $request = HttpClient::get($url);
+        $response = static::sendRequest($request);
 
-        return static::handleRequest($request, function (HttpResponse $response) {
-            return static::handleResponse($response, function ($data) {
-                return true;
-            });
+        return static::handleResponse($response, function (HttpResponse $response) {
+            return true;
         });
     }
 
@@ -88,11 +86,11 @@ class TagClient extends Client
     {
         $url = $this->buildUrl(self::API_GET_USERS, ['tagid' => $id]);
         $request = HttpClient::get($url);
+        $response = static::sendRequest($request);
 
-        return static::handleRequest($request, function (HttpResponse $response) {
-            return static::handleResponse($response, function ($data) {
-                return $data['userlist'];
-            });
+        return static::handleResponse($response, function (HttpResponse $response) {
+            $data = $response->getData();
+            return $data['userlist'];
         });
     }
 
@@ -110,16 +108,16 @@ class TagClient extends Client
 
         $url = $this->buildUrl(self::API_ADD_USERS);
         $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
+        $response = static::sendRequest($request);
 
-        return static::handleRequest($request, function (HttpResponse $response) {
-            return static::handleResponse($response, function ($data) {
-                if ($data['invalidlist'] || $data['invalidparty']) {
-                    throw new ResponseException($data['errmsg'],
-                        $data['invalidlist'] . $data['invalidparty']);
-                } else {
-                    return true;
-                }
-            });
+        return static::handleResponse($response, function (HttpResponse $response) {
+            $data = $response->getData();
+            if ($data['invalidlist'] || $data['invalidparty']) {
+                throw new ResponseException($data['errmsg'],
+                    $data['invalidlist'] . $data['invalidparty']);
+            } else {
+                return true;
+            }
         });
     }
 
@@ -137,22 +135,22 @@ class TagClient extends Client
 
         $url = $this->buildUrl(self::API_DELETE_USERS);
         $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
+        $response = static::sendRequest($request);
 
-        return static::handleRequest($request, function (HttpResponse $response) {
-            return static::handleResponse($response, function ($data) {
-                $invalid = [
-                    'invalidlist' => $data['invalidlist'],
-                    'invalidparty' => $data['invalidparty'],
-                ];
-                $invalid = array_filter($invalid);
+        return static::handleResponse($response, function (HttpResponse $response) {
+            $data = $response->getData();
+            $invalid = [
+                'invalidlist' => $data['invalidlist'],
+                'invalidparty' => $data['invalidparty'],
+            ];
+            $invalid = array_filter($invalid);
 
-                if ($invalid) {
-                    $invalidText = join('；', $invalid);
-                    throw new ResponseException($data['errmsg'] . $invalidText);
-                } else {
-                    return true;
-                }
-            });
+            if ($invalid) {
+                $invalidText = join('；', $invalid);
+                throw new ResponseException($data['errmsg'] . $invalidText);
+            } else {
+                return true;
+            }
         });
     }
 }

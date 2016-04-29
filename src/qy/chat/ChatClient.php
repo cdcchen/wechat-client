@@ -54,11 +54,10 @@ class ChatClient extends Client
 
         $url = $this->buildUrl(self::API_CREATE);
         $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
+        $response = static::sendRequest($request);
 
-        return static::handleRequest($request, function (HttpResponse $response) use ($chat_id) {
-            return static::handleResponse($response, function ($data)  use ($chat_id) {
-                return $chat_id;
-            });
+        return static::handleResponse($response, function (HttpResponse $response) use ($chat_id) {
+            return $chat_id;
         });
     }
 
@@ -77,11 +76,11 @@ class ChatClient extends Client
     {
         $url = $this->buildUrl(self::API_FETCH, ['chatid' => $chat_id]);
         $request = HttpClient::get($url);
+        $response = static::sendRequest($request);
 
-        return static::handleRequest($request, function (HttpResponse $response) {
-            return static::handleResponse($response, function ($data) {
-                return new $data['chat_info'];
-            });
+        return static::handleResponse($response, function (HttpResponse $response) {
+            $data = $response->getData();
+            return new $data['chat_info'];
         });
     }
 
@@ -100,11 +99,10 @@ class ChatClient extends Client
 
         $url = $this->buildUrl(self::API_UPDATE);
         $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
+        $response = static::sendRequest($request);
 
-        return static::handleRequest($request, function (HttpResponse $response) {
-            return static::handleResponse($response, function ($data) {
-                return true;
-            });
+        return static::handleResponse($response, function (HttpResponse $response) {
+            return true;
         });
     }
 
@@ -164,11 +162,10 @@ class ChatClient extends Client
 
         $url = $this->buildUrl(self::API_QUIT);
         $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
+        $response = static::sendRequest($request);
 
-        return static::handleRequest($request, function (HttpResponse $response) {
-            return static::handleResponse($response, function ($data) {
-                return true;
-            });
+        return static::handleResponse($response, function (HttpResponse $response) {
+            return true;
         });
     }
 
@@ -182,11 +179,10 @@ class ChatClient extends Client
 
         $url = $this->buildUrl(self::API_CLEAR_NOTIFY);
         $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
+        $response = static::sendRequest($request);
 
-        return static::handleRequest($request, function (HttpResponse $response) {
-            return static::handleResponse($response, function ($data) {
-                return true;
-            });
+        return static::handleResponse($response, function (HttpResponse $response) {
+            return true;
         });
     }
 
@@ -197,11 +193,11 @@ class ChatClient extends Client
 
         $url = $this->buildUrl(self::API_SET_MUTE);
         $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
+        $response = static::sendRequest($request);
 
-        return static::handleRequest($request, function (HttpResponse $response) {
-            return static::handleResponse($response, function ($data) {
-                return isset($data['invaliduser']) ? $data['invaliduser'] : true;
-            });
+        return static::handleResponse($response, function (HttpResponse $response) {
+            $data = $response->getData();
+            return isset($data['invaliduser']) ? $data['invaliduser'] : true;
         });
     }
 
@@ -245,11 +241,10 @@ class ChatClient extends Client
 
         $url = $this->buildUrl(self::API_SEND);
         $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
+        $response = static::sendRequest($request);
 
-        return static::handleRequest($request, function (HttpResponse $response) {
-            return static::handleResponse($response, function ($data) {
-                return true;
-            });
+        return static::handleResponse($response, function (HttpResponse $response) {
+            return true;
         });
     }
 

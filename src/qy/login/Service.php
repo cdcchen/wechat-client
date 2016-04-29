@@ -16,12 +16,12 @@ use cdcchen\net\curl\HttpResponse;
 class Service extends Client
 {
     const TARGET_AGENT_SETTING = 'agent_setting';
-    const TARGET_SEND_MSG = 'send_msg';
-    const TARGET_CONTACT = 'contact';
-    const TARGET_3RD_ADMIN = '3rd_admin';
+    const TARGET_SEND_MSG      = 'send_msg';
+    const TARGET_CONTACT       = 'contact';
+    const TARGET_3RD_ADMIN     = '3rd_admin';
 
     const API_GET_LOGIN_INFO = '/cgi-bin/service/get_login_info';
-    const API_GET_LOGIN_URL = '/cgi-bin/service/get_login_url';
+    const API_GET_LOGIN_URL  = '/cgi-bin/service/get_login_url';
 
     public function getLoginInfo($auth_code)
     {
@@ -29,11 +29,11 @@ class Service extends Client
 
         $url = $this->buildUrl(self::API_GET_LOGIN_INFO);
         $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
+        $response = static::sendRequest($request);
 
-        return static::handleRequest($request, function (HttpResponse $response) {
-            return static::handleResponse($response, function ($data) {
-                return $data;
-            });
+        return static::handleResponse($response, function (HttpResponse $response) {
+            $data = $response->getData();
+            return $data;
         });
     }
 
@@ -47,12 +47,12 @@ class Service extends Client
 
         $url = $this->buildUrl(self::API_GET_LOGIN_URL);
         $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
+        $response = static::sendRequest($request);
 
-        return static::handleRequest($request, function (HttpResponse $response) {
-            return static::handleResponse($response, function ($data) {
-                unset($data['errcode'], $data['errmsg']);
-                return $data;
-            });
+        return static::handleResponse($response, function (HttpResponse $response) {
+            $data = $response->getData();
+            unset($data['errcode'], $data['errmsg']);
+            return $data;
         });
     }
 }

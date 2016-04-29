@@ -63,11 +63,10 @@ class BatchClient extends Client
     {
         $url = $this->buildUrl(self::API_GET_RESULT);
         $request = HttpClient::get($url, ['jobid' => $job_id]);
+        $response = static::sendRequest($request);
 
-        return static::handleRequest($request, function (HttpResponse $response) {
-            return static::handleResponse($response, function ($data) {
-                return $data;
-            });
+        return static::handleResponse($response, function (HttpResponse $response) {
+            return $response->getData();
         });
     }
 
@@ -80,11 +79,11 @@ class BatchClient extends Client
 
         $url = $this->buildUrl($api_name);
         $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
+        $response = static::sendRequest($request);
 
-        return static::handleRequest($request, function (HttpResponse $response) {
-            return static::handleResponse($response, function ($data) {
-                return $data['jobid'];
-            });
+        return static::handleResponse($response, function (HttpResponse $response) {
+            $data = $response->getData();
+            return $data['jobid'];
         });
     }
 
