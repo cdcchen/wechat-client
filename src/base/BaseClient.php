@@ -11,6 +11,7 @@ namespace cdcchen\wechat\base;
 
 use cdcchen\net\curl\HttpRequest;
 use cdcchen\net\curl\HttpResponse;
+use cdcchen\net\curl\RequestException as CUrlRequestException;
 
 
 /**
@@ -106,13 +107,13 @@ class BaseClient extends Object
     protected static function sendRequest(HttpRequest $request, callable $success = null, callable $failed = null)
     {
         try {
-            $response = $request->send();
+            $response = $request->setSSL()->send();
             if ($success === null) {
                 return $response;
             } else {
                 return call_user_func($success, $response);
             }
-        } catch (\Exception $e) {
+        } catch (CUrlRequestException $e) {
             if ($failed) {
                 return call_user_func($failed, $request);
             } else {
