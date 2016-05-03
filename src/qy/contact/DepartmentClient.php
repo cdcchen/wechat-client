@@ -130,7 +130,7 @@ class DepartmentClient extends Client
         $attributes = ['id' => $id];
 
         $url = $this->buildUrl(self::API_DELETE);
-        $request = HttpClient::get($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
+        $request = HttpClient::get($url, $attributes);
         $response = static::sendRequest($request);
 
         return static::handleResponse($response, function (HttpResponse $response) {
