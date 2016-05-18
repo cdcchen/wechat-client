@@ -58,38 +58,42 @@ class MaterialClient extends Client
 
     /**
      * @param string $filename
+     * @param string|null $postName
      * @return string
      */
-    public function uploadFile($filename)
+    public function uploadFile($filename, $postName = null)
     {
-        return $this->upload($filename, Media::TYPE_FILE);
+        return $this->upload($filename, Media::TYPE_FILE, $postName);
     }
 
     /**
      * @param string $filename
+     * @param string|null $postName
      * @return string
      */
-    public function uploadImage($filename)
+    public function uploadImage($filename, $postName = null)
     {
-        return $this->upload($filename, Media::TYPE_IMAGE);
+        return $this->upload($filename, Media::TYPE_IMAGE, $postName);
     }
 
     /**
      * @param string $filename
+     * @param string|null $postName
      * @return string
      */
-    public function uploadVoice($filename)
+    public function uploadVoice($filename, $postName = null)
     {
-        return $this->upload($filename, Media::TYPE_VOICE);
+        return $this->upload($filename, Media::TYPE_VOICE, $postName);
     }
 
     /**
      * @param string $filename
+     * @param string|null $postName
      * @return string
      */
-    public function uploadVideo($filename)
+    public function uploadVideo($filename, $postName = null)
     {
-        return $this->upload($filename, Media::TYPE_VIDEO);
+        return $this->upload($filename, Media::TYPE_VIDEO, $postName);
     }
 
     /**
