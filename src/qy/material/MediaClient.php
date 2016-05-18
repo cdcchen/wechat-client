@@ -15,11 +15,15 @@ use cdcchen\net\curl\HttpResponse;
 use cdcchen\wechat\base\ResponseException;
 use cdcchen\wechat\qy\Client;
 
+/**
+ * Class MediaClient
+ * @package cdcchen\wechat\qy\material
+ */
 class MediaClient extends Client
 {
     const API_UPLOAD     = '/cgi-bin/media/upload';
     const API_UPLOAD_IMG = '/cgi-bin/media/uploadimg';
-    const API_DOWNLOAD   = '/cgi-bin/media/get';
+    const API_DOWNLOAD = '/cgi-bin/media/get';
 
     const SIZE_MIN       = 5;
     const SIZE_IMAGE_MAX = 2048000;
@@ -27,9 +31,17 @@ class MediaClient extends Client
     const SIZE_VIDEO_MAX = 10240000;
     const SIZE_FILE_MAX  = 20480000;
 
-    public function upload($filename, $type)
+    /**
+     * @param string $filename
+     * @param string $type
+     * @param string|null $postName
+     * @return string
+     * @throws ResponseException
+     * @throws \cdcchen\wechat\base\RequestException
+     */
+    public function upload($filename, $type, $postName = null)
     {
-        $media = (new Media())->setFilename($filename);
+        $media = (new Media())->setFilename($filename, $postName);
         $url = $this->buildUrl(self::API_UPLOAD, ['type' => $type]);
         $request = HttpClient::post($url, $media->getFormData())
                              ->addFile('upload_file', $media->getUploadFile())
@@ -42,29 +54,52 @@ class MediaClient extends Client
         });
     }
 
+    /**
+     * @param string $filename
+     * @return string
+     */
     public function uploadFile($filename)
     {
         return $this->upload($filename, Media::TYPE_FILE);
     }
 
+    /**
+     * @param string $filename
+     * @return string
+     */
     public function uploadVideo($filename)
     {
         return $this->upload($filename, Media::TYPE_VIDEO);
     }
 
+    /**
+     * @param string $filename
+     * @return string
+     */
     public function uploadVoice($filename)
     {
         return $this->upload($filename, Media::TYPE_VOICE);
     }
 
+    /**
+     * @param string $filename
+     * @return string
+     */
     public function uploadImage($filename)
     {
         return $this->upload($filename, Media::TYPE_IMAGE);
     }
 
-    public function uploadPhoto($filename)
+    /**
+     * @param string $filename
+     * @param string $postName
+     * @return mixed
+     * @throws ResponseException
+     * @throws \cdcchen\wechat\base\RequestException
+     */
+    public function uploadPhoto($filename, $postName = null)
     {
-        $media = (new Media())->setFilename($filename);
+        $media = (new Media())->setFilename($filename, $postName);
 
         $url = $this->buildUrl(self::API_UPLOAD_IMG);
         $request = HttpClient::post($url, $media->getFormData())
@@ -78,6 +113,12 @@ class MediaClient extends Client
         });
     }
 
+    /**
+     * @param string $media_id
+     * @return null|string
+     * @throws ResponseException
+     * @throws \cdcchen\wechat\base\RequestException
+     */
     public function download($media_id)
     {
         $url = $this->buildUrl(self::API_DOWNLOAD);

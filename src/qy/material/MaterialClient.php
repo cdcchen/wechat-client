@@ -32,9 +32,17 @@ class MaterialClient extends Client
     const SIZE_VIDEO_MAX = 10240000;
     const SIZE_FILE_MAX  = 20480000;
 
-    public function upload($filename, $type)
+    /**
+     * @param string $filename
+     * @param string $type
+     * @param string|null $postName
+     * @return string
+     * @throws \cdcchen\wechat\base\RequestException
+     * @throws \cdcchen\wechat\base\ResponseException
+     */
+    public function upload($filename, $type, $postName = null)
     {
-        $media = (new Media())->setFilename($filename);
+        $media = (new Media())->setFilename($filename, $postName);
 
         $url = $this->buildUrl(self::API_UPLOAD, ['type' => $type]);
         $request = HttpClient::post($url, $media->getFormData(), true)
@@ -48,26 +56,49 @@ class MaterialClient extends Client
         });
     }
 
+    /**
+     * @param string $filename
+     * @return string
+     */
     public function uploadFile($filename)
     {
         return $this->upload($filename, Media::TYPE_FILE);
     }
 
+    /**
+     * @param string $filename
+     * @return string
+     */
     public function uploadImage($filename)
     {
         return $this->upload($filename, Media::TYPE_IMAGE);
     }
 
+    /**
+     * @param string $filename
+     * @return string
+     */
     public function uploadVoice($filename)
     {
         return $this->upload($filename, Media::TYPE_VOICE);
     }
 
+    /**
+     * @param string $filename
+     * @return string
+     */
     public function uploadVideo($filename)
     {
         return $this->upload($filename, Media::TYPE_VIDEO);
     }
 
+    /**
+     * @param int $agent_id
+     * @param array $news
+     * @return mixed
+     * @throws \cdcchen\wechat\base\RequestException
+     * @throws \cdcchen\wechat\base\ResponseException
+     */
     public function uploadNews($agent_id, $news)
     {
         $attributes = [
@@ -85,6 +116,14 @@ class MaterialClient extends Client
         });
     }
 
+    /**
+     * @param int $agent_id
+     * @param string $media_id
+     * @param array $articles
+     * @return mixed
+     * @throws \cdcchen\wechat\base\RequestException
+     * @throws \cdcchen\wechat\base\ResponseException
+     */
     public function updateNews($agent_id, $media_id, $articles)
     {
         $attributes = [
@@ -102,6 +141,13 @@ class MaterialClient extends Client
         });
     }
 
+    /**
+     * @param string $media_id
+     * @param int $agent_id
+     * @return mixed|null|string
+     * @throws \cdcchen\wechat\base\RequestException
+     * @throws \cdcchen\wechat\base\ResponseException
+     */
     public function fetch($media_id, $agent_id)
     {
         $url = $this->buildUrl(self::API_GET_ITEM);
@@ -118,6 +164,12 @@ class MaterialClient extends Client
         }
     }
 
+    /**
+     * @param int $agent_id
+     * @return mixed
+     * @throws \cdcchen\wechat\base\RequestException
+     * @throws \cdcchen\wechat\base\ResponseException
+     */
     public function getCount($agent_id)
     {
         $url = $this->buildUrl(self::API_GET_COUNT);
@@ -160,6 +212,13 @@ class MaterialClient extends Client
     }
 
 
+    /**
+     * @param int $agent_id
+     * @param string $media_id
+     * @return mixed
+     * @throws \cdcchen\wechat\base\RequestException
+     * @throws \cdcchen\wechat\base\ResponseException
+     */
     public function delete($agent_id, $media_id)
     {
         $url = $this->buildUrl(self::API_DELETE);
