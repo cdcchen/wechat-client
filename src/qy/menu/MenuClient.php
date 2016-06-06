@@ -62,7 +62,7 @@ class MenuClient extends Client
     public function delete($agent_id)
     {
         $url = $this->buildUrl(self::API_DELETE);
-        $request = HttpClient::post($url, ['agentid' => $agent_id])->setFormat(HttpRequest::FORMAT_JSON);
+        $request = HttpClient::get($url, ['agentid' => $agent_id]);
         $response = static::sendRequest($request);
 
         return static::handleResponse($response, function (HttpResponse $response) {
