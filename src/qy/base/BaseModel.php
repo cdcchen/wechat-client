@@ -36,7 +36,7 @@ abstract class BaseModel
     public function __construct($attributes = [])
     {
         foreach ($attributes as $name => $value) {
-            $methodName = 'set' . ucfirst($name);var_dump($methodName);
+            $methodName = 'set' . ucfirst($name);
             if (method_exists($this, $methodName)) {
                 call_user_func([$this, $methodName], $value);
             }
