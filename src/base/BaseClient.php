@@ -11,51 +11,23 @@ namespace cdcchen\wechat\base;
 
 use cdcchen\net\curl\HttpRequest;
 use cdcchen\net\curl\HttpResponse;
-use cdcchen\net\curl\RequestException as CUrlRequestException;
 
 
 /**
  * Class BaseClient
  * @package cdcchen\wechat\base
  */
-class BaseClient extends Object
+abstract class BaseClient extends Object
 {
     /**
-     * @var string
+     * api host url
      */
-    protected $_accessToken;
+    protected static $host = 'https://qyapi.weixin.qq.com';
 
     /**
-     * BaseClient constructor.
-     * @param string $access_token
+     * @var array
      */
-    public function __construct($access_token)
-    {
-        if (empty($access_token)) {
-            throw new \InvalidArgumentException('Access token is required.');
-        }
-
-        $this->setAccessToken($access_token);
-    }
-
-    /**
-     * @return string
-     */
-    public function getAccessToken()
-    {
-        return $this->_accessToken;
-    }
-
-    /**
-     * @param string $access_token
-     * @return $this
-     */
-    public function setAccessToken($access_token)
-    {
-        $this->_accessToken = $access_token;
-        return $this;
-    }
-
+    private $_params = [];
 
     /**
      * @param string $token
@@ -74,78 +46,91 @@ class BaseClient extends Object
     }
 
     /**
-     * @param string $path
-     * @param array $query
-     * @return string
-     * @throws \Exception
+     * @param string $name
+     * @param mixed $value
+     * @return $this
      */
-    protected function buildUrl($path, $query = [])
+    public function setParam($name, $value)
     {
-        return static::getRequestUrl($path, $query, $this->getAccessToken());
+        $this->_params[$name] = $value;
+        return $this;
     }
 
     /**
-     * @param string $path
-     * @param array $query
-     * @param string $access_token
-     * @return string
-     * @throws \Exception
+     * @param array $params
+     * @return $this
      */
-    protected static function getRequestUrl($path, $query = [], $access_token = '')
+    public function setParams(array $params)
     {
-        throw new \Exception('This method should be override.');
-    }
-
-
-    /**
-     * @param HttpRequest $request
-     * @param callable|null $success
-     * @param callable|null $failed
-     * @return bool|\cdcchen\net\curl\HttpResponse
-     * @throws RequestException
-     */
-    protected static function sendRequest(HttpRequest $request, callable $success = null, callable $failed = null)
-    {
-        try {
-            $response = $request->setSSL()->send();
-            if ($success === null) {
-                return $response;
-            } else {
-                return call_user_func($success, $response);
-            }
-        } catch (CUrlRequestException $e) {
-            if ($failed) {
-                return call_user_func($failed, $request);
-            } else {
-                throw new RequestException($e->getMessage(), $e->getCode());
-            }
+        foreach ($params as $name => $value) {
+            $this->setParam($name, $value);
         }
+        return $this;
     }
 
     /**
-     * @param HttpResponse $response
-     * @param callable|null $success
-     * @param callable|null $failed
-     * @return mixed
-     * @throws ResponseException
+     * prepare before send request
      */
-    protected static function handleResponse(HttpResponse $response, callable $success = null, callable $failed = null)
+    public function prepare()
     {
-        $httpCode = (int)$response->getHeader('http-code');
+    }
+
+
+    /**
+     * @param BaseRequest $request
+     * @return HttpRequest
+     */
+    private function buildHttpRequest(BaseRequest $request)
+    {
+        $httpRequest = (new HttpRequest())
+            ->setSSL()
+            ->setMethod($request->getMethod())
+            ->setUrl($request->getRequestUrl());
+
+        if ($request->isPost()) {
+            $httpRequest->setFormat(HttpRequest::FORMAT_JSON);
+        }
+
+        if (is_array($request->getData())) {
+            $httpRequest->setData($request->getData());
+        } else {
+            $httpRequest->setContent($request->getData());
+        }
+
+        return $httpRequest;
+    }
+
+    /**
+     * @param BaseRequest $request
+     * @param callable|null $success
+     * @return HttpResponse|mixed
+     * @throws RequestException
+     * @throws ResponseException
+     * @throws \cdcchen\net\curl\RequestException
+     */
+    public function sendRequest(BaseRequest $request, callable $success = null)
+    {
+        $this->prepare();
+
+        $request->setHost(static::$host)
+                ->mergeQueryParams($this->_params);
+        $request->validate();
+
+        $httpRequest = $this->buildHttpRequest($request);
+
+        /* @var HttpResponse $response */
+        $response = $httpRequest->send();
+
+        $httpCode = (int)$response->getStatus();
         if ($httpCode !== 200) {
-            throw new ResponseException('Http request error.', $httpCode);
+            throw new RequestException('Http request error.', $httpCode);
         }
 
         $data = $response->getData();
-
         if (isset($data['errcode']) && $data['errcode'] != 0) {
-            if ($failed) {
-                return call_user_func($failed, $response);
-            } else {
-                throw new ResponseException($data['errmsg'], $data['errcode']);
-            }
+            throw new ResponseException($data['errmsg'], $data['errcode']);
         }
 
-        return call_user_func($success, $response);
+        return $success ? call_user_func($success, $response) : $response;
     }
 }

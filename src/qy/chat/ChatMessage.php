@@ -35,6 +35,11 @@ class ChatMessage extends BaseModel
     const MSG_TYPE_VOICE = 'voice';
 
     /**
+     * Link msg type
+     */
+    const MSG_TYPE_LINK = 'link';
+
+    /**
      * @param int $type
      * @return $this
      */
@@ -67,7 +72,13 @@ class ChatMessage extends BaseModel
      */
     public function setMsgType($type)
     {
-        $types = [self::MSG_TYPE_TEXT, self::MSG_TYPE_IMAGE, self::MSG_TYPE_FILE, self::MSG_TYPE_VOICE];
+        $types = [
+            self::MSG_TYPE_TEXT,
+            self::MSG_TYPE_IMAGE,
+            self::MSG_TYPE_FILE,
+            self::MSG_TYPE_VOICE,
+            self::MSG_TYPE_LINK
+        ];
         if (in_array($type, $types)) {
             return $this->setAttribute('msgtype', $type);
         }
@@ -89,6 +100,8 @@ class ChatMessage extends BaseModel
 
         if ($msgType === self::MSG_TYPE_TEXT) {
             $content = ['content' => $value];
+        } elseif ($msgType === self::MSG_TYPE_LINK) {
+            $content = $value;
         } else {
             $content = ['media_id' => $value];
         }
@@ -101,6 +114,6 @@ class ChatMessage extends BaseModel
      */
     protected function fields()
     {
-        return ['receiver', 'sender', 'msgtype', 'text', 'file', 'image', 'voice'];
+        return ['receiver', 'sender', 'msgtype', 'text', 'file', 'image', 'voice', 'link'];
     }
 }

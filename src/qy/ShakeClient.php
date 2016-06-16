@@ -9,36 +9,25 @@
 namespace cdcchen\wechat\qy;
 
 
-use cdcchen\net\curl\Client as HttpClient;
-use cdcchen\net\curl\HttpRequest;
 use cdcchen\net\curl\HttpResponse;
 
 /**
  * Class ShakeClient
  * @package cdcchen\wechat\qy
  */
-class ShakeClient extends Client
+class ShakeClient extends DefaultClient
 {
     /**
-     *
-     */
-    const API_GET_SHAKE_INFO = '/cgi-bin/shakearound/getshakeinfo';
-
-    /**
-     * @param string $ticket
-     * @return mixed
+     * @param $ticket
+     * @return array
      * @throws \cdcchen\wechat\base\RequestException
      * @throws \cdcchen\wechat\base\ResponseException
      */
     public function getInfo($ticket)
     {
-        $attributes = ['ticket' => $ticket];
-
-        $url = $this->buildUrl(self::API_GET_SHAKE_INFO);
-        $request = HttpClient::post($url, $attributes)->setFormat(HttpRequest::FORMAT_JSON);
-        $response = static::sendRequest($request);
-
-        return static::handleResponse($response, function (HttpResponse $response) {
+        $client = new DefaultClient();
+        $request = (new ShakeInfoRequest())->setTicket($ticket);
+        return $client->sendRequest($request, function (HttpResponse $response) {
             $data = $response->getData();
             return $data['data'];
         });

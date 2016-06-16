@@ -9,52 +9,43 @@
 namespace cdcchen\wechat\qy;
 
 
-use cdcchen\net\curl\Client as HttpClient;
-use cdcchen\wechat\base\ResponseException;
+use cdcchen\net\curl\HttpResponse;
 
 /**
  * Class OAuth
  * @package cdcchen\wechat\qy
  */
-class OAuth extends Client
+class OAuthClient extends DefaultClient
 {
     /**
      * authorize url
      */
-    CONST URL_AUTHORIZE = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=snsapi_base&state=%s#wechat_redirect';
-    /**
-     * api path
-     */
-    const API_INFO = '/cgi-bin/user/getuserinfo';
+    const URL_AUTHORIZE = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=snsapi_base&state=%s#wechat_redirect';
 
     /**
-     * @param string $corp_id
-     * @param string $redirect_uri
+     * @param string $corpId
+     * @param string $redirectUri
      * @param string $state
      * @return string
      */
-    public static function buildAuthorizeUrl($corp_id, $redirect_uri, $state = '')
+    public static function buildAuthorizeUrl($corpId, $redirectUri, $state = '')
     {
-        return sprintf(self::URL_AUTHORIZE, $corp_id, urlencode($redirect_uri), $state);
+        return sprintf(self::URL_AUTHORIZE, $corpId, urlencode($redirectUri), $state);
     }
+
 
     /**
      * @param string $code
      * @return array
-     * @throws ResponseException
      * @throws \cdcchen\wechat\base\RequestException
+     * @throws \cdcchen\wechat\base\ResponseException
      */
     public function getUserInfo($code)
     {
-        $url = $this->buildUrl(self::API_INFO, ['code' => $code]);
-        $request = HttpClient::get($url);
-        $response = static::sendRequest($request);
-
-        $data = $response->getData();
-        if (isset($data['errcode'])) {
-            throw new ResponseException($response['errmsg'], $response['errcode']);
-        } else {
-            return $data;
-        }
+        $request = new UserInfoRequest();
+        $request->setCode($code);
+        return $this->sendRequest($request, function (HttpResponse $response) {
+            return $response->getData();
+        });
     }
 }
