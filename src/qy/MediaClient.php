@@ -20,10 +20,6 @@ use cdcchen\wechat\qy\DefaultClient;
  */
 class MediaClient extends DefaultClient
 {
-    const API_UPLOAD     = '/cgi-bin/media/upload';
-    const API_UPLOAD_IMG = '/cgi-bin/media/uploadimg';
-    const API_DOWNLOAD   = '/cgi-bin/media/get';
-
     const SIZE_MIN       = 5;
     const MAX_IMAGE_SIZE = 2048000;
     const MAX_VOICE_SIZE = 2048000;
@@ -103,7 +99,7 @@ class MediaClient extends DefaultClient
     public function uploadNewsImage($filename, $postName = null)
     {
         static::validateFileSize(filesize($filename), self::MAX_IMAGE_SIZE);
-        
+
         $media = (new Media())->setFilename($filename, $postName);
         $request = (new UploadNewsImageRequest())->setMedia($media);
 
@@ -132,6 +128,10 @@ class MediaClient extends DefaultClient
         return $response->getContent();
     }
 
+    /**
+     * @param int $size
+     * @param int $limit
+     */
     private static function validateFileSize($size, $limit)
     {
         if ($size > $limit) {
