@@ -17,14 +17,6 @@ class MaterialClient extends DefaultClient
 {
     const BATCH_GET_MAX_COUNT = 50;
 
-    const API_UPLOAD      = '/cgi-bin/material/add_material';
-    const API_GET_ITEM    = '/cgi-bin/material/get';
-    const API_ADD_NEWS    = '/cgi-bin/material/add_mpnews';
-    const API_UPDATE_NEWS = '/cgi-bin/material/update_MPNEWS';
-    const API_GET_COUNT   = '/cgi-bin/material/get_count';
-    const API_LIST        = '/cgi-bin/material/batchget';
-    const API_DELETE      = '/cgi-bin/material/del';
-
     const SIZE_MIN       = 5;
     const SIZE_IMAGE_MAX = 2048000;
     const SIZE_VOICE_MAX = 2048000;
