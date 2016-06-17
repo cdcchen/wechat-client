@@ -80,7 +80,7 @@ class ChatSendMessageRequest extends BaseRequest
     /**
      * @return array
      */
-    public function getRequireParams()
+    protected function getRequireParams()
     {
         return ['msgtype', 'receiver', 'sender'];
     }

@@ -20,7 +20,7 @@ class Message extends BaseModel
     /**
      * Max user count
      */
-    const MAX_USER_COUNT  = 1000;
+    const MAX_USER_COUNT = 1000;
     /**
      * Max party count
      */
@@ -29,27 +29,27 @@ class Message extends BaseModel
     /**
      * Text message type
      */
-    const TYPE_TEXT   = 'text';
+    const TYPE_TEXT = 'text';
     /**
      * Image message type
      */
-    const TYPE_IMAGE  = 'image';
+    const TYPE_IMAGE = 'image';
     /**
      * Voice message type
      */
-    const TYPE_VOICE  = 'voice';
+    const TYPE_VOICE = 'voice';
     /**
      * Video message type
      */
-    const TYPE_VIDEO  = 'video';
+    const TYPE_VIDEO = 'video';
     /**
      * File message type
      */
-    const TYPE_FILE   = 'file';
+    const TYPE_FILE = 'file';
     /**
      * News message type
      */
-    const TYPE_NEWS   = 'news';
+    const TYPE_NEWS = 'news';
     /**
      * MPNews message type
      */

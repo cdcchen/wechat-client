@@ -2,18 +2,18 @@
 /**
  * Created by PhpStorm.
  * User: chendong
- * Date: 16/6/16
- * Time: 22:25
+ * Date: 16/6/17
+ * Time: 11:14
  */
 
-namespace cdcchen\wechat\qy;
-
+namespace cdcchen\wechat\qy\contact;
 
 use cdcchen\wechat\base\BaseRequest;
 
+
 /**
  * Class UserInfoRequest
- * @package cdcchen\wechat\qy
+ * @package cdcchen\wechat\qy\contact
  */
 class UserInfoRequest extends BaseRequest
 {
@@ -24,22 +24,22 @@ class UserInfoRequest extends BaseRequest
     /**
      * @var string
      */
-    protected $action = '/cgi-bin/user/getuserinfo';
+    protected $action = '/cgi-bin/user/delete';
 
     /**
      * @param string $value
      * @return $this
      */
-    public function setCode($value)
+    public function setUserId($value)
     {
-        return $this->setData('code', $value);
+        return $this->setQueryParam('userid', $value);
     }
 
     /**
      * @return array
      */
-    public function getRequireParams()
+    protected function getRequireParams()
     {
-        return ['code'];
+        return ['userid'];
     }
 }

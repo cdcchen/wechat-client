@@ -47,7 +47,7 @@ class ChatQuitRequest extends BaseRequest
     /**
      * @return array
      */
-    public function getRequireParams()
+    protected function getRequireParams()
     {
         return ['chatid', 'op_user'];
     }

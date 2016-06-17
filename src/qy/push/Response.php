@@ -14,7 +14,7 @@ use cdcchen\wechat\security\PrpCrypt;
 
 class Response
 {
-    const TYPE_TEXT = 'text';
+    const TYPE_TEXT  = 'text';
     const TYPE_IMAGE = 'image';
 
     private $_token;
@@ -94,7 +94,7 @@ class Response
             <PicUrl><![CDATA[%s]]></PicUrl>
             <Url><![CDATA[%s]]></Url>
         </Item>';
-        
+
         return sprintf($format, $title, $desc, $pic_url, $url);
     }
 
@@ -109,7 +109,6 @@ class Response
         $this->_fromUser = $from_user;
         return $this;
     }
-
 
 
     protected function buildContentXml($extra_xml)
@@ -143,8 +142,9 @@ class Response
 
     protected function defaultPlainXml()
     {
-        if (empty($this->_toUser) || empty($this->_fromUser) || empty($this->_msgType))
+        if (empty($this->_toUser) || empty($this->_fromUser) || empty($this->_msgType)) {
             throw new \InvalidArgumentException('ToUserName|FromUserName|MsgType is required.');
+        }
 
         $format = '<ToUserName><![CDATA[%s]]></ToUserName>
             <FromUserName><![CDATA[%s]]></FromUserName>

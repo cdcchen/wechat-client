@@ -42,7 +42,7 @@ class OAuthClient extends DefaultClient
      */
     public function getUserInfo($code)
     {
-        $request = new UserInfoRequest();
+        $request = new OAuthUserInfoRequest();
         $request->setCode($code);
         return $this->sendRequest($request, function (HttpResponse $response) {
             return $response->getData();

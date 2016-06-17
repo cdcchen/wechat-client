@@ -17,12 +17,14 @@ class Client extends BaseClient
 
     protected static function getRequestUrl($path, $query = [], $access_token = '')
     {
-        $url =  self::API_HOST . '/' . ltrim($path, '/');
-        if ($access_token)
+        $url = self::API_HOST . '/' . ltrim($path, '/');
+        if ($access_token) {
             $query['access_token'] = $access_token;
+        }
 
-        if ($query)
+        if ($query) {
             $url .= '?' . http_build_query($query);
+        }
 
         return $url;
     }

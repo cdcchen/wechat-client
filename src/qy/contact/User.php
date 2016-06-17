@@ -20,7 +20,7 @@ class User extends BaseModel
     /**
      * male
      */
-    const GENDER_MALE   = 1;
+    const GENDER_MALE = 1;
     /**
      * female
      */
@@ -29,15 +29,40 @@ class User extends BaseModel
     /**
      * followed status
      */
-    const STATUS_FOLLOWED     = 1;
+    const STATUS_FOLLOWED = 1;
     /**
      * forbidden status
      */
-    const STATUS_FORBIDDEN    = 2;
+    const STATUS_FORBIDDEN = 2;
     /**
      * not followed status
      */
     const STATUS_NOT_FOLLOWED = 4;
+
+    /**
+     * @param int $value
+     * @return bool
+     */
+    public static function validateGender($value)
+    {
+        $genders = [self::GENDER_FEMALE, self::GENDER_MALE];
+        return in_array($value, $genders);
+    }
+
+    /**
+     * @param string $value
+     * @return bool
+     * @todo 功能未实现
+     */
+    public static function validateMobile($value)
+    {
+        return true;
+    }
+
+    public static function validateEmail($value)
+    {
+        return filter_var($value, FILTER_VALIDATE_EMAIL);
+    }
 
     /**
      * @param string $id
@@ -157,5 +182,4 @@ class User extends BaseModel
             'extattr'
         ];
     }
-
 }

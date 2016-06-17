@@ -9,6 +9,8 @@
 namespace cdcchen\wechat\base;
 
 
+use CURLFile;
+
 /**
  * Class BaseRequest
  * @package cdcchen\wechat\base
@@ -36,6 +38,10 @@ abstract class BaseRequest extends Object
      * @var mixed
      */
     private $_data;
+    /**
+     * @var CURLFile[]
+     */
+    private $_files = [];
 
     /**
      * BaseRequest constructor.
@@ -77,7 +83,6 @@ abstract class BaseRequest extends Object
     public function getRequestUrl()
     {
         $url = $this->_host . '/' . ltrim($this->action, '/');
-
         return $url . '?' . http_build_query($this->getQueryParams());
     }
 
@@ -149,6 +154,55 @@ abstract class BaseRequest extends Object
     }
 
     /**
+     * @param $input_name
+     * @param array $files
+     * @param null $mime_type
+     * @param null $post_name
+     * @return static
+     */
+    public function addFiles($input_name, array $files, $mime_type = null, $post_name = null)
+    {
+        foreach ($files as $index => $file) {
+            $inputName = "{$input_name}[{$index}]";
+            $this->addFile($inputName, $file, $mime_type, $post_name);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param $input_name
+     * @param $file
+     * @param null $mime_type
+     * @param null $post_name
+     * @return static
+     */
+    public function addFile($input_name, $file, $mime_type = null, $post_name = null)
+    {
+        if ($file instanceof CURLFile) {
+            $this->_files[$input_name] = $file;
+        } else {
+            $this->_files[$input_name] = new CURLFile($file, $mime_type, $post_name);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return static
+     */
+    public function clearFiles()
+    {
+        $this->_files = [];
+        return $this;
+    }
+
+    public function getFiles()
+    {
+        return $this->_files;
+    }
+
+    /**
      * @return bool
      */
     public function isPost()
@@ -198,9 +252,16 @@ abstract class BaseRequest extends Object
         }
 
         $params = is_array($this->_data) ? array_merge($this->_queryParams, $this->_data) : $this->_queryParams;
-
         foreach ($requireParams as $param) {
-            if (!isset($params[$param])) {
+            $parts = explode('|', $param);
+            if (isset($parts[1])) {
+                foreach ($parts as $part) {
+                    if (isset($params[$part])) {
+                        break;
+                    }
+                }
+                throw new \InvalidArgumentException("$param cannot at the same time is empty.");
+            } elseif (!isset($params[$param])) {
                 throw new \InvalidArgumentException("$param is required.");
             }
         }

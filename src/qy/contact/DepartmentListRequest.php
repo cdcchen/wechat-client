@@ -6,21 +6,21 @@
  * Time: 17:31
  */
 
-namespace cdcchen\wechat\qy;
+namespace cdcchen\wechat\qy\contact;
 
 
 use cdcchen\wechat\base\BaseRequest;
 
 /**
  * Class DepartmentListRequest
- * @package cdcchen\wechat\qy
+ * @package cdcchen\wechat\qy\contact
  */
 class DepartmentListRequest extends BaseRequest
 {
     /**
      * @var string
      */
-    protected $method = 'post';
+    protected $method = 'get';
     /**
      * @var string
      */
@@ -29,10 +29,11 @@ class DepartmentListRequest extends BaseRequest
 
     /**
      * @param int $id
+     * @return $this
      */
-    public function setDepartmentId($id)
+    public function setId($id)
     {
-        $this->setQueryParam('id', $id);
+        return $this->setQueryParam('id', $id);
     }
 
     /**

@@ -47,7 +47,7 @@ class ChatSetMuteRequest extends BaseRequest
     /**
      * @return array
      */
-    public function getRequireParams()
+    protected function getRequireParams()
     {
         return ['user_mute_list'];
     }

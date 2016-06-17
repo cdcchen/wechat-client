@@ -22,6 +22,7 @@ class ChatSendFileRequest extends ChatSendMessageRequest
     {
         $this->setData('msgtype', ChatMessage::MSG_TYPE_FILE);
     }
+
     /**
      * @param string $value
      * @return $this
@@ -34,7 +35,7 @@ class ChatSendFileRequest extends ChatSendMessageRequest
     /**
      * @return array
      */
-    public function getRequireParams()
+    protected function getRequireParams()
     {
         $params = parent::getRequireParams();
         $params[] = 'file';

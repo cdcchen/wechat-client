@@ -99,6 +99,4 @@ class Media extends BaseModel
     {
         return ['upload_file', 'filename', 'filelength', 'content-type'];
     }
-
-
 }

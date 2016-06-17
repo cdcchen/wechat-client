@@ -102,7 +102,7 @@ class AgentUpdateRequest extends BaseRequest
     /**
      * @return array
      */
-    public function getRequireParams()
+    protected function getRequireParams()
     {
         return ['agentid'];
     }

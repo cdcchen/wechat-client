@@ -24,7 +24,8 @@ class PicPhotoEvent extends Event
         $info = $this->_xml->SendPicsInfo;
         $this->count = (int)$info->Count;
 
-        if ($this->count > 0)
+        if ($this->count > 0) {
             $this->pics = $this->parsePicInfo();
+        }
     }
 }

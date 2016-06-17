@@ -9,46 +9,41 @@
 namespace cdcchen\wechat\qy\material;
 
 
-use cdcchen\net\curl\Client as HttpClient;
 use cdcchen\net\curl\HttpRequest;
 use cdcchen\net\curl\HttpResponse;
 use cdcchen\wechat\base\ResponseException;
-use cdcchen\wechat\qy\Client;
+use cdcchen\wechat\qy\DefaultClient;
 
 /**
  * Class MediaClient
  * @package cdcchen\wechat\qy\material
  */
-class MediaClient extends Client
+class MediaClient extends DefaultClient
 {
     const API_UPLOAD     = '/cgi-bin/media/upload';
     const API_UPLOAD_IMG = '/cgi-bin/media/uploadimg';
-    const API_DOWNLOAD = '/cgi-bin/media/get';
+    const API_DOWNLOAD   = '/cgi-bin/media/get';
 
     const SIZE_MIN       = 5;
-    const SIZE_IMAGE_MAX = 2048000;
-    const SIZE_VOICE_MAX = 2048000;
-    const SIZE_VIDEO_MAX = 10240000;
-    const SIZE_FILE_MAX  = 20480000;
+    const MAX_IMAGE_SIZE = 2048000;
+    const MAX_VOICE_SIZE = 2048000;
+    const MAX_VIDEO_SIZE = 10240000;
+    const MAX_FILE_SIZE  = 20480000;
 
     /**
      * @param string $filename
      * @param string $type
      * @param string|null $postName
      * @return string
-     * @throws ResponseException
+     * @throws \cdcchen\wechat\base\ResponseException
      * @throws \cdcchen\wechat\base\RequestException
      */
     public function upload($filename, $type, $postName = null)
     {
         $media = (new Media())->setFilename($filename, $postName);
-        $url = $this->buildUrl(self::API_UPLOAD, ['type' => $type]);
-        $request = HttpClient::post($url, $media->getFormData())
-                             ->addFile('upload_file', $media->getUploadFile())
-                             ->setFormat(HttpRequest::FORMAT_JSON);
-        $response = static::sendRequest($request);
+        $request = (new MediaUploadRequest())->setType($type)->setMedia($media);
 
-        return static::handleResponse($response, function (HttpResponse $response) {
+        return $this->sendRequest($request, function (HttpResponse $response) {
             $data = $response->getData();
             return $data['media_id'];
         });
@@ -61,6 +56,7 @@ class MediaClient extends Client
      */
     public function uploadFile($filename, $postName = null)
     {
+        static::validateFileSize(filesize($filename), self::MAX_FILE_SIZE);
         return $this->upload($filename, Media::TYPE_FILE, $postName);
     }
 
@@ -71,6 +67,7 @@ class MediaClient extends Client
      */
     public function uploadVideo($filename, $postName = null)
     {
+        static::validateFileSize(filesize($filename), self::MAX_VIDEO_SIZE);
         return $this->upload($filename, Media::TYPE_VIDEO, $postName);
     }
 
@@ -81,6 +78,7 @@ class MediaClient extends Client
      */
     public function uploadVoice($filename, $postName = null)
     {
+        static::validateFileSize(filesize($filename), self::MAX_VOICE_SIZE);
         return $this->upload($filename, Media::TYPE_VOICE, $postName);
     }
 
@@ -91,49 +89,53 @@ class MediaClient extends Client
      */
     public function uploadImage($filename, $postName = null)
     {
+        static::validateFileSize(filesize($filename), self::MAX_IMAGE_SIZE);
         return $this->upload($filename, Media::TYPE_IMAGE, $postName);
     }
 
     /**
      * @param string $filename
      * @param string $postName
-     * @return mixed
-     * @throws ResponseException
+     * @return string
+     * @throws \cdcchen\wechat\base\ResponseException
      * @throws \cdcchen\wechat\base\RequestException
      */
-    public function uploadPhoto($filename, $postName = null)
+    public function uploadNewsImage($filename, $postName = null)
     {
+        static::validateFileSize(filesize($filename), self::MAX_IMAGE_SIZE);
+        
         $media = (new Media())->setFilename($filename, $postName);
+        $request = (new UploadNewsImageRequest())->setMedia($media);
 
-        $url = $this->buildUrl(self::API_UPLOAD_IMG);
-        $request = HttpClient::post($url, $media->getFormData())
-                             ->addFile('upload_file', $media->getUploadFile())
-                             ->setFormat(HttpRequest::FORMAT_JSON);
-        $response = static::sendRequest($request);
-
-        return static::handleResponse($response, function (HttpResponse $response) {
+        return $this->sendRequest($request, function (HttpResponse $response) {
             $data = $response->getData();
             return $data['url'];
         });
     }
 
     /**
-     * @param string $media_id
+     * @param string $mediaId
      * @return null|string
-     * @throws ResponseException
+     * @throws \cdcchen\wechat\base\ResponseException
      * @throws \cdcchen\wechat\base\RequestException
      */
-    public function download($media_id)
+    public function download($mediaId)
     {
-        $url = $this->buildUrl(self::API_DOWNLOAD);
-        $request = HttpClient::get($url, ['media_id' => $media_id]);
-        $response = static::sendRequest($request);
+        $request = (new MediaDownloadRequest())->setMediaId($mediaId);
+        $response = $this->sendRequest($request);
 
-        if ($response->getFormat() !== HttpRequest::FORMAT_JSON) {
-            return $response->getContent();
-        } else {
+        if ($response->getFormat() === HttpRequest::FORMAT_JSON) {
             $data = $response->getData();
             throw new ResponseException($data['errmsg'], $data['errcode']);
+        }
+
+        return $response->getContent();
+    }
+
+    private static function validateFileSize($size, $limit)
+    {
+        if ($size > $limit) {
+            throw new \InvalidArgumentException("Upload media file size ($size) is too big, Maximum $limit.");
         }
     }
 }

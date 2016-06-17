@@ -39,8 +39,7 @@ abstract class BaseModel
             $methodName = 'set' . ucfirst($name);
             if (method_exists($this, $methodName)) {
                 call_user_func([$this, $methodName], $value);
-            }
-            else {
+            } else {
                 $this->setAttribute($name, $value);
             }
         }

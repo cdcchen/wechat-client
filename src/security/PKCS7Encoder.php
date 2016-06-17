@@ -10,11 +10,8 @@ namespace cdcchen\wechat\security;
 
 
 /**
- * PKCS7Encoder class
- *
  * 提供基于PKCS7算法的加解密接口.
- */
-/**
+ *
  * Class PKCS7Encoder
  * @package cdcchen\wechat\security
  */

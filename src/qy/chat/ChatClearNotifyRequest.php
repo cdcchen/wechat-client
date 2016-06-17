@@ -48,7 +48,7 @@ class ChatClearNotifyRequest extends BaseRequest
     /**
      * @return array
      */
-    public function getRequireParams()
+    protected function getRequireParams()
     {
         return ['op_user', 'chat'];
     }

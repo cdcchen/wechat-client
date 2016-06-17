@@ -21,7 +21,7 @@ class AccessToken extends Object
     /**
      * @param string $corpId
      * @param string $corpSecret
-     * @return array 
+     * @return array
      * @throws \cdcchen\wechat\base\RequestException
      * @throws \cdcchen\wechat\base\ResponseException
      */

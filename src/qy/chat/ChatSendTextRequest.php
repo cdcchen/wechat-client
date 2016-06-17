@@ -35,7 +35,7 @@ class ChatSendTextRequest extends ChatSendMessageRequest
     /**
      * @return array
      */
-    public function getRequireParams()
+    protected function getRequireParams()
     {
         $params = parent::getRequireParams();
         $params[] = 'text';

@@ -22,8 +22,9 @@ trait ParseSendPicsInfoTrait
         $pics = [];
         if ($list->count() > 0) {
             $items = $list->children();
-            foreach ($items as $item)
+            foreach ($items as $item) {
                 $pics[] = ['md5Sum' => (string)$item->PicMd5Sum];
+            }
         }
 
         return $pics;

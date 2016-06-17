@@ -30,8 +30,9 @@ abstract class Base
     {
         if (is_string($xml)) {
             $xml = simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA);
-            if ($xml === false)
+            if ($xml === false) {
                 throw new \BadFunctionCallException('Load xml error.');
+            }
         }
 
         $this->_xml = $xml;

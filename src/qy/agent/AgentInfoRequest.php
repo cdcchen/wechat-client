@@ -38,7 +38,7 @@ class AgentInfoRequest extends BaseRequest
     /**
      * @return array
      */
-    public function getRequireParams()
+    protected function getRequireParams()
     {
         return ['agentid'];
     }

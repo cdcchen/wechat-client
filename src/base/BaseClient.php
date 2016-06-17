@@ -82,10 +82,10 @@ abstract class BaseClient extends Object
      */
     private function buildHttpRequest(BaseRequest $request)
     {
-        $httpRequest = (new HttpRequest())
-            ->setSSL()
-            ->setMethod($request->getMethod())
-            ->setUrl($request->getRequestUrl());
+        $httpRequest = (new HttpRequest())->setSSL()
+                                          ->addFiles('media_file', $request->getFiles())
+                                          ->setMethod($request->getMethod())
+                                          ->setUrl($request->getRequestUrl());
 
         if ($request->isPost()) {
             $httpRequest->setFormat(HttpRequest::FORMAT_JSON);

@@ -35,7 +35,7 @@ class ChatSendImageRequest extends ChatSendMessageRequest
     /**
      * @return array
      */
-    public function getRequireParams()
+    protected function getRequireParams()
     {
         $params = parent::getRequireParams();
         $params[] = 'image';

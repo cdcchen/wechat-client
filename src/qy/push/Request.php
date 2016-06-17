@@ -53,11 +53,10 @@ class Request
 
         if ($model) {
             return new $model($xml);
-        }
-        else
+        } else {
             throw new \ErrorException('Unsupported msg type or event type.');
+        }
     }
-
 
 
     static protected $modelMap = [

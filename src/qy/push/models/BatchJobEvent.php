@@ -11,9 +11,9 @@ namespace cdcchen\wechat\qy\push\models;
 
 class BatchJobEvent extends Event
 {
-    const TYPE_SYNC_USER = 'sync_user';
-    const TYPE_REPLACE_USER = 'replace_user';
-    const TYPE_INVITE_USER = 'invite_user';
+    const TYPE_SYNC_USER     = 'sync_user';
+    const TYPE_REPLACE_USER  = 'replace_user';
+    const TYPE_INVITE_USER   = 'invite_user';
     const TYPE_REPLACE_PARTY = 'replace_party';
 
     public $jobID;

@@ -44,8 +44,7 @@ class MenuButton extends BaseModel
         foreach ($buttons as $key => $button) {
             if ($button['sub_button']) {
                 $button['sub_button'] = static::parseButtons($button['sub_button']);
-            }
-            else {
+            } else {
                 unset($button['sub_button']);
             }
             $buttons[$key] = new MenuButtonItem($button);

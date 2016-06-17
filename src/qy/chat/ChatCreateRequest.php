@@ -74,7 +74,7 @@ class ChatCreateRequest extends BaseRequest
     /**
      * @return array
      */
-    public function getRequireParams()
+    protected function getRequireParams()
     {
         return ['chatid', 'name', 'owner', 'userlist'];
     }
