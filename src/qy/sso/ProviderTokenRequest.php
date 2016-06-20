@@ -6,25 +6,25 @@
  * Time: 20:03
  */
 
-namespace cdcchen\wechat\qy;
+namespace cdcchen\wechat\qy\sso;
 
 
 use cdcchen\wechat\base\BaseRequest;
 
 /**
- * Class AccessTokenRequest
- * @package cdcchen\wechat\qy
+ * Class ProviderTokenRequest
+ * @package cdcchen\wechat\qy\login
  */
-class AccessTokenRequest extends BaseRequest
+class ProviderTokenRequest extends BaseRequest
 {
     /**
      * @var string
      */
-    protected $method = 'get';
+    protected $method = 'post';
     /**
      * @var string
      */
-    protected $action = '/cgi-bin/gettoken';
+    protected $action = '/cgi-bin/service/get_provider_token';
 
     /**
      * @param string $value
@@ -32,7 +32,7 @@ class AccessTokenRequest extends BaseRequest
      */
     public function setCorpId($value)
     {
-        $this->setQueryParam('corpid', $value);
+        $this->setData('corpid', $value);
         return $this;
     }
 
@@ -40,9 +40,9 @@ class AccessTokenRequest extends BaseRequest
      * @param string $value
      * @return $this
      */
-    public function setCorpSecret($value)
+    public function setProviderSecret($value)
     {
-        $this->setQueryParam('corpsecret', $value);
+        $this->setData('provider_secret', $value);
         return $this;
     }
 
@@ -51,6 +51,6 @@ class AccessTokenRequest extends BaseRequest
      */
     protected function getRequireParams()
     {
-        return ['corpid', 'corpsecret'];
+        return ['corpid', 'provider_secret'];
     }
 }
