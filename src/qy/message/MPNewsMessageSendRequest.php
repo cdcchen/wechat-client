@@ -43,6 +43,6 @@ class MPNewsMessageSendRequest extends MediaMessageSendRequest
             $items[] = $article->toArray();
         }
 
-        return $items;
+        return ['articles' => $items];
     }
 }

@@ -42,6 +42,6 @@ class NewsMessageSendRequest extends MessageSendRequest
             $items[] = $article->toArray();
         }
 
-        return $items;
+        return ['articles' => $items];
     }
 }

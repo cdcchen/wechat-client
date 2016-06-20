@@ -6,13 +6,16 @@
  * Time: 下午3:29
  */
 
-namespace cdcchen\wechat\qy\material;
+namespace cdcchen\wechat\qy;
 
 
 use cdcchen\net\curl\HttpRequest;
 use cdcchen\net\curl\HttpResponse;
 use cdcchen\wechat\base\ResponseException;
-use cdcchen\wechat\qy\DefaultClient;
+use cdcchen\wechat\qy\material\Media;
+use cdcchen\wechat\qy\material\MediaDownloadRequest;
+use cdcchen\wechat\qy\material\MediaUploadRequest;
+use cdcchen\wechat\qy\material\UploadNewsImageRequest;
 
 /**
  * Class MediaClient

@@ -6,14 +6,18 @@
  * Time: 下午10:11
  */
 
-namespace cdcchen\wechat\qy\message;
+namespace cdcchen\wechat\qy;
 
 
 use cdcchen\net\curl\HttpResponse;
 use cdcchen\wechat\base\ResponseException;
-use cdcchen\wechat\qy\DefaultClient;
 use cdcchen\wechat\qy\material\MPNewsArticle;
 use cdcchen\wechat\qy\material\NewsArticle;
+use cdcchen\wechat\qy\message\MediaMessageSendRequest;
+use cdcchen\wechat\qy\message\MessageSendRequest;
+use cdcchen\wechat\qy\message\MPNewsMessageSendRequest;
+use cdcchen\wechat\qy\message\NewsMessageSendRequest;
+use cdcchen\wechat\qy\message\TextMessageSendRequest;
 
 /**
  * Class MessageClient
@@ -48,7 +52,7 @@ class MessageClient extends DefaultClient
     public function sendText(TextMessageSendRequest $request, $text, $agentId = null)
     {
         $request->setText($text);
-        if ($agentId) {
+        if (is_int($agentId)) {
             $request->setAgentId($agentId);
         }
         return $this->send($request);
@@ -107,7 +111,7 @@ class MessageClient extends DefaultClient
     private function sendMedia(MediaMessageSendRequest $request, $mediaId, $agentId = null)
     {
         $request->setMediaId($mediaId);
-        if ($agentId) {
+        if (is_int($agentId)) {
             $request->setAgentId($agentId);
         }
 

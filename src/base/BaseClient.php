@@ -90,7 +90,7 @@ abstract class BaseClient extends Object
         if ($request->isPost()) {
             $httpRequest->setFormat(HttpRequest::FORMAT_JSON);
         }
-
+//print_r($request->getData());exit;
         if (is_array($request->getData())) {
             $httpRequest->setData($request->getData());
         } else {

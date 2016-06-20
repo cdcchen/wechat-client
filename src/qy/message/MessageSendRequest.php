@@ -15,7 +15,7 @@ use cdcchen\wechat\base\BaseRequest;
  * Class MessageSendRequest
  * @package cdcchen\wechat\qy\message
  */
-abstract class MessageSendRequest extends BaseRequest
+class MessageSendRequest extends BaseRequest
 {
     /**
      * @var string
@@ -106,7 +106,7 @@ abstract class MessageSendRequest extends BaseRequest
             throw new \InvalidArgumentException('Please set msgtype param first.');
         }
 
-        if (Message::validateMsgType($this->msgType)) {
+        if (!Message::validateMsgType($this->msgType)) {
             throw new \InvalidArgumentException("{$this->msgType} is not a valid msg type.");
         }
 

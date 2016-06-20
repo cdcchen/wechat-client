@@ -257,7 +257,7 @@ abstract class BaseRequest extends Object
             if (isset($parts[1])) {
                 foreach ($parts as $part) {
                     if (isset($params[$part])) {
-                        break;
+                        continue 2;
                     }
                 }
                 throw new \InvalidArgumentException("$param cannot at the same time is empty.");

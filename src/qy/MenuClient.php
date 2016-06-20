@@ -6,11 +6,15 @@
  * Time: 下午1:59
  */
 
-namespace cdcchen\wechat\qy\menu;
+namespace cdcchen\wechat\qy;
 
 
 use cdcchen\net\curl\HttpResponse;
 use cdcchen\wechat\qy\DefaultClient;
+use cdcchen\wechat\qy\menu\MenuButton;
+use cdcchen\wechat\qy\menu\MenuCreateRequest;
+use cdcchen\wechat\qy\menu\MenuDeleteRequest;
+use cdcchen\wechat\qy\menu\MenuFetchRequest;
 
 /**
  * Class MenuClient

@@ -6,12 +6,19 @@
  * Time: 下午9:41
  */
 
-namespace cdcchen\wechat\qy\material;
+namespace cdcchen\wechat\qy;
 
 
 use cdcchen\net\curl\HttpRequest;
 use cdcchen\net\curl\HttpResponse;
 use cdcchen\wechat\qy\DefaultClient;
+use cdcchen\wechat\qy\material\MaterialCountRequest;
+use cdcchen\wechat\qy\material\MaterialDeleteRequest;
+use cdcchen\wechat\qy\material\MaterialInfoRequest;
+use cdcchen\wechat\qy\material\MaterialListRequest;
+use cdcchen\wechat\qy\material\MaterialUploadRequest;
+use cdcchen\wechat\qy\material\Media;
+use cdcchen\wechat\qy\material\UploadMPNewsRequest;
 
 class MaterialClient extends DefaultClient
 {
@@ -88,7 +95,7 @@ class MaterialClient extends DefaultClient
 
     /**
      * @param int $agentId
-     * @param MPNewsArticle[] $articles
+     * @param \cdcchen\wechat\qy\material\MPNewsArticle[] $articles
      * @return mixed
      * @throws \cdcchen\wechat\base\RequestException
      * @throws \cdcchen\wechat\base\ResponseException
@@ -114,7 +121,7 @@ class MaterialClient extends DefaultClient
      */
     public function updateMPNews($agentId, $mediaId, $articles)
     {
-        $request = (new UpdateMPNewsRequest())->setAgentId($agentId)
+        $request = (new UploadMPNewsRequest())->setAgentId($agentId)
                                               ->setMediaId($mediaId)
                                               ->setArticles($articles);
 
@@ -187,7 +194,7 @@ class MaterialClient extends DefaultClient
     /**
      * @param int $agentId
      * @param string $mediaId
-     * @return mixed
+     * @return bool
      * @throws \cdcchen\wechat\base\RequestException
      * @throws \cdcchen\wechat\base\ResponseException
      */
@@ -196,7 +203,6 @@ class MaterialClient extends DefaultClient
         $request = (new MaterialDeleteRequest())->setAgentId($agentId)->setMediaId($mediaId);
 
         return $this->sendRequest($request, function (HttpResponse $response) {
-            $data = $response->getData();
             return true;
         });
     }
