@@ -87,4 +87,9 @@ class Message extends BaseModel
 
         return in_array($type, $types);
     }
+
+
+    protected function fields()
+    {
+    }
 }
