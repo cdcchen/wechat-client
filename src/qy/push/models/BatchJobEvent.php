@@ -9,6 +9,10 @@
 namespace cdcchen\wechat\qy\push\models;
 
 
+/**
+ * Class BatchJobEvent
+ * @package cdcchen\wechat\qy\push\models
+ */
 class BatchJobEvent extends Event
 {
     const TYPE_SYNC_USER     = 'sync_user';
@@ -16,18 +20,49 @@ class BatchJobEvent extends Event
     const TYPE_INVITE_USER   = 'invite_user';
     const TYPE_REPLACE_PARTY = 'replace_party';
 
-    public $jobID;
-    public $jobType;
-    public $errCode;
-    public $errMsg;
-
-    protected function parseEventXml()
+    /**
+     * @return null|string
+     */
+    public function getJobId()
     {
-        $batchJOb = $this->_xml->BatchJob;
+        return $this->getBatchJob('JobID');
+    }
 
-        $this->jobID = (string)$batchJOb->JobID;
-        $this->jobType = (int)$batchJOb->JobType;
-        $this->errCode = (int)$batchJOb->ErrCode;
-        $this->errMsg = (string)$batchJOb->ErrMsg;
+    /**
+     * @return int
+     */
+    public function getJobType()
+    {
+        return (int)$this->getBatchJob('JobType');
+    }
+
+    /**
+     * @return int
+     */
+    public function getErrCode()
+    {
+        return (int)$this->getBatchJob('ErrCode');
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getErrMsg()
+    {
+        return $this->getBatchJob('ErrMsg');
+    }
+
+    /**
+     * @param string $name
+     * @return null|mixed
+     */
+    private function getBatchJob($name)
+    {
+        $job = $this->get('BatchJob');
+        if ($job === null) {
+            return null;
+        }
+
+        return isset($job[$name]) ? $job[$name] : null;
     }
 }

@@ -6,10 +6,8 @@
  * Time: 15:26
  */
 
-namespace cdcchen\wechat\qy\material;
+namespace cdcchen\wechat\qy\base;
 
-
-use cdcchen\wechat\qy\base\BaseModel;
 
 /**
  * Class MPNewsArticle

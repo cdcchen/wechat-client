@@ -9,15 +9,25 @@
 namespace cdcchen\wechat\qy\push\models;
 
 
+/**
+ * Class Video
+ * @package cdcchen\wechat\qy\push\models
+ */
 class Video extends Message
 {
-    public $mediaID;
-    public $thumbMediaID;
-
-    protected function parseSpecificXml()
+    /**
+     * @return string
+     */
+    public function getMediaId()
     {
-        $this->mediaID = (string)$this->_xml->MediaId;
-        $this->thumbMediaID = (string)$this->_xml->ThumbMediaId;
+        return $this->get('MediaId');
     }
 
+    /**
+     * @return string
+     */
+    public function getThumbMediaId()
+    {
+        return $this->get('ThumbMediaId');
+    }
 }

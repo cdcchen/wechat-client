@@ -6,10 +6,8 @@
  * Time: 23:17
  */
 
-namespace cdcchen\wechat\qy\message;
+namespace cdcchen\wechat\qy\base;
 
-
-use cdcchen\wechat\qy\base\BaseModel;
 
 /**
  * Class Message

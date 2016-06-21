@@ -9,26 +9,67 @@
 namespace cdcchen\wechat\qy\push\models;
 
 
+/**
+ * Class LocationSelectEvent
+ * @package cdcchen\wechat\qy\push\models
+ */
 class LocationSelectEvent extends Event
 {
-    public $eventKey;
-
-    public $locationX;
-    public $locationY;
-    public $scale;
-    public $label;
-    public $poiName;
-
-    protected function parseEventXml()
+    /**
+     * @return string
+     */
+    public function getEventKey()
     {
-        $this->eventKey = (string)$this->_xml->EventKey;
+        return $this->get('EventKey');
+    }
 
-        $info = $this->_xml->SendLocationInfo;
-        $this->locationX = (double)$info->Location_X;
-        $this->locationY = (double)$info->Location_Y;
-        $this->scale = (int)$info->Scale;
-        $this->label = (string)$info->Label;
-        $this->poiName = (string)$info->Poiname;
+    /**
+     * @return float
+     */
+    public function getX()
+    {
+        return (double)$this->getSendLocationInfo('Location_X');
+    }
 
+    /**
+     * @return float
+     */
+    public function getY()
+    {
+        return (double)$this->getSendLocationInfo('Location_Y');
+    }
+
+    /**
+     * @return int
+     */
+    public function getScale()
+    {
+        return (int)$this->getSendLocationInfo('Scale');
+    }
+
+    /**
+     * @return string
+     */
+    public function getLabel()
+    {
+        return $this->getSendLocationInfo('Label');
+    }
+
+    /**
+     * @return string
+     */
+    public function getPoiName()
+    {
+        return $this->getSendLocationInfo('poiName');
+    }
+
+    /**
+     * @param $name
+     * @return null|mixed
+     */
+    private function getSendLocationInfo($name)
+    {
+        $info = $this->get('SendLocationInfo');
+        return isset($info[$name]) ? $info[$name] : null;
     }
 }

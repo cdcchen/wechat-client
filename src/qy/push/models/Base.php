@@ -9,24 +9,90 @@
 namespace cdcchen\wechat\qy\push\models;
 
 
-abstract class Base
+use cdcchen\wechat\base\Object;
+
+/**
+ * Class Base
+ * @package cdcchen\wechat\qy\push\models
+ */
+abstract class Base extends Object
 {
-    public $toUserName;
-    public $fromUserName;
-    public $createTime;
-    public $agentID;
-    public $msgType;
+    /**
+     * @var array
+     */
+    private $_data;
 
-    protected $_xml;
-
+    /**
+     * Base constructor.
+     * @param $xml
+     */
     public function __construct($xml)
     {
         $this->init();
-        $this->parseBaseXml($xml);
-        $this->parseExtraXml();
+        $this->parseXml($xml);
     }
 
-    protected function parseBaseXml($xml)
+    /**
+     * init
+     */
+    protected function init()
+    {
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getToUserName()
+    {
+        return $this->get('ToUserName');
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getFromUserName()
+    {
+        return $this->get('FromUserName');
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getCreateTime()
+    {
+        return $this->get('CreateTime');
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getAgentId()
+    {
+        return $this->get('AgentId');
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getMsgType()
+    {
+        return $this->get('MsgType');
+    }
+
+    /**
+     * @param $name
+     * @param null|mixed $defaultValue
+     * @return null|mixed
+     */
+    protected function get($name, $defaultValue = null)
+    {
+        return isset($this->_data[$name]) ? $this->_data[$name] : $defaultValue;
+    }
+
+    /**
+     * @param string $xml
+     */
+    private function parseXml($xml)
     {
         if (is_string($xml)) {
             $xml = simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA);
@@ -34,19 +100,15 @@ abstract class Base
                 throw new \BadFunctionCallException('Load xml error.');
             }
         }
-
-        $this->_xml = $xml;
-
-        $this->toUserName = (string)$xml->ToUserName;
-        $this->fromUserName = (string)$xml->FromUserName;
-        $this->createTime = (int)$xml->CreateTime;
-        $this->msgType = (string)$xml->MsgType;
-        $this->agentID = (int)$xml->AgentID;
+        $this->_data = static::convertXmlElementToArray($xml);
     }
 
-    protected function init()
+    /**
+     * @param SimpleXMLElement
+     * @return array
+     */
+    private static function convertXmlElementToArray($xml)
     {
+        return json_decode(json_encode((array)$xml, 320), true);
     }
-
-    abstract protected function parseExtraXml();
 }

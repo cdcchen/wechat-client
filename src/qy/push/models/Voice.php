@@ -9,15 +9,26 @@
 namespace cdcchen\wechat\qy\push\models;
 
 
+/**
+ * Class Voice
+ * @package cdcchen\wechat\qy\push\models
+ */
 class Voice extends Message
 {
-    public $mediaID;
-    public $format;
-
-    protected function parseSpecificXml()
+    /**
+     * @return string
+     */
+    public function getMediaId()
     {
-        $this->mediaID = (string)$this->_xml->MediaId;
-        $this->format = (string)$this->_xml->Format;
+        return $this->get('MediaId');
+    }
+
+    /**
+     * @return string
+     */
+    public function getFormat()
+    {
+        return $this->get('Format');
     }
 
 }

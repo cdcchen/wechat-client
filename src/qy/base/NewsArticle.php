@@ -6,10 +6,8 @@
  * Time: 15:26
  */
 
-namespace cdcchen\wechat\qy\material;
+namespace cdcchen\wechat\qy\base;
 
-
-use cdcchen\wechat\qy\base\BaseModel;
 
 /**
  * Class NewsArticle
@@ -51,6 +49,38 @@ class NewsArticle extends BaseModel
     public function setPicUrl($url)
     {
         return $this->setAttribute('picurl', $url);
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->getAttribute('title');
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->getAttribute('description');
+    }
+
+    /**
+     * @return string
+     */
+    public function getUrl()
+    {
+        return $this->getAttribute('url');
+    }
+
+    /**
+     * @return string
+     */
+    public function getPicUrl()
+    {
+        return $this->getAttribute('picurl');
     }
 
 

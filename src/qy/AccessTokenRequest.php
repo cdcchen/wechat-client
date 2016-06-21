@@ -9,6 +9,7 @@
 namespace cdcchen\wechat\qy;
 
 
+use cdcchen\wechat\auth\QyCredential;
 use cdcchen\wechat\base\BaseRequest;
 
 /**
@@ -44,6 +45,16 @@ class AccessTokenRequest extends BaseRequest
     {
         $this->setQueryParam('corpsecret', $value);
         return $this;
+    }
+
+    /**
+     * @param QyCredential $credential
+     * @return $this
+     */
+    public function setCredential(QyCredential $credential)
+    {
+        return $this->setCorpId($credential->getCorpId())
+                    ->setCorpSecret($credential->getCorpSecret());
     }
 
     /**

@@ -9,24 +9,45 @@
 namespace cdcchen\wechat\qy\push\models;
 
 
+/**
+ * Class ParseSendPicsInfoTrait
+ * @package cdcchen\wechat\qy\push\models
+ */
 trait ParseSendPicsInfoTrait
 {
     /**
+     * @return int
+     */
+    public function getCount()
+    {
+        return $this->getSendPicsInfo('Count');
+    }
+
+    /**
      * @return array
      */
-    private function parsePicInfo()
+    public function getPics()
     {
-        /* @var \SimpleXMLElement $list */
-        $list = $this->_xml->SendPicsInfo->PicList;
+        $items = $this->getSendPicsInfo('PicList');
+        if (empty($items)) {
+            return [];
+        }
 
         $pics = [];
-        if ($list->count() > 0) {
-            $items = $list->children();
-            foreach ($items as $item) {
-                $pics[] = ['md5Sum' => (string)$item->PicMd5Sum];
-            }
+        foreach ($items as $item) {
+            $pics[] = ['md5Sum' => $item['PicMd5Sum']];
         }
 
         return $pics;
+    }
+
+    /**
+     * @param string $name
+     * @return mixed
+     */
+    private function getSendPicsInfo($name)
+    {
+        $info = $this->get('SendPicsInfo');
+        return isset($info[$name]) ? $info[$name] : null;
     }
 }

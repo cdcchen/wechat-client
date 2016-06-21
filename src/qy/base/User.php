@@ -6,10 +6,8 @@
  * Time: 23:29
  */
 
-namespace cdcchen\wechat\qy\contact;
+namespace cdcchen\wechat\qy\base;
 
-
-use cdcchen\wechat\qy\base\BaseModel;
 
 /**
  * Class User

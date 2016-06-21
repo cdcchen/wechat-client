@@ -6,11 +6,10 @@
  * Time: 23:35
  */
 
-namespace cdcchen\wechat\qy\material;
+namespace cdcchen\wechat\qy\base;
 
 
 use cdcchen\filesystem\FileHelper;
-use cdcchen\wechat\qy\base\BaseModel;
 
 /**
  * Class Media

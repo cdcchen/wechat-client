@@ -11,10 +11,11 @@ namespace cdcchen\wechat\qy\push\models;
 
 class ViewEvent extends Event
 {
-    public $eventKey;
-
-    protected function parseEventXml()
+    /**
+     * @return string
+     */
+    public function getEventKey()
     {
-        $this->eventKey = (string)$this->_xml->EventKey;
+        return $this->get('EventKey');
     }
 }

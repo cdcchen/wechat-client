@@ -9,12 +9,17 @@
 namespace cdcchen\wechat\qy\push\models;
 
 
+/**
+ * Class EnterAgentEvent
+ * @package cdcchen\wechat\qy\push\models
+ */
 class EnterAgentEvent extends Event
 {
-    public $eventKey;
-
-    protected function parseEventXml()
+    /**
+     * @return string
+     */
+    public function getEventKey()
     {
-        $this->eventKey = (string)$this->_xml->EventKey;
+        return $this->get('EventKey');
     }
 }

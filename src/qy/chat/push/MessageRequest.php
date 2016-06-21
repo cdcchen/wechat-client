@@ -9,10 +9,11 @@
 namespace cdcchen\wechat\qy\chat\push;
 
 
+use cdcchen\wechat\base\Object;
 use cdcchen\wechat\security\PrpCrypt;
 
 
-class Request
+class MessageRequest extends Object
 {
     // @todo wait complete
 

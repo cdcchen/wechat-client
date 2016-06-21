@@ -6,7 +6,7 @@ namespace cdcchen\wechat\auth;
  * Class Credential
  * @package cdcchen\wechat\auth
  */
-class Credential
+class QyCredential
 {
     /**
      * @var string Corp id

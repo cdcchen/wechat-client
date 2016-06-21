@@ -9,14 +9,25 @@
 namespace cdcchen\wechat\qy\push\models;
 
 
+/**
+ * Class Image
+ * @package cdcchen\wechat\qy\push\models
+ */
 class Image extends Message
 {
-    public $picUrl;
-    public $mediaID;
-
-    protected function parseSpecificXml()
+    /**
+     * @return string
+     */
+    public function getMediaId()
     {
-        $this->picUrl = (string)$this->_xml->PicUrl;
-        $this->mediaID = (string)$this->_xml->MediaId;
+        return $this->get('MediaId');
+    }
+
+    /**
+     * @return string
+     */
+    public function getPicUrl()
+    {
+        return $this->get('PicUrl');
     }
 }

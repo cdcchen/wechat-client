@@ -9,6 +9,10 @@
 namespace cdcchen\wechat\qy\push\models;
 
 
+/**
+ * Class Event
+ * @package cdcchen\wechat\qy\push\models
+ */
 class Event extends Message
 {
     const EVENT_SUBSCRIBE          = 'subscribe';
@@ -25,21 +29,19 @@ class Event extends Message
     const EVENT_ENTER_AGENT        = 'enter_agent';
     const EVENT_BATCH_JOB_RESULT   = 'batch_job_result';
 
-    public $event;
-
+    /**
+     * @return bool
+     */
     public function getIsEvent()
     {
         return true;
     }
 
-    protected function parseExtraXml()
+    /**
+     * @return string
+     */
+    public function getEvent()
     {
-        $this->event = (string)$this->_xml->Event;
-
-        $this->parseEventXml();
-    }
-
-    protected function parseEventXml()
-    {
+        return $this->get('Event');
     }
 }

@@ -9,14 +9,15 @@
 namespace cdcchen\wechat\qy;
 
 
-use cdcchen\wechat\base\BaseClient;
+use cdcchen\wechat\auth\CallbackCredential;
+use cdcchen\wechat\base\Object;
 use cdcchen\wechat\security\PrpCrypt;
 
 /**
  * Class Connect
  * @package cdcchen\wechat\qy
  */
-class Connect
+class Connect extends Object
 {
     /**
      * aes key length
@@ -87,6 +88,6 @@ class Connect
      */
     protected function getSignature($timestamp, $nonce, $echoStr)
     {
-        return BaseClient::getSHA1($this->_token, $timestamp, $nonce, $echoStr);
+        return CallbackCredential::getSHA1($this->_token, $timestamp, $nonce, $echoStr);
     }
 }

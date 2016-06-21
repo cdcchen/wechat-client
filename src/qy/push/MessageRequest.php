@@ -9,23 +9,49 @@
 namespace cdcchen\wechat\qy\push;
 
 
+use cdcchen\wechat\base\Object;
+use cdcchen\wechat\qy\push\models\Base;
 use cdcchen\wechat\qy\push\models\Event;
 use cdcchen\wechat\qy\push\models\Message;
 use cdcchen\wechat\security\PrpCrypt;
 
-class Request
+/**
+ * Class Request
+ * @package cdcchen\wechat\qy\push
+ */
+class MessageRequest extends Object
 {
+    /**
+     * @var string
+     */
     private $_token;
+    /**
+     * @var string
+     */
     private $_encodingAesKey;
-    private $_corpID;
+    /**
+     * @var string
+     */
+    private $_corpId;
 
-    public function __construct($corp_id, $token, $encoding_aes_key)
+    /**
+     * Request constructor.
+     * @param string $corpId
+     * @param string $token
+     * @param string $encodingAesKey
+     */
+    public function __construct($corpId, $token, $encodingAesKey)
     {
         $this->_token = $token;
-        $this->_encodingAesKey = $encoding_aes_key;
-        $this->_corpID = $corp_id;
+        $this->_encodingAesKey = $encodingAesKey;
+        $this->_corpId = $corpId;
     }
 
+    /**
+     * @param string $body
+     * @return mixed
+     * @throws \ErrorException
+     */
     public function buildMessage($body)
     {
         $decrypt = $this->decrypt($body);
@@ -33,14 +59,32 @@ class Request
         return static::createModel($decrypt);
     }
 
-    protected function decrypt($body)
+    /**
+     * @param $body
+     * @return \SimpleXMLElement
+     */
+    public static function buildXmlElement($body)
     {
-        $xml = simplexml_load_string($body, 'SimpleXMLElement', LIBXML_NOCDATA);
-
-        $crypt = new PrpCrypt($this->_encodingAesKey);
-        return $crypt->decrypt((string)$xml->Encrypt, $this->_corpID);
+        return simplexml_load_string($body, 'SimpleXMLElement', LIBXML_NOCDATA);
     }
 
+    /**
+     * @param string $body
+     * @return string
+     */
+    protected function decrypt($body)
+    {
+        $xml = static::buildXmlElement($body);
+
+        $crypt = new PrpCrypt($this->_encodingAesKey);
+        return $crypt->decrypt((string)$xml->Encrypt, $this->_corpId);
+    }
+
+    /**
+     * @param string $decrypt
+     * @return Base
+     * @throws \ErrorException
+     */
     protected static function createModel($decrypt)
     {
         $xml = simplexml_load_string($decrypt, 'SimpleXMLElement', LIBXML_NOCDATA);
@@ -59,6 +103,9 @@ class Request
     }
 
 
+    /**
+     * @var array
+     */
     static protected $modelMap = [
         Message::TYPE_TEXT => 'cdcchen\wechat\qy\push\models\Text',
         Message::TYPE_IMAGE => 'cdcchen\wechat\qy\push\models\Image',

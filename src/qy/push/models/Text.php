@@ -9,12 +9,17 @@
 namespace cdcchen\wechat\qy\push\models;
 
 
+/**
+ * Class Text
+ * @package cdcchen\wechat\qy\push\models
+ */
 class Text extends Message
 {
-    public $content;
-
-    protected function parseSpecificXml()
+    /**
+     * @return string
+     */
+    public function getContent()
     {
-        $this->content = (string)$this->_xml->Content;
+        return $this->get('Content');
     }
 }

@@ -9,18 +9,41 @@
 namespace cdcchen\wechat\qy\push\models;
 
 
+/**
+ * Class Location
+ * @package cdcchen\wechat\qy\push\models
+ */
 class Location extends Message
 {
-    public $locationX;
-    public $locationY;
-    public $scale;
-    public $label;
-
-    protected function parseSpecificXml()
+    /**
+     * @return float
+     */
+    public function getX()
     {
-        $this->locationX = (double)$this->_xml->Location_X;
-        $this->locationY = (double)$this->_xml->Location_Y;
-        $this->scale = (int)$this->_xml->Scale;
-        $this->label = (string)$this->_xml->Label;
+        return (double)$this->get('Location_X');
+    }
+
+    /**
+     * @return float
+     */
+    public function getY()
+    {
+        return (double)$this->get('Location_Y');
+    }
+
+    /**
+     * @return int
+     */
+    public function getScale()
+    {
+        return (int)$this->get('Scale');
+    }
+
+    /**
+     * @return string
+     */
+    public function getLabel()
+    {
+        return $this->get('Label');
     }
 }

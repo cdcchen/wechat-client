@@ -9,23 +9,20 @@
 namespace cdcchen\wechat\qy\push\models;
 
 
+/**
+ * Class PicPhotoEvent
+ * @package cdcchen\wechat\qy\push\models
+ */
 class PicPhotoEvent extends Event
 {
     use ParseSendPicsInfoTrait;
 
-    public $eventKey;
-    public $count;
-    public $pics = [];
-
-    protected function parseEventXml()
+    /**
+     * @return string
+     */
+    public function getEventKey()
     {
-        $this->eventKey = (string)$this->_xml->EventKey;
-
-        $info = $this->_xml->SendPicsInfo;
-        $this->count = (int)$info->Count;
-
-        if ($this->count > 0) {
-            $this->pics = $this->parsePicInfo();
-        }
+        return $this->getEventKey();
     }
+
 }

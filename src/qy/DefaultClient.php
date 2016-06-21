@@ -25,12 +25,12 @@ class DefaultClient extends BaseClient
 
     /**
      * BaseClient constructor.
-     * @param string $access_token
+     * @param string $token
      */
-    public function __construct($access_token = '')
+    public function __construct($token = '')
     {
-        if ($access_token) {
-            $this->setAccessToken($access_token);
+        if ($token) {
+            $this->setAccessToken($token);
         }
     }
 
@@ -43,13 +43,13 @@ class DefaultClient extends BaseClient
     }
 
     /**
-     * @param string $access_token
+     * @param string $token
      * @return $this
      */
-    public function setAccessToken($access_token)
+    public function setAccessToken($token)
     {
-        $this->_accessToken = $access_token;
-        $this->setParam('access_token', $access_token);
+        $this->_accessToken = $token;
+        $this->setParam('access_token', $token);
 
         return $this;
     }

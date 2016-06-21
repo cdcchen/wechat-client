@@ -9,16 +9,47 @@
 namespace cdcchen\wechat\qy\push\models;
 
 
+/**
+ * Class ScanCodePushEvent
+ * @package cdcchen\wechat\qy\push\models
+ */
 class ScanCodePushEvent extends Event
 {
-    public $eventKey;
-    public $scanType;
-    public $scanResult;
-
-    protected function parseEventXml()
+    /**
+     * @return string
+     */
+    public function getEventKey()
     {
-        $this->eventKey = (string)$this->_xml->EventKey;
-        $this->scanType = (string)$this->_xml->ScanCodeInfo->ScanType;
-        $this->scanResult = (string)$this->_xml->ScanCodeInfo->ScanResult;
+        return $this->get('EventKey');
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getScanType()
+    {
+        return $this->getScanCodeInfo('ScanType');
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getScanResult()
+    {
+        return $this->getScanCodeInfo('ScanResult');
+    }
+
+    /**
+     * @param string $name
+     * @return mixed
+     */
+    private function getScanCodeInfo($name)
+    {
+        $info = $this->get('ScanCodeInfo');
+        if ($info === null) {
+            return null;
+        }
+
+        return isset($info[$name]) ? $info[$name] : null;
     }
 }

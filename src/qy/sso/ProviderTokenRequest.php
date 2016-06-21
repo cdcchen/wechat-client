@@ -9,6 +9,7 @@
 namespace cdcchen\wechat\qy\sso;
 
 
+use cdcchen\wechat\auth\QyCredential;
 use cdcchen\wechat\base\BaseRequest;
 
 /**
@@ -44,6 +45,16 @@ class ProviderTokenRequest extends BaseRequest
     {
         $this->setData('provider_secret', $value);
         return $this;
+    }
+
+    /**
+     * @param QyCredential $credential
+     * @return $this
+     */
+    public function setCredential(QyCredential $credential)
+    {
+        return $this->setCorpId($credential->getCorpId())
+                    ->setProviderSecret($credential->getCorpSecret());
     }
 
     /**

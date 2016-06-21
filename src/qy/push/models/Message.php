@@ -9,6 +9,10 @@
 namespace cdcchen\wechat\qy\push\models;
 
 
+/**
+ * Class Message
+ * @package cdcchen\wechat\qy\push\models
+ */
 class Message extends Base
 {
     const TYPE_TEXT        = 'text';
@@ -18,17 +22,22 @@ class Message extends Base
     const TYPE_SHORT_VIDEO = 'shortvideo';
     const TYPE_LOCATION    = 'location';
     const TYPE_EVENT       = 'event';
+    const TYPE_LINK        = 'link';
 
-    public $msgID;
 
-    protected function parseExtraXml()
+    /**
+     * @return bool
+     */
+    public function getIsEvent()
     {
-        $this->msgID = (string)$this->_xml->MsgId;
-
-        $this->parseSpecificXml();
+        return false;
     }
 
-    protected function parseSpecificXml()
+    /**
+     * @return string
+     */
+    public function getMsgId()
     {
+        return $this->get('MsgId');
     }
 }
