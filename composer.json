@@ -19,7 +19,7 @@
   "minimum-stability": "stable",
   "require": {
     "php": ">=5.4.0",
-    "cdcchen/file-helper": "1.0.x-dev",
+    "cdcchen/file-helper": "^1.0.0",
     "cdcchen/curl-client": "^1.0.0"
   },
   "autoload": {
