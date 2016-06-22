@@ -9,13 +9,11 @@
 namespace cdcchen\wechat\qy\push\models;
 
 
-class ClickEvent extends Event
+/**
+ * Class ClickEvent
+ * @package cdcchen\wechat\qy\push\models
+ */
+class ClickEvent extends EventMessage
 {
-    /**
-     * @return string
-     */
-    public function getEventKey()
-    {
-        return $this->get('EventKey');
-    }
+    use EventKeyTrait;
 }

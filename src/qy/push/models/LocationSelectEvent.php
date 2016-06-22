@@ -13,15 +13,9 @@ namespace cdcchen\wechat\qy\push\models;
  * Class LocationSelectEvent
  * @package cdcchen\wechat\qy\push\models
  */
-class LocationSelectEvent extends Event
+class LocationSelectEvent extends EventMessage
 {
-    /**
-     * @return string
-     */
-    public function getEventKey()
-    {
-        return $this->get('EventKey');
-    }
+    use EventKeyTrait;
 
     /**
      * @return float

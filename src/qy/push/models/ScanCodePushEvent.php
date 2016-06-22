@@ -13,15 +13,9 @@ namespace cdcchen\wechat\qy\push\models;
  * Class ScanCodeWaitMsgEvent
  * @package cdcchen\wechat\qy\push\models
  */
-class ScanCodeWaitMsgEvent extends Event
+class ScanCodeWaitMsgEvent extends EventMessage
 {
-    /**
-     * @return string
-     */
-    public function getEventKey()
-    {
-        return $this->getEventKey();
-    }
+    use EventKeyTrait;
 
     /**
      * @return string

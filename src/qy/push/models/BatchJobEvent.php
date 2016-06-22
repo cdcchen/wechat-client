@@ -13,7 +13,7 @@ namespace cdcchen\wechat\qy\push\models;
  * Class BatchJobEvent
  * @package cdcchen\wechat\qy\push\models
  */
-class BatchJobEvent extends Event
+class BatchJobEvent extends EventMessage
 {
     const TYPE_SYNC_USER     = 'sync_user';
     const TYPE_REPLACE_USER  = 'replace_user';

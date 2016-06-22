@@ -26,18 +26,83 @@ class Message extends Base
 
 
     /**
-     * @return bool
-     */
-    public function getIsEvent()
-    {
-        return false;
-    }
-
-    /**
      * @return string
      */
     public function getMsgId()
     {
         return $this->get('MsgId');
+    }
+
+    /**
+     * @return bool
+     */
+    public function isTextMessage()
+    {
+        return $this->isMsgType(self::TYPE_TEXT);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isImageMessage()
+    {
+        return $this->isMsgType(self::TYPE_IMAGE);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isVoiceMessage()
+    {
+        return $this->isMsgType(self::TYPE_VOICE);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isVideoMessage()
+    {
+        return $this->isMsgType(self::TYPE_VIDEO);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isShortVideoMessage()
+    {
+        return $this->isMsgType(self::TYPE_SHORT_VIDEO);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isLocationMessage()
+    {
+        return $this->isMsgType(self::TYPE_LOCATION);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isLinkMessage()
+    {
+        return $this->isMsgType(self::TYPE_LINK);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEventMessage()
+    {
+        return $this->isMsgType(self::TYPE_EVENT);
+    }
+
+    /**
+     * @param string $type
+     * @return bool
+     */
+    private function isMsgType($type)
+    {
+        return $this->getMsgType() === $type;
     }
 }

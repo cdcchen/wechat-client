@@ -9,15 +9,14 @@
 namespace cdcchen\wechat\qy\push\models;
 
 
-class PicWeixinPhotoEvent extends Event
+/**
+ * Class PicWeixinPhotoEvent
+ * @package cdcchen\wechat\qy\push\models
+ */
+class PicWeixinPhotoEvent extends EventMessage
 {
     use ParseSendPicsInfoTrait;
+    use EventKeyTrait;
 
-    /**
-     * @return string
-     */
-    public function getEventKey()
-    {
-        return $this->getEventKey();
-    }
+
 }

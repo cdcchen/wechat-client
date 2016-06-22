@@ -13,7 +13,7 @@ namespace cdcchen\wechat\qy\push\models;
  * Class Video
  * @package cdcchen\wechat\qy\push\models
  */
-class Video extends Message
+class VideoMessage extends Message
 {
     /**
      * @return string

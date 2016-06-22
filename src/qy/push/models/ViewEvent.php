@@ -9,13 +9,7 @@
 namespace cdcchen\wechat\qy\push\models;
 
 
-class ViewEvent extends Event
+class ViewEvent extends EventMessage
 {
-    /**
-     * @return string
-     */
-    public function getEventKey()
-    {
-        return $this->get('EventKey');
-    }
+    use EventKeyTrait;
 }

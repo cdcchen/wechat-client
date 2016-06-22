@@ -13,7 +13,7 @@ namespace cdcchen\wechat\qy\push\models;
  * Class LocationEvent
  * @package cdcchen\wechat\qy\push\models
  */
-class LocationEvent extends Event
+class LocationEvent extends EventMessage
 {
     /**
      * @return double

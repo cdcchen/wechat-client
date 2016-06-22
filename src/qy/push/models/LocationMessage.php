@@ -13,7 +13,7 @@ namespace cdcchen\wechat\qy\push\models;
  * Class Location
  * @package cdcchen\wechat\qy\push\models
  */
-class Location extends Message
+class LocationMessage extends Message
 {
     /**
      * @return float

@@ -13,7 +13,7 @@ namespace cdcchen\wechat\qy\push\models;
  * Class Text
  * @package cdcchen\wechat\qy\push\models
  */
-class Text extends Message
+class TextMessage extends Message
 {
     /**
      * @return string

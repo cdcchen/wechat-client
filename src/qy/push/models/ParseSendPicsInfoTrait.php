@@ -26,7 +26,7 @@ trait ParseSendPicsInfoTrait
     /**
      * @return array
      */
-    public function getPics()
+    public function getPicList()
     {
         $items = $this->getSendPicsInfo('PicList');
         if (empty($items)) {

@@ -13,7 +13,7 @@ namespace cdcchen\wechat\qy\push\models;
  * Class Image
  * @package cdcchen\wechat\qy\push\models
  */
-class Image extends Message
+class ImageMessage extends Message
 {
     /**
      * @return string

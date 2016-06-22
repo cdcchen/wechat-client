@@ -11,7 +11,7 @@ namespace cdcchen\wechat\qy\push;
 
 use cdcchen\wechat\base\Object;
 use cdcchen\wechat\qy\push\models\Base;
-use cdcchen\wechat\qy\push\models\Event;
+use cdcchen\wechat\qy\push\models\EventMessage;
 use cdcchen\wechat\qy\push\models\Message;
 use cdcchen\wechat\security\PrpCrypt;
 
@@ -107,25 +107,25 @@ class MessageRequest extends Object
      * @var array
      */
     static protected $modelMap = [
-        Message::TYPE_TEXT => 'cdcchen\wechat\qy\push\models\Text',
-        Message::TYPE_IMAGE => 'cdcchen\wechat\qy\push\models\Image',
-        Message::TYPE_VOICE => 'cdcchen\wechat\qy\push\models\Voice',
-        Message::TYPE_VIDEO => 'cdcchen\wechat\qy\push\models\Video',
-        Message::TYPE_SHORT_VIDEO => 'cdcchen\wechat\qy\push\models\ShortVideo',
-        Message::TYPE_LOCATION => 'cdcchen\wechat\qy\push\models\Location',
+        Message::TYPE_TEXT => 'cdcchen\wechat\qy\push\models\TextMessage',
+        Message::TYPE_IMAGE => 'cdcchen\wechat\qy\push\models\ImageMessage',
+        Message::TYPE_VOICE => 'cdcchen\wechat\qy\push\models\VoiceMessage',
+        Message::TYPE_VIDEO => 'cdcchen\wechat\qy\push\models\VideoMessage',
+        Message::TYPE_SHORT_VIDEO => 'cdcchen\wechat\qy\push\models\ShortVideoMessage',
+        Message::TYPE_LOCATION => 'cdcchen\wechat\qy\push\models\LocationMessage',
 
-        Message::TYPE_EVENT . Event::EVENT_SUBSCRIBE => 'cdcchen\wechat\qy\push\models\Event',
-        Message::TYPE_EVENT . Event::EVENT_UNSUBSCRIBE => 'cdcchen\wechat\qy\push\models\Event',
-        Message::TYPE_EVENT . Event::EVENT_LOCATION => 'cdcchen\wechat\qy\push\models\LocationEvent',
-        Message::TYPE_EVENT . Event::EVENT_CLICK => 'cdcchen\wechat\qy\push\models\ClickEvent',
-        Message::TYPE_EVENT . Event::EVENT_VIEW => 'cdcchen\wechat\qy\push\models\ViewEvent',
-        Message::TYPE_EVENT . Event::EVENT_SCANCODE_PUSH => 'cdcchen\wechat\qy\push\models\ScanCodePushEvent',
-        Message::TYPE_EVENT . Event::EVENT_SCANCODE_WAITMSG => 'cdcchen\wechat\qy\push\models\ScanCodeWaitMsgEvent',
-        Message::TYPE_EVENT . Event::EVENT_PIC_SYSPHOTO => 'cdcchen\wechat\qy\push\models\PicPhotoEvent',
-        Message::TYPE_EVENT . Event::EVENT_PIC_PHOTO_OR_ALBUM => 'cdcchen\wechat\qy\push\models\PicPhotoAlbumEvent',
-        Message::TYPE_EVENT . Event::EVENT_PIC_WEIXIN_PHOTO => 'cdcchen\wechat\qy\push\models\PicWeixinPhotoEvent',
-        Message::TYPE_EVENT . Event::EVENT_LOCATION_SELECT => 'cdcchen\wechat\qy\push\models\LocationSelectEvent',
-        Message::TYPE_EVENT . Event::EVENT_ENTER_AGENT => 'cdcchen\wechat\qy\push\models\EnterAgentEvent',
-        Message::TYPE_EVENT . Event::EVENT_BATCH_JOB_RESULT => 'cdcchen\wechat\qy\push\models\BatchJobEvent',
+        Message::TYPE_EVENT . EventMessage::EVENT_SUBSCRIBE => 'cdcchen\wechat\qy\push\models\EventMessage',
+        Message::TYPE_EVENT . EventMessage::EVENT_UNSUBSCRIBE => 'cdcchen\wechat\qy\push\models\EventMessage',
+        Message::TYPE_EVENT . EventMessage::EVENT_LOCATION => 'cdcchen\wechat\qy\push\models\LocationEvent',
+        Message::TYPE_EVENT . EventMessage::EVENT_CLICK => 'cdcchen\wechat\qy\push\models\ClickEvent',
+        Message::TYPE_EVENT . EventMessage::EVENT_VIEW => 'cdcchen\wechat\qy\push\models\ViewEvent',
+        Message::TYPE_EVENT . EventMessage::EVENT_SCANCODE_PUSH => 'cdcchen\wechat\qy\push\models\ScanCodePushEvent',
+        Message::TYPE_EVENT . EventMessage::EVENT_SCANCODE_WAITMSG => 'cdcchen\wechat\qy\push\models\ScanCodeWaitMsgEvent',
+        Message::TYPE_EVENT . EventMessage::EVENT_PIC_SYSPHOTO => 'cdcchen\wechat\qy\push\models\PicPhotoEvent',
+        Message::TYPE_EVENT . EventMessage::EVENT_PIC_PHOTO_OR_ALBUM => 'cdcchen\wechat\qy\push\models\PicPhotoAlbumEvent',
+        Message::TYPE_EVENT . EventMessage::EVENT_PIC_WEIXIN_PHOTO => 'cdcchen\wechat\qy\push\models\PicWeixinPhotoEvent',
+        Message::TYPE_EVENT . EventMessage::EVENT_LOCATION_SELECT => 'cdcchen\wechat\qy\push\models\LocationSelectEvent',
+        Message::TYPE_EVENT . EventMessage::EVENT_ENTER_AGENT => 'cdcchen\wechat\qy\push\models\EnterAgentEvent',
+        Message::TYPE_EVENT . EventMessage::EVENT_BATCH_JOB_RESULT => 'cdcchen\wechat\qy\push\models\BatchJobEvent',
     ];
 }

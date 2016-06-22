@@ -10,10 +10,10 @@ namespace cdcchen\wechat\qy\push\models;
 
 
 /**
- * Class Voice
+ * Class ShortVideo
  * @package cdcchen\wechat\qy\push\models
  */
-class Voice extends Message
+class ShortVideoMessage extends Message
 {
     /**
      * @return string
@@ -26,9 +26,8 @@ class Voice extends Message
     /**
      * @return string
      */
-    public function getFormat()
+    public function getThumbMediaId()
     {
-        return $this->get('Format');
+        return $this->get('ThumbMediaId');
     }
-
 }
