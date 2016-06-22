@@ -16,7 +16,7 @@ use cdcchen\wechat\qy\push\models\Message;
 use cdcchen\wechat\security\PrpCrypt;
 
 /**
- * Class Request
+ * Class MessageRequest
  * @package cdcchen\wechat\qy\push
  */
 class MessageRequest extends Object
