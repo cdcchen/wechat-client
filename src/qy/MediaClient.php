@@ -12,7 +12,7 @@ namespace cdcchen\wechat\qy;
 use cdcchen\net\curl\HttpRequest;
 use cdcchen\net\curl\HttpResponse;
 use cdcchen\wechat\base\ResponseException;
-use cdcchen\wechat\qy\material\Media;
+use cdcchen\wechat\qy\base\Media;
 use cdcchen\wechat\qy\material\MediaDownloadRequest;
 use cdcchen\wechat\qy\material\MediaUploadRequest;
 use cdcchen\wechat\qy\material\UploadNewsImageRequest;

@@ -10,6 +10,7 @@ namespace cdcchen\wechat\qy\material;
 
 
 use cdcchen\wechat\base\BaseRequest;
+use cdcchen\wechat\qy\base\Media;
 
 /**
  * Class MediaUploadRequest
