@@ -36,7 +36,7 @@ class UploadMPNewsRequest extends BaseRequest
     }
 
     /**
-     * @param MPNewsArticle[] $articles
+     * @param \cdcchen\wechat\qy\base\MPNewsArticle[] $articles
      * @return $this
      */
     public function setArticles(array $articles)
@@ -54,7 +54,7 @@ class UploadMPNewsRequest extends BaseRequest
     }
 
     /**
-     * @param MPNewsArticle[] $articles
+     * @param \cdcchen\wechat\qy\base\MPNewsArticle[] $articles
      * @return array
      */
     private static function buildMArticles(array $articles)

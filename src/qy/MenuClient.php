@@ -10,7 +10,6 @@ namespace cdcchen\wechat\qy;
 
 
 use cdcchen\net\curl\HttpResponse;
-use cdcchen\wechat\qy\DefaultClient;
 use cdcchen\wechat\qy\menu\MenuButton;
 use cdcchen\wechat\qy\menu\MenuCreateRequest;
 use cdcchen\wechat\qy\menu\MenuDeleteRequest;

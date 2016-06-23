@@ -11,6 +11,7 @@ namespace cdcchen\wechat\qy;
 
 use cdcchen\net\curl\HttpResponse;
 use cdcchen\wechat\qy\contact\OpenIdToUserIdRequest;
+use cdcchen\wechat\qy\contact\UserAuthSuccessRequest;
 use cdcchen\wechat\qy\contact\UserBatchDeleteRequest;
 use cdcchen\wechat\qy\contact\UserCreateRequest;
 use cdcchen\wechat\qy\contact\UserDeleteRequest;
@@ -193,6 +194,20 @@ class UserClient extends DefaultClient
         return $this->sendRequest($request, function (HttpResponse $response) {
             $data = $response->getData();
             return $data['userid'];
+        });
+    }
+
+    /**
+     * @param string $id
+     * @return bool
+     * @throws \cdcchen\wechat\base\RequestException
+     * @throws \cdcchen\wechat\base\ResponseException
+     */
+    public function setUserAuthSuccess($id)
+    {
+        $request = (new UserAuthSuccessRequest())->setUserId($id);
+        return $this->sendRequest($request, function (HttpResponse $response) {
+            return true;
         });
     }
 

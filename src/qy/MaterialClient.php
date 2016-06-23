@@ -11,13 +11,13 @@ namespace cdcchen\wechat\qy;
 
 use cdcchen\net\curl\HttpRequest;
 use cdcchen\net\curl\HttpResponse;
-use cdcchen\wechat\qy\DefaultClient;
+use cdcchen\wechat\qy\base\Media;
 use cdcchen\wechat\qy\material\MaterialCountRequest;
 use cdcchen\wechat\qy\material\MaterialDeleteRequest;
 use cdcchen\wechat\qy\material\MaterialInfoRequest;
 use cdcchen\wechat\qy\material\MaterialListRequest;
 use cdcchen\wechat\qy\material\MaterialUploadRequest;
-use cdcchen\wechat\qy\material\Media;
+use cdcchen\wechat\qy\material\UpdateMPNewsRequest;
 use cdcchen\wechat\qy\material\UploadMPNewsRequest;
 
 class MaterialClient extends DefaultClient
@@ -95,7 +95,7 @@ class MaterialClient extends DefaultClient
 
     /**
      * @param int $agentId
-     * @param \cdcchen\wechat\qy\material\MPNewsArticle[] $articles
+     * @param \cdcchen\wechat\qy\base\MPNewsArticle[] $articles
      * @return mixed
      * @throws \cdcchen\wechat\base\RequestException
      * @throws \cdcchen\wechat\base\ResponseException
@@ -121,7 +121,7 @@ class MaterialClient extends DefaultClient
      */
     public function updateMPNews($agentId, $mediaId, $articles)
     {
-        $request = (new UploadMPNewsRequest())->setAgentId($agentId)
+        $request = (new UpdateMPNewsRequest())->setAgentId($agentId)
                                               ->setMediaId($mediaId)
                                               ->setArticles($articles);
 
@@ -176,7 +176,7 @@ class MaterialClient extends DefaultClient
      * @return array
      * @throws \ErrorException
      */
-    public function query($agentId, $type, $count, $offset = 0)
+    public function getList($agentId, $type, $count, $offset = 0)
     {
         $request = (new MaterialListRequest())->setAgentId($agentId)
                                               ->setType($type)
