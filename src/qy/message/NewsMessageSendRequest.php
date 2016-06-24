@@ -9,7 +9,8 @@
 namespace cdcchen\wechat\qy\message;
 
 
-use cdcchen\wechat\qy\material\NewsArticle;
+use cdcchen\wechat\qy\base\Message;
+use cdcchen\wechat\qy\base\NewsArticle;
 
 /**
  * Class NewsMessageSendRequest

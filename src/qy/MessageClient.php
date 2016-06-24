@@ -11,8 +11,6 @@ namespace cdcchen\wechat\qy;
 
 use cdcchen\net\curl\HttpResponse;
 use cdcchen\wechat\base\ResponseException;
-use cdcchen\wechat\qy\material\MPNewsArticle;
-use cdcchen\wechat\qy\material\NewsArticle;
 use cdcchen\wechat\qy\message\MediaMessageSendRequest;
 use cdcchen\wechat\qy\message\MessageSendRequest;
 use cdcchen\wechat\qy\message\MPNewsMessageSendRequest;
@@ -121,7 +119,7 @@ class MessageClient extends DefaultClient
     /**
      * @param NewsMessageSendRequest $request
      * @param null $agentId
-     * @param NewsArticle[] $articles
+     * @param \cdcchen\wechat\qy\base\NewsArticle[] $articles
      * @return mixed
      */
     public function sendNews(NewsMessageSendRequest $request, $agentId, $articles)
@@ -133,7 +131,7 @@ class MessageClient extends DefaultClient
     /**
      * @param MPNewsMessageSendRequest $request
      * @param int $agentId
-     * @param MPNewsArticle[] $articles
+     * @param \cdcchen\wechat\qy\base\MPNewsArticle[] $articles
      * @param string $mediaId
      * @return mixed
      */

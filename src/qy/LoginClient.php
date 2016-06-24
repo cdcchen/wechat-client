@@ -6,17 +6,18 @@
  * Time: 21:26
  */
 
-namespace cdcchen\wechat\qy\sso;
+namespace cdcchen\wechat\qy;
 
 
 use cdcchen\net\curl\HttpResponse;
-use cdcchen\wechat\qy\DefaultClient;
+use cdcchen\wechat\qy\sso\LoginInfoRequest;
+use cdcchen\wechat\qy\sso\LoginUrlRequest;
 
 /**
  * Class LoginService
  * @package cdcchen\wechat\qy\login
  */
-class LoginService extends DefaultClient
+class LoginClient extends DefaultClient
 {
     /**
      * Redirect target page: agent setting
