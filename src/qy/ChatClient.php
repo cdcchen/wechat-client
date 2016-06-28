@@ -6,7 +6,7 @@
  * Date: 16/3/9
  * Time: 22:12
  */
-namespace cdcchen\wechat\qy\chat;
+namespace cdcchen\wechat\qy;
 
 use cdcchen\net\curl\HttpResponse;
 use cdcchen\wechat\qy\DefaultClient;
