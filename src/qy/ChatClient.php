@@ -9,7 +9,19 @@
 namespace cdcchen\wechat\qy;
 
 use cdcchen\net\curl\HttpResponse;
-use cdcchen\wechat\qy\DefaultClient;
+use cdcchen\wechat\qy\chat\ChatClearNotifyRequest;
+use cdcchen\wechat\qy\chat\ChatCreateRequest;
+use cdcchen\wechat\qy\chat\ChatGroup;
+use cdcchen\wechat\qy\chat\ChatInfoRequest;
+use cdcchen\wechat\qy\chat\ChatQuitRequest;
+use cdcchen\wechat\qy\chat\ChatSendFileRequest;
+use cdcchen\wechat\qy\chat\ChatSendImageRequest;
+use cdcchen\wechat\qy\chat\ChatSendLinkRequest;
+use cdcchen\wechat\qy\chat\ChatSendMessageRequest;
+use cdcchen\wechat\qy\chat\ChatSendTextRequest;
+use cdcchen\wechat\qy\chat\ChatSendVoiceRequest;
+use cdcchen\wechat\qy\chat\ChatSetMuteRequest;
+use cdcchen\wechat\qy\chat\ChatUpdateRequest;
 
 /**
  * Class ChatClient
