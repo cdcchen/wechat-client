@@ -8,6 +8,8 @@
 
 namespace cdcchen\wechat\qy\message;
 
+use cdcchen\wechat\qy\base\Message;
+
 
 /**
  * Class TextMessageSendRequest
