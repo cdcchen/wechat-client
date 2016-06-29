@@ -9,7 +9,7 @@
 namespace cdcchen\wechat\qy\message;
 
 
-use cdcchen\wechat\qy\material\MPNewsArticle;
+use cdcchen\wechat\qy\base\Message;
 
 /**
  * Class MPNewsMessageSendRequest
@@ -23,7 +23,7 @@ class MPNewsMessageSendRequest extends MediaMessageSendRequest
     protected $msgType = Message::TYPE_MPNEWS;
 
     /**
-     * @param MPNewsArticle[] $value
+     * @param \cdcchen\wechat\qy\base\MPNewsArticle[] $value
      * @return $this
      */
     public function setArticles($value)
@@ -33,7 +33,7 @@ class MPNewsMessageSendRequest extends MediaMessageSendRequest
     }
 
     /**
-     * @param MPNewsArticle[] $articles
+     * @param \cdcchen\wechat\qy\base\MPNewsArticle[] $articles
      * @return array
      */
     private static function buildArticles(array $articles)

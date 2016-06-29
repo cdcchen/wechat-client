@@ -10,6 +10,7 @@ namespace cdcchen\wechat\qy\message;
 
 
 use cdcchen\wechat\base\BaseRequest;
+use cdcchen\wechat\qy\base\Message;
 
 /**
  * Class MessageSendRequest

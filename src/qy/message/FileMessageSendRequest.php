@@ -9,6 +9,8 @@
 namespace cdcchen\wechat\qy\message;
 
 
+use cdcchen\wechat\qy\base\Message;
+
 class FileMessageSendRequest extends MediaMessageSendRequest
 {
     protected $msgType = Message::TYPE_FILE;
