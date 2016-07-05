@@ -13,6 +13,7 @@ use cdcchen\net\curl\Client as HttpClient;
 use cdcchen\net\curl\HttpRequest;
 use cdcchen\net\curl\HttpResponse;
 use cdcchen\wechat\base\ResponseException;
+use cdcchen\wechat\base\InvalidMembersException;
 use cdcchen\wechat\qy\Client;
 
 /**
@@ -246,7 +247,7 @@ class MessageClient extends Client
             }
             $invalidText = join('; ', $invalidMsg);
 
-            throw new ResponseException('Invalid user or party or tag. ' . $invalidText);
+            throw new InvalidMembersException('Invalid user or party or tag. ' . $invalidText);
         } else {
             return true;
         }
