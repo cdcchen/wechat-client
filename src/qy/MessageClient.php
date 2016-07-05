@@ -11,6 +11,7 @@ namespace cdcchen\wechat\qy;
 
 use cdcchen\net\curl\HttpResponse;
 use cdcchen\wechat\base\ResponseException;
+use cdcchen\wechat\qy\message\InvalidMessageReceiverException;
 use cdcchen\wechat\qy\message\MediaMessageSendRequest;
 use cdcchen\wechat\qy\message\MessageSendRequest;
 use cdcchen\wechat\qy\message\MPNewsMessageSendRequest;
@@ -201,7 +202,7 @@ class MessageClient extends DefaultClient
      *
      * @param array|mixed $response
      * @return bool
-     * @throws ResponseException
+     * @throws InvalidMessageReceiverException
      */
     private static function checkResponseData($response)
     {
@@ -219,7 +220,7 @@ class MessageClient extends DefaultClient
             }
             $invalidText = join('; ', $invalidMsg);
 
-            throw new ResponseException('Invalid user or party or tag. ' . $invalidText);
+            throw new InvalidMessageReceiverException('Invalid user or party or tag. ' . $invalidText);
         } else {
             return true;
         }
