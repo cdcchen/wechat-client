@@ -30,7 +30,7 @@ class MenuButton extends BaseModel
     {
         $button = new static();
         $buttons = $data['button'];
-        $button->setButton(static::parseButtons($buttons));
+        $button->setButtons(static::parseButtons($buttons));
 
         return $button;
     }
@@ -54,12 +54,12 @@ class MenuButton extends BaseModel
     }
 
     /**
-     * @param array $button
+     * @param array $buttons
      * @return $this
      */
-    public function setButton(array $button)
+    public function setButtons(array $buttons)
     {
-        return $this->setAttribute('button', $button);
+        return $this->setAttribute('button', $buttons);
     }
 
     /**
@@ -70,6 +70,31 @@ class MenuButton extends BaseModel
     {
         $this->_buttons[] = $button;
         return $this->setAttribute('button', $this->_buttons);
+    }
+
+    /**
+     * @return array|bool|string
+     */
+    public function getButtons()
+    {
+        return $this->getAttribute('button');
+    }
+
+    /**
+     * @return int
+     */
+    public function getButtonsCount()
+    {
+        $buttons = $this->getButtons();
+        return count($buttons);
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasButtons()
+    {
+        return $this->getButtonsCount() > 0;
     }
 
     /**

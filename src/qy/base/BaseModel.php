@@ -106,7 +106,7 @@ abstract class BaseModel
     }
 
     /**
-     * @return bool|mixed
+     * @return bool|array
      */
     public function toArray()
     {
@@ -145,7 +145,7 @@ abstract class BaseModel
 
     /**
      * @param array $attributes
-     * @return mixed
+     * @return array
      */
     protected function afterBuild($attributes)
     {

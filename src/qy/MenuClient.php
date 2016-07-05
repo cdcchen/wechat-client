@@ -30,8 +30,7 @@ class MenuClient extends DefaultClient
      */
     public function create($agentId, MenuButton $button)
     {
-        $items = $button->toArray();
-        $request = (new MenuCreateRequest())->setAgentId($agentId)->setButton($items);
+        $request = (new MenuCreateRequest())->setAgentId($agentId)->setButton($button);
 
         return $this->sendRequest($request, function (HttpResponse $response) {
             return true;

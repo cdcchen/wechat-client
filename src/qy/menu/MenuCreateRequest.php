@@ -36,12 +36,18 @@ class MenuCreateRequest extends BaseRequest
     }
 
     /**
-     * @param array $button
+     * @param MenuButton $button
      * @return $this
      */
-    public function setButton(array $button)
+    public function setButton(MenuButton $button)
     {
-        return $this->setData('button', $button);
+        if (!$button->hasButtons()) {
+            throw new \InvalidArgumentException('No buttons found.');
+        }
+
+        $buttonArray = $button->toArray();
+        $buttons = $buttonArray['button'];
+        return $this->setData('button', $buttons);
     }
 
     /**
