@@ -16,6 +16,14 @@ namespace cdcchen\wechat\qy\chat;
 class ChatSendLinkRequest extends ChatSendMessageRequest
 {
     /**
+     * @inheritdoc
+     */
+    public function init()
+    {
+        $this->setData('msgtype', ChatMessage::MSG_TYPE_LINK);
+    }
+
+    /**
      * @param string $title
      * @param string $url
      * @param string $thumbMediaId

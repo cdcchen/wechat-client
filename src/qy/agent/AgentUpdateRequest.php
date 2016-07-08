@@ -98,6 +98,15 @@ class AgentUpdateRequest extends BaseRequest
         return $this->setData('home_url', $value);
     }
 
+    /**
+     * @param string $value
+     * @return $this
+     */
+    public function setExtensionUrl($value)
+    {
+        return $this->setData('chat_extension_url', $value);
+    }
+
 
     /**
      * @return array
