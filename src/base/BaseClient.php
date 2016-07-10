@@ -110,9 +110,11 @@ abstract class BaseClient extends Object
             throw new RequestException('Http request error.', $httpCode);
         }
 
-        $data = $response->getData();
-        if (isset($data['errcode']) && $data['errcode'] != 0) {
-            throw new ResponseException($data['errmsg'], $data['errcode']);
+        if ($response->getFormat()) {
+            $data = $response->getData();
+            if (isset($data['errcode']) && $data['errcode'] != 0) {
+                throw new ResponseException($data['errmsg'], $data['errcode']);
+            }
         }
 
         return $success ? call_user_func($success, $response) : $response;
