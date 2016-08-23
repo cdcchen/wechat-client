@@ -98,7 +98,7 @@ class MessageRequest extends Object
         if ($model) {
             return new $model($xml);
         } else {
-            throw new \ErrorException('Unsupported msg type or event type.');
+            throw new \ErrorException("Unsupported msg type or event type. Key: $key, Model: $model");
         }
     }
 
@@ -113,6 +113,7 @@ class MessageRequest extends Object
         Message::TYPE_VIDEO => 'cdcchen\wechat\qy\push\models\VideoMessage',
         Message::TYPE_SHORT_VIDEO => 'cdcchen\wechat\qy\push\models\ShortVideoMessage',
         Message::TYPE_LOCATION => 'cdcchen\wechat\qy\push\models\LocationMessage',
+        Message::TYPE_LINK => 'cdcchen\wechat\qy\push\models\LinkMessage',
 
         Message::TYPE_EVENT . EventMessage::EVENT_SUBSCRIBE => 'cdcchen\wechat\qy\push\models\EventMessage',
         Message::TYPE_EVENT . EventMessage::EVENT_UNSUBSCRIBE => 'cdcchen\wechat\qy\push\models\EventMessage',
