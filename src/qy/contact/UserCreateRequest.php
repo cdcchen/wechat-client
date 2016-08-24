@@ -10,6 +10,7 @@ namespace cdcchen\wechat\qy\contact;
 
 
 use cdcchen\wechat\base\BaseRequest;
+use cdcchen\wechat\qy\base\User;
 
 /**
  * Class UserCreateRequest
