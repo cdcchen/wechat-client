@@ -68,7 +68,7 @@ abstract class Base extends Object
      */
     public function getAgentId()
     {
-        return $this->get('AgentId');
+        return $this->get('AgentID');
     }
 
     /**
