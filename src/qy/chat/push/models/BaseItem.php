@@ -37,12 +37,18 @@ abstract class BaseItem extends Object
 
     /**
      * Base constructor.
-     * @param $xml
+     * @param array|string $data
      */
-    public function __construct($xml)
+    public function __construct($data)
     {
         $this->init();
-        $this->parseXml($xml);
+        if (is_array($data)) {
+            $this->_data = $data;
+        } elseif (is_string($data)) {
+            $this->parseXml($data);
+        } else {
+            throw new \InvalidArgumentException('$data type is invalid.');
+        }
     }
 
     /**

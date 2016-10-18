@@ -10,8 +10,7 @@ namespace cdcchen\wechat\qy\chat\push;
 
 
 use cdcchen\wechat\base\Object;
-use cdcchen\wechat\qy\chat\push\models\Base;
-use cdcchen\wechat\qy\chat\push\models\BaseItem;
+use cdcchen\wechat\qy\chat\push\models\MessagePackage;
 use cdcchen\wechat\security\PrpCrypt;
 
 /**
@@ -51,71 +50,16 @@ class ChatMessageRequest extends Object
      * @return mixed
      * @throws \ErrorException
      */
-    public function buildMessage($body)
+    public function buildMessagePackage($body)
     {
-        $decrypt = $this->decrypt($body);
-
-        return static::createModel($decrypt);
-    }
-
-    /**
-     * @param $body
-     * @return \SimpleXMLElement
-     */
-    public static function buildXmlElement($body)
-    {
-        return simplexml_load_string($body, 'SimpleXMLElement', LIBXML_NOCDATA);
-    }
-
-    /**
-     * @param string $body
-     * @return string
-     */
-    protected function decrypt($body)
-    {
-        $xml = static::buildXmlElement($body);
+        $xml = simplexml_load_string($body, 'SimpleXMLElement', LIBXML_NOCDATA);
+        if ($xml === false) {
+            throw new \BadFunctionCallException('Load xml error.');
+        }
 
         $crypt = new PrpCrypt($this->_encodingAesKey);
-        return $crypt->decrypt((string)$xml->Encrypt, $this->_corpId);
+        $decrypt = $crypt->decrypt((string)$xml->Encrypt, $this->_corpId);
+
+        return new MessagePackage($decrypt);
     }
-
-    /**
-     * @param string $decrypt
-     * @return Base
-     * @throws \ErrorException
-     */
-    protected static function createModel($decrypt)
-    {
-        $xml = simplexml_load_string($decrypt, 'SimpleXMLElement', LIBXML_NOCDATA);
-
-        $msgType = (string)$xml->MsgType;
-        $eventType = (string)$xml->Event;
-
-        $key = strtolower($msgType . $eventType);
-        $model = static::$modelMap[$key];
-
-        if ($model) {
-            return new $model($xml);
-        } else {
-            throw new \ErrorException('Unsupported msg type or event type.');
-        }
-    }
-
-
-    /**
-     * @var array
-     */
-    static protected $modelMap = [
-        BaseItem::MSG_TYPE_TEXT => 'cdcchen\wechat\qy\chat\push\models\TextMessage',
-        BaseItem::MSG_TYPE_IMAGE => 'cdcchen\wechat\qy\chat\push\models\ImageMessage',
-        BaseItem::MSG_TYPE_VOICE => 'cdcchen\wechat\qy\chat\push\models\VoiceMessage',
-        BaseItem::MSG_TYPE_FILE => 'cdcchen\wechat\qy\chat\push\models\FileMessage',
-        BaseItem::MSG_TYPE_LINK => 'cdcchen\wechat\qy\chat\push\models\LinkMessage',
-
-        BaseItem::MSG_TYPE_EVENT . BaseItem::EVENT_CREATE_CHAT => 'cdcchen\wechat\qy\chat\push\models\CreateChatEvent',
-        BaseItem::MSG_TYPE_EVENT . BaseItem::EVENT_UPDATE_CHAT => 'cdcchen\wechat\qy\chat\push\models\UpdateChatEvent',
-        BaseItem::MSG_TYPE_EVENT . BaseItem::EVENT_QUIT_CHAT => 'cdcchen\wechat\qy\chat\push\models\QuitChatEvent',
-        BaseItem::MSG_TYPE_EVENT . BaseItem::EVENT_SUBSCRIBE => 'cdcchen\wechat\qy\chat\push\models\SubscribeEvent',
-        BaseItem::MSG_TYPE_EVENT . BaseItem::EVENT_UNSUBSCRIBE => 'cdcchen\wechat\qy\chat\push\models\UnSubscribeEvent',
-    ];
 }
