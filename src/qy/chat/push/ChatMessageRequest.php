@@ -6,7 +6,7 @@
  * Time: 下午5:12
  */
 
-namespace cdcchen\wechat\qy\push;
+namespace cdcchen\wechat\qy\chat\push;
 
 
 use cdcchen\wechat\base\Object;
