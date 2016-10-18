@@ -102,7 +102,7 @@ class MessagePackage extends Object
             if ($model) {
                 $_items[] = new $model($item);
             } else {
-                throw new \ErrorException('Unsupported msg type or event type.');
+                throw new \ErrorException("Unsupported msg type or event type: {$key}");
             }
         }
 
@@ -127,6 +127,7 @@ class MessagePackage extends Object
         BaseItem::MSG_TYPE_VOICE => 'cdcchen\wechat\qy\chat\push\models\VoiceMessage',
         BaseItem::MSG_TYPE_FILE => 'cdcchen\wechat\qy\chat\push\models\FileMessage',
         BaseItem::MSG_TYPE_LINK => 'cdcchen\wechat\qy\chat\push\models\LinkMessage',
+        BaseItem::MSG_TYPE_LOCATION => 'cdcchen\wechat\qy\chat\push\models\LocationMessage',
 
         BaseItem::MSG_TYPE_EVENT . BaseItem::EVENT_CREATE_CHAT => 'cdcchen\wechat\qy\chat\push\models\CreateChatEvent',
         BaseItem::MSG_TYPE_EVENT . BaseItem::EVENT_UPDATE_CHAT => 'cdcchen\wechat\qy\chat\push\models\UpdateChatEvent',
