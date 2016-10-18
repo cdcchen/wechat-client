@@ -79,6 +79,10 @@ class MessagePackage extends Object
         return $this->get('PackageId');
     }
 
+    /**
+     * @return array|BaseItem[]
+     * @throws \ErrorException
+     */
     public function getItems()
     {
         static $_items = null;
@@ -103,6 +107,15 @@ class MessagePackage extends Object
         }
 
         return $_items;
+    }
+
+    /**
+     * @return array
+     */
+    public function getItemsArray()
+    {
+        $items = $this->get('Item');
+        return ($this->getItemCount() === 1) ? [$items] : $items;
     }
 
     /**
