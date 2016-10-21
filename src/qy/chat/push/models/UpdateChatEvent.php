@@ -44,7 +44,8 @@ class UpdateChatEvent extends Event
      */
     public function getAddUserList()
     {
-        return $this->get('AddUserList');
+        $users = $this->get('AddUserList');
+        return empty($users) ? [] : explode('|', $users);
     }
 
     /**
@@ -52,6 +53,7 @@ class UpdateChatEvent extends Event
      */
     public function getDelUserList()
     {
-        return $this->get('DelUserList');
+        $users = $this->get('DelUserList');
+        return empty($users) ? [] : explode('|', $users);
     }
 }
