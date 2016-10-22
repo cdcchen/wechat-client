@@ -24,7 +24,7 @@ class ChatUpdateRequest extends BaseRequest
     /**
      * @var string
      */
-    protected $action = '/cgi-bin/chat/create';
+    protected $action = '/cgi-bin/chat/update';
 
     /**
      * @param string $value
