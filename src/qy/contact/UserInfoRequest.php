@@ -24,7 +24,7 @@ class UserInfoRequest extends BaseRequest
     /**
      * @var string
      */
-    protected $action = '/cgi-bin/user/delete';
+    protected $action = '/cgi-bin/user/get';
 
     /**
      * @param string $value
