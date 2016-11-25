@@ -98,7 +98,7 @@ class UserClient extends DefaultClient
 
     /**
      * @param string $id
-     * @return bool
+     * @return array
      * @throws \cdcchen\wechat\base\RequestException
      * @throws \cdcchen\wechat\base\ResponseException
      */

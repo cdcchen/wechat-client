@@ -90,6 +90,15 @@ class AgentUpdateRequest extends BaseRequest
     }
 
     /**
+     * @param bool $value
+     * @return $this
+     */
+    public function setIsReportUser($value = true)
+    {
+        return $this->setData('isreportuser', (int)(bool)$value);
+    }
+
+    /**
      * @param string $value
      * @return $this
      */

@@ -30,7 +30,7 @@ class UserUpdateRequest extends UserCreateRequest
      */
     public function setEnable($value = true)
     {
-        return $this->setData('userid', (int)(bool)$value);
+        return $this->setData('enable', $value ? 1 : 0);
     }
 
     /**
