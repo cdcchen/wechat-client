@@ -32,12 +32,12 @@ class DepartmentClient extends DefaultClient
     }
 
     /**
-     * @param null|int $id
+     * @param int $id
      * @return array
      * @throws \cdcchen\wechat\base\RequestException
      * @throws \cdcchen\wechat\base\ResponseException
      */
-    public function getList($id = null)
+    public function getList($id = 1)
     {
         $request = (new DepartmentListRequest())->setId($id);
 

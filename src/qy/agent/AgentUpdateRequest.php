@@ -77,7 +77,7 @@ class AgentUpdateRequest extends BaseRequest
      */
     public function setRedirectDomain($value)
     {
-        return $this->setData('redirect_domain', (int)(bool)$value);
+        return $this->setData('redirect_domain', $value);
     }
 
     /**
