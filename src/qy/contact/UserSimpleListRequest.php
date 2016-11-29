@@ -55,7 +55,7 @@ class UserSimpleListRequest extends BaseRequest
      */
     public function setStatus($value)
     {
-        return $this->setQueryParam('fetch_child', (int)$value);
+        return $this->setQueryParam('status', (int)$value);
     }
 
     /**
