@@ -51,7 +51,8 @@ class UserCreateRequest extends BaseRequest
      */
     public function setDepartment($value)
     {
-        return $this->setData('department', (array)$value);
+        $value = array_map('intval', (array)$value);
+        return $this->setData('department', $value);
     }
 
     /**
