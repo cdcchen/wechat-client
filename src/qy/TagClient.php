@@ -127,7 +127,7 @@ class TagClient extends DefaultClient
 
         return $this->sendRequest($request, function (HttpResponse $response) {
             $data = $response->getData();
-            if ($data['invalidlist'] || $data['invalidparty']) {
+            if (isset($data['invalidlist']) || isset($data['invalidparty'])) {
                 unset($data['errcode'], $data['errmsg']);
                 return $data;
             } else {
@@ -156,7 +156,7 @@ class TagClient extends DefaultClient
 
         return $this->sendRequest($request, function (HttpResponse $response) {
             $data = $response->getData();
-            if ($data['invalidlist'] || $data['invalidparty']) {
+            if (isset($data['invalidlist']) || isset($data['invalidparty'])) {
                 unset($data['errcode'], $data['errmsg']);
                 return $data;
             } else {
