@@ -41,10 +41,10 @@ class MenuButton extends BaseModel
      */
     protected static function parseButtons($buttons)
     {
-        foreach ($buttons as $key => $button) {
-            if ($button['sub_button']) {
+        foreach ((array)$buttons as $key => $button) {
+            if (!empty($button['sub_button'])) {
                 $button['sub_button'] = static::parseButtons($button['sub_button']);
-            } else {
+            } elseif (isset($button['sub_button'])) {
                 unset($button['sub_button']);
             }
             $buttons[$key] = new MenuButtonItem($button);
